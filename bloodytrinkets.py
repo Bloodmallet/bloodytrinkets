@@ -31,7 +31,7 @@ output_type = "json" #json or js
 
 simc_settings = {}
 simc_settings["fight_style"]  = "patchwerk"
-simc_settings["iterations"]   = "20000"
+simc_settings["iterations"]   = "1"
 simc_settings["target_error"] = "0.1"
 simc_settings["tier"]         = "T19M_NH"
 
@@ -395,47 +395,9 @@ def validate_class(wow_class, wow_classes):
 #-------------------------------------------------------------------------------------
 # Don't touch this unless you have to add data
 baseline = {"none": [["none", "", 840, 1200]]}
-trinkets = {}
-trinkets["world"] = [ [ "Devilsaur Shock-Baton",    "140030", 840, 1200 ],
-                      [ "Mana Spark",               "140031", 805, 1200 ],
-                      [ "Padawsen's Unlucky Charm", "141536", 860, 1200 ],
-                      [ "Unstable Arcano Crystal",  "141482", 860, 1200 ] ]
-trinkets["dungeon"] = [ [ "Caged Horror",           "136716", 840, 1200 ],
-                        [ "Chrono Shard",           "137419", 840, 1200 ],
-                        [ "Corrupted Starlight",    "137301", 840, 1200 ],
-                        [ "Eye of Skovald",         "133641", 840, 1200 ],
-                        [ "Figurehead of the Naglfar", "137329", 840, 1200 ],
-                        [ "Horn of Valor",          "133642", 840, 1200 ],
-                        [ "Infernal Writ",          "137485", 840, 1200 ],
-                        [ "Moonlit Prism",          "137541", 840, 1200 ],
-                        [ "Naraxas Spiked Tongue",  "137349", 840, 1200 ],
-                        [ "Oakhearts Gnarled Root", "137306", 840, 1200 ],
-                        [ "Obelisk of the Void",    "137433", 840, 1200 ],
-                        [ "Portable Manacracker",   "137398", 840, 1200 ],
-                        [ "Stormsinger Fulmination Charge", "137367", 840, 1200 ],
-                        [ "Squirrel Generator",     "137446", 840, 1200 ] ]
-trinkets["karazhan"] = [[ "Arans Relaxed Ruby",          "142157", 860, 1200 ],
-                        [ "Deteriorated Construct Core", "142165", 860, 1200 ],
-                        [ "Mrrgrias_Favor",              "142160", 855, 1200 ] ]
-trinkets["emerald_nightmare"] = [[ "Bough of Corruption",  "139323", 860, 1200 ],
-                                 [ "Swarming Plaguehive",  "139321", 860, 1200 ],
-                                 [ "Twisting Wind",        "139323", 860, 1200 ],
-                                 [ "Unstable Horrorslime", "138224", 860, 1200 ],
-                                 [ "Wriggling Sinew",      "139326", 860, 1200 ] ]
-trinkets["trial_of_valor"] = [[ "Brinewater Slime in a Bottle Crit",        "142507,bonus_id=603", 865, 1200 ],
-                              [ "Brinewater Slime in a Bottle Haste",       "142507,bonus_id=604", 865, 1200 ],
-                              [ "Brinewater Slime in a Bottle Mastery",     "142507,bonus_id=605", 865, 1200 ],
-                              [ "Brinewater Slime in a Bottle Versatility", "142507,bonus_id=607", 865, 1200 ] ]
-trinkets["nighthold"] = [ [ "Erratic Metronome",        "140792", 870, 1200 ],
-                          [ "Fury of the Burning Sky",  "140801", 875, 1200 ],
-                          [ "Icon of Rot",              "140798", 875, 1200 ],
-                          [ "Pharameres Forbidden Guidance", "140800", 875, 1200 ],
-                          [ "Star Gate",                "140804", 875, 1200 ],
-                          [ "Whispers in the Dark",     "140809", 875, 1200 ] ]
-trinkets["pvp"] = [       [ "PVP Insignia of Dominance", "142668", 840, 1200 ],
-                          [ "PVP Badge of Dominance",    "142779", 840, 1200 ] ]
-trinkets["crafted"] = [ [ "Darkmoon Deck: Hellfire",  "128709", 815, 865 ],
-                        [ "Infernal Alchemist Stone", "127842", 815, 865 ] ]
+# Import here for now
+from lib.trinkets import get_trinkets_for_spec
+trinkets = get_trinkets_for_spec("shaman", "elemental")
 
 # TODO: create wow lib
 wow_classes = { "shaman":       {"talents": "1001111", "specs": ("elemental", "enhancement")              },
