@@ -55,8 +55,8 @@ simc_settings["c_profile_name"]     = "example_name.simc"
 ## @brief      Creates a filename with current date.
 ##
 ## @param      simc_settings  The simc options dictionary {iterations s, target
-##                           error s, fight style s, class s, spec s, tier s
-##                           "T19M_NH"}
+##                            error s, fight style s, class s, spec s, tier s
+##                            "T19M_NH"}
 ##
 ## @return     Returns a filename which contains the current date
 ##
@@ -73,11 +73,11 @@ def create_filename(simc_settings):
 ##
 ## @brief      Gets the dps for one trinket.
 ##
-## @param      trinket_id    The trinket identifier
-## @param      item_level    The item level
+## @param      trinket_id     The trinket identifier
+## @param      item_level     The item level
 ## @param      simc_settings  The simc options dictionary {iterations s, target
-##                           error s, fight style s, class s, spec s, tier s
-##                           "T19M_NH"}
+##                            error s, fight style s, class s, spec s, tier s
+##                            "T19M_NH"}
 ##
 ## @return     The dps s.
 ##
@@ -176,9 +176,9 @@ def order_results(sim_results, ilevels):
 ##                                    {trinket_name s:{ilevel s:{dps s}}}
 ## @param      ordered_trinket_names  The ordered trinket names
 ## @param      ilevels                The ilevels list
-## @param      graph_colours                The graph_colours list for ilevels
+## @param      graph_colours          The graph_colours list for ilevels
 ## @param      graph_name             The graph name
-## @param      simc_settings           The simc options dictionary {iterations s,
+## @param      simc_settings          The simc options dictionary {iterations s,
 ##                                    target error s, fight style s, class s,
 ##                                    spec s, tier s "T19M_NH"}
 ##
@@ -294,13 +294,13 @@ def print_graph_data(trinket_list, ordered_trinket_names, ilevels, graph_colours
 ##
 ## @brief      Prints all data to json file
 ##
-## @param      trinket_list  The trinkets dictionary {trinket_name s:{ilevel
-##                           s:{dps s}}}
-## @param      ilevels       The ilevels
-## @param      graph_name    The graph name
+## @param      trinket_list   The trinkets dictionary {trinket_name s:{ilevel
+##                            s:{dps s}}}
+## @param      ilevels        The ilevels
+## @param      graph_name     The graph name
 ## @param      simc_settings  The simc options dictionary {iterations s, target
-##                           error s, fight style s, class s, spec s, tier s
-##                           "T19M_NH"}
+##                            error s, fight style s, class s, spec s, tier s
+##                            "T19M_NH"}
 ## @param      ordered_trinket_names  The ordered trinket names
 ##
 ## @return     True after json output
