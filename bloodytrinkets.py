@@ -404,6 +404,8 @@ trinkets["nighthold"] = [ [ "Erratic Metronome",        "140792", 870, 1200 ],
                           [ "Pharameres Forbidden Guidance", "140800", 875, 1200 ],
                           [ "Star Gate",                "140804", 875, 1200 ],
                           [ "Whispers in the Dark",     "140809", 875, 1200 ] ]
+trinkets["pvp"] = [       ["PVP Insignia of Dominance", "142668", 840, 1200],
+                          ["PVP Badge of Dominance", "142779", 840, 1200] ]
 
 # TODO: create wow lib
 wow_classes = { "shaman":       {"talents": "1001111", "specs": ("elemental", "enhancement")              },
