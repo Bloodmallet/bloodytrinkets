@@ -184,7 +184,7 @@ def __get_relevant_trinkets(role,stat):
 ##
 ## @return     A group of trinkets relevant to the spec as a dictionary of lists
 ##
-def combine_trinket_dicts(role_trinkets,stat_trinkets):	
+def __combine_trinket_dicts(role_trinkets,stat_trinkets):	
 	# Populate a new trinkets dict with role trinkets
 	trinkets = role_trinkets
 
@@ -209,5 +209,5 @@ def combine_trinket_dicts(role_trinkets,stat_trinkets):
 def get_trinkets_for_spec(class_name, spec_name):
 	spec_info = get_spec_info(class_name, spec_name)
 	role_trinkets, stat_trinkets = __get_relevant_trinkets(spec_info[0], spec_info[1])
-	combined_trinkets = combine_trinket_dicts(role_trinkets, stat_trinkets)
+	combined_trinkets = __combine_trinket_dicts(role_trinkets, stat_trinkets)
 	return combined_trinkets
