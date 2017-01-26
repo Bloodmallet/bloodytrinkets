@@ -36,7 +36,7 @@ simc_options["c_profile"]          = False
 simc_options["c_profile_location"] = "example_dir/"
 simc_options["c_profile_name"]     = "example_same.simc"
 
-# Defines itemlevels that shall be simed ordered from lowest to highest
+# Defines itemlevels that shall be simed ordered from highest to lowest (graph output will have this order reversed)
 ilevels = [ "925", "915", "905", "895", "885", "875", "865" ]
 colours = { "865": "#4572a7", "875": "#aa4643", "885": "#89a54e", "895": "#71588f", "905": "#4198af", "915": "#db843d", "925": "#00E676" }
 
