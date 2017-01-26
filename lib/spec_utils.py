@@ -193,6 +193,11 @@ def get_spec_info(class_name, spec_name):
   return [get_role(class_name), get_stat(spec_name)]
 
 
+##
+## @brief      Simple data check
+##
+## @return     True if data doesn't have obvious flaws, False otherwise.
+##
 def __validity_check():
   for wow_class in __classes_data:
     for spec in __classes_data[wow_class]["specs"]:
