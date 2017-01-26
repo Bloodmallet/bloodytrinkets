@@ -190,7 +190,7 @@ def get_dps_talents(class_name, spec_name):
 ## @return     list of [role, main_stat]
 ##
 def get_spec_info(class_name, spec_name):
-  return [get_role(class_name), get_stat(spec_name)]
+  return [get_role(class_name, spec_name), get_stat(class_name, spec_name)]
 
 
 ##
