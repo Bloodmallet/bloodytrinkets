@@ -12,6 +12,41 @@ import os
 import sys
 
 
+
+##
+#-------------------------------------------------------------------------------------
+# Options
+#-------------------------------------------------------------------------------------
+##
+
+graph_name = "Icefury trinket sims 7.1.5"
+
+output = True
+
+simc_options = {}
+simc_options["fight_style"]  = "patchwerk"
+simc_options["iterations"]   = "20000"
+simc_options["target_error"] = "0.1"
+simc_options["tier"]         = "T19M_NH"
+
+simc_options["class"] = "shaman"
+simc_options["spec"]  = "elemental"
+
+simc_options["c_profile"]          = False
+simc_options["c_profile_location"] = "example_dir/"
+simc_options["c_profile_name"]     = "example_same.simc"
+
+# Defines itemlevels that shall be simed ordered from lowest to highest
+ilevels = [ "925", "915", "905", "895", "885", "875", "865" ]
+colours = { "865": "#4572a7", "875": "#aa4643", "885": "#89a54e", "895": "#71588f", "905": "#4198af", "915": "#db843d", "925": "#00E676" }
+
+
+##
+#-------------------------------------------------------------------------------------
+# Functions
+#-------------------------------------------------------------------------------------
+##
+
 ##
 ## @brief      Creates a filename with current date.
 ##
@@ -49,16 +84,19 @@ def get_dps(trinket_id, item_level, simc_options):
   argument += "fight_style=" + simc_options["fight_style"] + " "
   argument += "fixed_time=1 "
   argument += "default_actions=1 "
-  argument += simc_options["class"] + "_" + simc_options["spec"] + "_" + simc_options["tier"] + ".simc "
+  if simc_options["c_profile"]:
+    argument += simc_options["c_profile_location"] + simc_options["c_profile_name"] + " "
+  else:
+    argument += simc_options["class"] + "_" + simc_options["spec"] + "_" + simc_options["tier"] + ".simc "
   argument += "name=" + create_filename(simc_options) + " "
   argument += "trinket1= "
   argument += "trinket2=,id=" + trinket_id + ",ilevel=" + item_level + " "
-  # call simulationcraft in the background. grab output for precessing and getting dps value
+  # call simulationcraft in the background. grab output for processing and getting dps value
   simulation_output = subprocess.run(argument, stdout=subprocess.PIPE, universal_newlines=True)
 
   owndps = True
   for line in simulation_output.stdout.splitlines():
-    #needs this check to prevent grabbing the enemy dps
+    # needs this check to prevent grabbing the enemy dps
     if "DPS:" in line and owndps:
       dps = line
       owndps = False
@@ -326,31 +364,6 @@ def validate_class(wow_class, wow_classes):
 
 ##
 #-------------------------------------------------------------------------------------
-# Options
-#-------------------------------------------------------------------------------------
-##
-
-graph_name = "Icefury trinket sims 7.1.5"
-
-output = True
-
-simc_options = {}
-simc_options["fight_style"] = "patchwerk"
-simc_options["iterations"] = "20000"
-simc_options["target_error"] = "0.1"
-simc_options["tier"] = "T19M_NH"
-
-simc_options["class"] = "shaman"
-simc_options["spec"] = "elemental"
-
-# Defines itemlevels that shall be simed ordered from lowest to highest
-ilevels = [ "925", "915", "905", "895", "885", "875", "865" ]
-colours = { "865": "#4572a7", "875": "#aa4643", "885": "#89a54e", "895": "#71588f", "905": "#4198af", "915": "#db843d", "925": "#00E676" }
-
-
-
-##
-#-------------------------------------------------------------------------------------
 # Data
 #-------------------------------------------------------------------------------------
 # Don't touch this unless you have to add data
@@ -418,22 +431,22 @@ wow_classes = { "shaman":       {"talents": "1001111", "specs": ("elemental", "e
 print("Name of the graph: '" + graph_name + "'")
 print("Loading base dps value.")
 base_dps = sim_all(baseline, [ilevels[-1]], simc_options, False)
-if output:
-  print(base_dps)
+#if output:
+#  print(base_dps)
 
 print("Loading dps-values for all trinkets.")
 sim_results = sim_all(trinkets, ilevels, simc_options, output)
 
 print("Ordering trinkets by dps.")
 ordered_trinket_names = order_results(sim_results, ilevels)
-if output:
-  print(ordered_trinket_names)
+#if output:
+#  print(ordered_trinket_names)
 
 print("")
 print("Normalising dps values.")
 sim_results = normalise_trinkets(sim_results, base_dps, ilevels[-1])
-if output:
-  print(sim_results)
+#if output:
+#  print(sim_results)
 
 print("Printing results to file.")
 if output_graph_data(sim_results, ordered_trinket_names, ilevels, colours, graph_name, simc_options):
