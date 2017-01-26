@@ -370,6 +370,7 @@ def validate_class(wow_class, wow_classes):
 baseline = {"none": [["none", "", 840, 1200]]}
 trinkets = {}
 trinkets["world"] = [ [ "Devilsaur Shock-Baton",    "140030", 840, 1200 ],
+                      [ "Mana Spark",               "140031", 805, 1200 ],
                       [ "Padawsen's Unlucky Charm", "141536", 860, 1200 ],
                       [ "Unstable Arcano Crystal",  "141482", 860, 1200 ] ]
 trinkets["dungeon"] = [ [ "Caged Horror",           "136716", 840, 1200 ],
@@ -386,9 +387,9 @@ trinkets["dungeon"] = [ [ "Caged Horror",           "136716", 840, 1200 ],
                         [ "Portable Manacracker",   "137398", 840, 1200 ],
                         [ "Stormsinger Fulmination Charge", "137367", 840, 1200 ],
                         [ "Squirrel Generator",     "137446", 840, 1200 ] ]
-trinkets["karazhan"] = [[ "Arans Relaxed Ruby", "142157", 860, 1200 ],
+trinkets["karazhan"] = [[ "Arans Relaxed Ruby",          "142157", 860, 1200 ],
                         [ "Deteriorated Construct Core", "142165", 860, 1200 ],
-                        [ "Mrrgrias_Favor", "142160", 855, 1200 ] ]
+                        [ "Mrrgrias_Favor",              "142160", 855, 1200 ] ]
 trinkets["emerald_nightmare"] = [[ "Bough of Corruption",  "139323", 860, 1200 ],
                                  [ "Swarming Plaguehive",  "139321", 860, 1200 ],
                                  [ "Twisting Wind",        "139323", 860, 1200 ],
@@ -404,8 +405,10 @@ trinkets["nighthold"] = [ [ "Erratic Metronome",        "140792", 870, 1200 ],
                           [ "Pharameres Forbidden Guidance", "140800", 875, 1200 ],
                           [ "Star Gate",                "140804", 875, 1200 ],
                           [ "Whispers in the Dark",     "140809", 875, 1200 ] ]
-trinkets["pvp"] = [       ["PVP Insignia of Dominance", "142668", 840, 1200],
-                          ["PVP Badge of Dominance", "142779", 840, 1200] ]
+trinkets["pvp"] = [       [ "PVP Insignia of Dominance", "142668", 840, 1200 ],
+                          [ "PVP Badge of Dominance",    "142779", 840, 1200 ] ]
+trinkets["crafted"] = [ [ "Darkmoon Deck: Hellfire",  "128709", 815, 865 ],
+                        [ "Infernal Alchemist Stone", "127842", 815, 865 ]]
 
 # TODO: create wow lib
 wow_classes = { "shaman":       {"talents": "1001111", "specs": ("elemental", "enhancement")              },
