@@ -4,11 +4,13 @@
 import subprocess
 # Library to get date and calcutiontime for program
 import datetime
+# Library to create json output
+import json
 # Library to look for files and create them if needed
 import os
 # params
 #import argparse
-# TODO: Recheck sys in 
+# Library to print fancy one line output
 import sys
 
 
@@ -19,26 +21,28 @@ import sys
 #-------------------------------------------------------------------------------------
 ##
 
+graph_colours = { "865": "#4572a7", "875": "#aa4643", "885": "#89a54e", "895": "#71588f", "905": "#4198af", "915": "#db843d", "925": "#00E676" }
 graph_name = "Icefury trinket sims 7.1.5"
-
-output = True
-
-simc_options = {}
-simc_options["fight_style"]  = "patchwerk"
-simc_options["iterations"]   = "20000"
-simc_options["target_error"] = "0.1"
-simc_options["tier"]         = "T19M_NH"
-
-simc_options["class"] = "shaman"
-simc_options["spec"]  = "elemental"
-
-simc_options["c_profile"]          = False
-simc_options["c_profile_location"] = "example_dir/"
-simc_options["c_profile_name"]     = "example_same.simc"
-
 # Defines itemlevels that shall be simed ordered from highest to lowest (graph output will have this order reversed)
 ilevels = [ "925", "915", "905", "895", "885", "875", "865" ]
-colours = { "865": "#4572a7", "875": "#aa4643", "885": "#89a54e", "895": "#71588f", "905": "#4198af", "915": "#db843d", "925": "#00E676" }
+
+output_screen = False
+output_type = "json" #json or js
+
+simc_settings = {}
+simc_settings["fight_style"]  = "patchwerk"
+simc_settings["iterations"]   = "20000"
+simc_settings["target_error"] = "0.1"
+simc_settings["tier"]         = "T19M_NH"
+
+simc_settings["class"] = "shaman"
+simc_settings["spec"]  = "elemental"
+
+# You want to use a custom profile? Set c_profile to True and add the relative path and name
+simc_settings["c_profile"]          = False
+simc_settings["c_profile_path"] = "example_dir/"
+simc_settings["c_profile_name"]     = "example_name.simc"
+
 
 
 ##
@@ -50,19 +54,19 @@ colours = { "865": "#4572a7", "875": "#aa4643", "885": "#89a54e", "895": "#71588
 ##
 ## @brief      Creates a filename with current date.
 ##
-## @param      simc_options  The simc options dictionary {iterations s, target
+## @param      simc_settings  The simc options dictionary {iterations s, target
 ##                           error s, fight style s, class s, spec s, tier s
 ##                           "T19M_NH"}
 ##
 ## @return     Returns a filename which contains the current date
 ##
-def create_filename(simc_options):
+def create_filename(simc_settings):
   filename = ""
-  filename += "{:%Y_%m_%d}".format(datetime.datetime.now())
-  filename += "_" + simc_options["fight_style"]
-  filename += "_" + simc_options["class"]
-  filename += "_" + simc_options["spec"]
-  filename += "_" + simc_options["tier"]
+  filename += "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.now())
+  filename += "_" + simc_settings["fight_style"]
+  filename += "_" + simc_settings["class"]
+  filename += "_" + simc_settings["spec"]
+  filename += "_" + simc_settings["tier"]
   return filename
 
 
@@ -71,24 +75,24 @@ def create_filename(simc_options):
 ##
 ## @param      trinket_id    The trinket identifier
 ## @param      item_level    The item level
-## @param      simc_options  The simc options dictionary {iterations s, target
+## @param      simc_settings  The simc options dictionary {iterations s, target
 ##                           error s, fight style s, class s, spec s, tier s
 ##                           "T19M_NH"}
 ##
 ## @return     The dps s.
 ##
-def get_dps(trinket_id, item_level, simc_options):
+def get_dps(trinket_id, item_level, simc_settings):
   argument = "../simc.exe "
-  argument += "iterations=" + simc_options["iterations"] + " "
-  argument += "target_error=" + simc_options["target_error"] + " "
-  argument += "fight_style=" + simc_options["fight_style"] + " "
+  argument += "iterations=" + simc_settings["iterations"] + " "
+  argument += "target_error=" + simc_settings["target_error"] + " "
+  argument += "fight_style=" + simc_settings["fight_style"] + " "
   argument += "fixed_time=1 "
   argument += "default_actions=1 "
-  if simc_options["c_profile"]:
-    argument += simc_options["c_profile_location"] + simc_options["c_profile_name"] + " "
+  if simc_settings["c_profile"]:
+    argument += simc_settings["c_profile_path"] + simc_settings["c_profile_name"] + " "
   else:
-    argument += simc_options["class"] + "_" + simc_options["spec"] + "_" + simc_options["tier"] + ".simc "
-  argument += "name=" + create_filename(simc_options) + " "
+    argument += simc_settings["class"] + "_" + simc_settings["spec"] + "_" + simc_settings["tier"] + ".simc "
+  argument += "name=" + create_filename(simc_settings) + " "
   argument += "trinket1= "
   argument += "trinket2=,id=" + trinket_id + ",ilevel=" + item_level + " "
   # call simulationcraft in the background. grab output for processing and getting dps value
@@ -168,20 +172,20 @@ def order_results(sim_results, ilevels):
 ## @brief      Generates js output for http://www.highcharts.com/ bars of
 ##             http://www.stormearthandlava.com/elemental-shaman-hub/elemental-trinket-sims/
 ##
-## @param      trinket_list           The trinkets dictionary {trinket_name
-##                                    s:{ilevel s:{dps s}}}
+## @param      trinket_list           The normalised trinkets dictionary
+##                                    {trinket_name s:{ilevel s:{dps s}}}
 ## @param      ordered_trinket_names  The ordered trinket names
 ## @param      ilevels                The ilevels list
-## @param      colours                The colours list for ilevels
+## @param      graph_colours                The graph_colours list for ilevels
 ## @param      graph_name             The graph name
-## @param      simc_options           The simc options dictionary {iterations s,
+## @param      simc_settings           The simc options dictionary {iterations s,
 ##                                    target error s, fight style s, class s,
 ##                                    spec s, tier s "T19M_NH"}
 ##
 ## @return     True if writing to file was successfull
 ##
-def output_graph_data(trinket_list, ordered_trinket_names, ilevels, colours, graph_name, simc_options):
-  with open(create_filename(simc_options) + ".js", "w") as ofile:
+def print_graph_data(trinket_list, ordered_trinket_names, ilevels, graph_colours, graph_name, simc_settings):
+  with open(create_filename(simc_settings) + ".js", "w") as ofile:
     ofile.write("jQuery(function ($) {\n")
     ofile.write("    Highcharts.chart('if-container', {\n")
     ofile.write("        chart: {\n")
@@ -266,7 +270,7 @@ def output_graph_data(trinket_list, ordered_trinket_names, ilevels, colours, gra
         ofile.write(", ")
       ofile.write("{\n")
       ofile.write("            name: '" + ilevel + "',\n")
-      ofile.write("            color: '" + colours[ilevel] + "',\n")
+      ofile.write("            color: '" + graph_colours[ilevel] + "',\n")
       ofile.write("            data: [")
       for trinket_name in ordered_trinket_names:
         if ilevel == ilevels[-1]:
@@ -288,21 +292,47 @@ def output_graph_data(trinket_list, ordered_trinket_names, ilevels, colours, gra
 
 
 ##
-## @brief      Sim all trinkets at all itemlevels when available.
+## @brief      Prints all data to json file
 ##
-## @param      trinkets      The trinkets dictionary {source s:{[trinket_name s,
-##                           id s, base_ilevel i, max_itemlevel i]}}
-## @param      ilevels       The ilevels list
-## @param      simc_options  The simc options dictionary {iterations s, target
+## @param      trinket_list  The trinkets dictionary {trinket_name s:{ilevel
+##                           s:{dps s}}}
+## @param      ilevels       The ilevels
+## @param      graph_name    The graph name
+## @param      simc_settings  The simc options dictionary {iterations s, target
 ##                           error s, fight style s, class s, spec s, tier s
 ##                           "T19M_NH"}
-## @param      output        Enables os disables "x / y" lines
+## @param      ordered_trinket_names  The ordered trinket names
+##
+## @return     True after json output
+##
+def print_json(trinket_list, ilevels, graph_name, simc_settings):
+  sim_data = {}
+  sim_data["Name"] = graph_name
+  sim_data["Simulated itemlevels"] = ilevels
+  sim_data["Simc setting"] = simc_settings
+  sim_data["Date"] = "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.now())
+  sim_data["trinkets"] = trinket_list
+  with open(create_filename(simc_settings) + ".json", "w") as ofile:
+    ofile.write(json.dumps(sim_data, sort_keys=True, indent=4))
+    return True
+  return False
+
+
+##
+## @brief      Sim all trinkets at all itemlevels when available.
+##
+## @param      trinkets       The trinkets dictionary {source s:{[trinket_name
+##                            s, id s, base_ilevel i, max_itemlevel i]}}
+## @param      ilevels        The ilevels list
+## @param      simc_settings  The simc options dictionary {iterations s, target
+##                            error s, fight style s, class s, spec s, tier s
+##                            "T19M_NH"}
 ##
 ## @return     Dictionary of all simmed trinkets with all their dps values as
 ##             strings {trinket_name s:{ilevel s:{dps s}}}. dps is "0" if to be
 ##             simmed itemlevel don't match available trinket itemlevel
 ##
-def sim_all(trinkets, ilevels, simc_options, output):
+def sim_all(trinkets, ilevels, simc_settings):
   sim_counter = 0
   sim_ceiling = 0
   for source in trinkets:
@@ -315,14 +345,11 @@ def sim_all(trinkets, ilevels, simc_options, output):
       for ilevel in ilevels:
         dps = "0"
         if trinket[2] <= int(ilevel) and trinket[3] >= int(ilevel):
-          dps = get_dps(trinket[1], ilevel, simc_options)
+          dps = get_dps(trinket[1], ilevel, simc_settings)
         all_simmed[trinket[0]][ilevel] = dps
         sim_counter += 1
-        if output:
-          sys.stdout.write("Already simed: %d of %d\r" % (sim_counter, sim_ceiling))
-          sys.stdout.flush()
-          # TODO: Recheck here @ import sys
-          #print(str(sim_counter) + "/" + str(sim_ceiling))
+        sys.stdout.write("Already simed: %d of %d\r" % (sim_counter, sim_ceiling))
+        sys.stdout.flush()
   return all_simmed
 
 
@@ -408,7 +435,7 @@ trinkets["nighthold"] = [ [ "Erratic Metronome",        "140792", 870, 1200 ],
 trinkets["pvp"] = [       [ "PVP Insignia of Dominance", "142668", 840, 1200 ],
                           [ "PVP Badge of Dominance",    "142779", 840, 1200 ] ]
 trinkets["crafted"] = [ [ "Darkmoon Deck: Hellfire",  "128709", 815, 865 ],
-                        [ "Infernal Alchemist Stone", "127842", 815, 865 ]]
+                        [ "Infernal Alchemist Stone", "127842", 815, 865 ] ]
 
 # TODO: create wow lib
 wow_classes = { "shaman":       {"talents": "1001111", "specs": ("elemental", "enhancement")              },
@@ -433,26 +460,35 @@ wow_classes = { "shaman":       {"talents": "1001111", "specs": ("elemental", "e
 
 print("Name of the graph: '" + graph_name + "'")
 print("Loading base dps value.")
-base_dps = sim_all(baseline, [ilevels[-1]], simc_options, False)
-#if output:
-#  print(base_dps)
+base_dps = sim_all(baseline, [ilevels[-1]], simc_settings)
+if output_screen:
+  print(base_dps)
 
 print("Loading dps-values for all trinkets.")
-sim_results = sim_all(trinkets, ilevels, simc_options, output)
+sim_results = sim_all(trinkets, ilevels, simc_settings)
 
-print("Ordering trinkets by dps.")
-ordered_trinket_names = order_results(sim_results, ilevels)
-#if output:
-#  print(ordered_trinket_names)
-
-print("")
-print("Normalising dps values.")
-sim_results = normalise_trinkets(sim_results, base_dps, ilevels[-1])
-#if output:
-#  print(sim_results)
-
-print("Printing results to file.")
-if output_graph_data(sim_results, ordered_trinket_names, ilevels, colours, graph_name, simc_options):
-  print("Output successful")
+if output_type == "js":
+  print("Ordering trinkets by dps.")
+  ordered_trinket_names = order_results(sim_results, ilevels)
+  if output_screen:
+    print(ordered_trinket_names)
+  
+  print("")
+  print("Normalising dps values.")
+  sim_results = normalise_trinkets(sim_results, base_dps, ilevels[-1])
+  if output_screen:
+    print(sim_results)
+  
+  print("Printing results to js file.")
+  if print_graph_data(sim_results, ordered_trinket_names, ilevels, graph_colours, graph_name, simc_settings):
+    print("Output successful.")
+  else:
+    print("Output failed.")
+elif output_type == "json":
+  print("Printing results to json file.")
+  if print_json(sim_results, ilevels, graph_name, simc_settings):
+    print("Output successful.")
+  else:
+    print("Output failed.")
 else:
-  print("Output failed")
+  print("The specified output_type was not recognised.")
