@@ -30,7 +30,8 @@ graph_name = "Icefury trinket sims 7.1.5"
 ilevels = [ "925", "915", "905", "895", "885", "875", "865" ]
 
 output_screen = False
-output_type = "json" #json or js
+# "json" or "highchart"
+output_type = "json" 
 
 simc_settings = {}
 simc_settings["fight_style"]  = "patchwerk"
@@ -206,64 +207,6 @@ def sim_all(trinkets, ilevels, simc_settings):
   return all_simmed
 
 
-##
-## @brief      Validates the input fight style.
-##
-## @param      fight_style  The fight style like in SimC options
-##
-## @return     True if fight_style matches predetermined SimC-styles
-##
-def validate_fight_style(fight_style):
-  fight_style_list = ("patchwerk",
-                      "lightmovement", 
-                      "heavymovement", 
-                      "hecticaddcleave", 
-                      "beastlord", 
-                      "helterskelter")
-  if fight_style in fight_style_list:
-      return True
-  return False
-
-
-##
-## @brief      Validates the input wow_class
-##
-## @param      wow_class    The wow class you want to check
-## @param      wow_classes  The wow classes that are available as a dictionary
-##                          {name s:{talents s, specs s:(spec_names)}}
-##
-## @return     True if wow_class is an actual wow class
-##
-def validate_class(wow_class, wow_classes):
-  if wow_class in wow_classes:
-    return True
-  return False
-
-
-
-
-##
-#-------------------------------------------------------------------------------------
-# Data
-#-------------------------------------------------------------------------------------
-# Don't touch this unless you have to add data
-baseline = {"none": [["none", "", 840, 1200]]}
-trinkets = lib.trinkets.get_trinkets_for_spec("shaman", "elemental")
-
-# TODO: create wow lib
-wow_classes = { "shaman":       {"talents": "1001111", "specs": ("elemental", "enhancement")              },
-                "mage":         {"talents": "1011011", "specs": ("fire", "frost", "arcane")               },
-                "druid":        {"talents": "1000111", "specs": ("balance", "feral")                      },
-                "priest":       {"talents": "1001111", "specs": ("shadow")                                },
-                "warlock":      {"talents": "1101011", "specs": ("affliction", "destruction", "demonology")  },
-                "hunter":       {"talents": "1101011", "specs": ("mm", "sv", "bm")                        },
-                "death_knight": {"talents": "1110011", "specs": ("unholy", "frost")                       },
-                "demon_hunter": {"talents": "1110111", "specs": ("havoc")                                 },
-                "monk":         {"talents": "1010011", "specs": ("windwalker")                            },
-                "paladin":      {"talents": "1101001", "specs": ("retribution")                           },
-                "rogue":        {"talents": "1110111", "specs": ("assassination", "sublety", "outlaw")    },
-                "warrior":      {"talents": "1010111", "specs": ("arms", "fury")                          } }
-
 
 ##
 #-------------------------------------------------------------------------------------
@@ -271,7 +214,17 @@ wow_classes = { "shaman":       {"talents": "1001111", "specs": ("elemental", "e
 #-------------------------------------------------------------------------------------
 ##
 
+
+baseline = {"none": [["none", "", 840, 1200]]}
+error_collector = []
+if lib.spec_utils.is_class_spec(simc_settings["class"], simc_settings["spec"]):
+  trinkets = lib.trinkets.get_trinkets_for_spec(simc_settings["class"], simc_settings["spec"])
+else:
+  error_collector.append("invalid_class_spec")
+
 print("Name of the graph: '" + graph_name + "'")
+
+
 print("Loading base dps value.")
 base_dps = sim_all(baseline, [ilevels[-1]], simc_settings)
 if output_screen:
@@ -280,7 +233,7 @@ if output_screen:
 print("Loading dps-values for all trinkets.")
 sim_results = sim_all(trinkets, ilevels, simc_settings)
 
-if output_type == "js":
+if output_type == "highchart":
   print("Ordering trinkets by dps.")
   ordered_trinket_names = order_results(sim_results, ilevels)
   if output_screen:
@@ -293,7 +246,7 @@ if output_type == "js":
     print(sim_results)
   
   print("Printing results to js file.")
-  if lib.output.highcharts.print_graph_data(sim_results, ordered_trinket_names, ilevels, graph_colours, graph_name, simc_settings):
+  if lib.output.highcharts.print_highchart(sim_results, ordered_trinket_names, ilevels, graph_colours, graph_name, simc_settings):
     print("Output successful.")
   else:
     print("Output failed.")

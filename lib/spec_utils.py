@@ -91,58 +91,58 @@ __classes_data = {
 ##
 ## @brief      Gets the role from class and spec.
 ##
-## @param      class_name  The class name as string
-## @param      spec_name   The specifier name as string
+## @param      wow_class  The class name as string
+## @param      wow_spec   The specifier name as string
 ##
 ## @return     The role as string.
 ##
-def get_role(class_name, spec_name):
-  return __classes_data[class_name]["specs"][spec_name]["role"]
+def get_role(wow_class, wow_spec):
+  return __classes_data[wow_class]["specs"][wow_spec]["role"]
 
 
 ##
 ## @brief      Gets the main stat like agi, str or int.
 ##
-## @param      class_name  The class name as string
-## @param      spec_name   The specifier name as string
+## @param      wow_class  The class name as string
+## @param      wow_spec   The specifier name as string
 ##
 ## @return     The main stat as string.
 ##
-def get_stat(class_name, spec_name):
-  return __classes_data[class_name]["specs"][spec_name]["stat"]
+def get_stat(wow_class, wow_spec):
+  return __classes_data[wow_class]["specs"][wow_spec]["stat"]
 
 
 ##
 ## @brief      Gets the dps talents. 0-no dps row, 1-dps row
 ##
-## @param      class_name  The class name
+## @param      wow_class  The class name
 ##
 ## @return     The dps talents as string.
 ##
-def get_dps_talents(class_name):
-  return __classes_data[class_name]["talents"]
+def get_dps_talents(wow_class):
+  return __classes_data[wow_class]["talents"]
 
 
 ##
 ## @brief      Gets the specs of a class.
 ##
-## @param      class_name  The class name
+## @param      wow_class  The class name
 ##
 ## @return     The specs as a list.
 ##
-def get_specs(class_name):
-  return __classes_data[class_name]["specs"].keys()
+def get_specs(wow_class):
+  return __classes_data[wow_class]["specs"].keys()
 
 
 ##
 ## @brief      Determines if class is a wow class.
 ##
-## @param      class_name  The class name
+## @param      wow_class  The class name
 ##
 ## @return     True if class, False otherwise.
 ##
-def is_class(class_name):
-  if class_name in __classes_data.keys():
+def is_class(wow_class):
+  if wow_class in __classes_data.keys():
     return True
   else:
     return False
@@ -151,13 +151,15 @@ def is_class(class_name):
 ##
 ## @brief      Determines if specis of class.
 ##
-## @param      class_name  The class name
-## @param      spec_name   The specifier name
+## @param      wow_spec   The specifier name
 ##
-## @return     True if spec is of the provided class, False otherwise.
+## @return     True if spec exists in wow, False otherwise.
 ##
-def is_spec(class_name, spec_name):
-  if spec_name in __classes_data[class_name]["specs"].keys():
+def is_spec(wow_spec):
+  spec_list = []
+  for wow_class in __classes_data:
+    spec_list.append(get_specs(wow_class))
+  if wow_spec in spec_list:
     return True
   else:
     return False
@@ -173,24 +175,64 @@ def is_spec(class_name, spec_name):
 ##
 ## @brief      Function for people who don't paying attention to parameters
 ##
-## @param      class_name  The class name
-## @param      spec_name   The spec name
+## @param      wow_class  The class name
+## @param      wow_spec   The spec name
 ##
 ## @return     The dps talents as string.
 ##
-def get_dps_talents(class_name, spec_name):
-  return get_dps_talents(class_name)
+def get_dps_talents(wow_class, wow_spec):
+  return get_dps_talents(wow_class)
+
 
 ##
-## @brief      Gets the role and main stat
+## @brief      Gets the role and main stat.
 ##
-## @param      class_name  The class name as string
-## @param      spec_name   The specifier name as string
+## @param      wow_class  The class name as string
+## @param      wow_spec   The specifier name as string
 ##
-## @return     list of [role, main_stat]
+## @return     List of [role, main_stat]
 ##
-def get_spec_info(class_name, spec_name):
-  return [get_role(class_name, spec_name), get_stat(class_name, spec_name)]
+def get_role_stat(wow_class, wow_spec):
+  return [get_role(wow_class, wow_spec), get_stat(wow_class, wow_spec)]
+
+
+##
+## @brief      Gets the role, main_stat and dps_talent_rows.
+##
+## @param      wow_class  The wow class
+## @param      wow_spec   The wow specifier
+##
+## @return     The specifier information.
+##
+def get_spec_info(wow_class, wow_spec)
+ return [get_role(wow_class, wow_spec), get_stat(wow_class, wow_spec), get_dps_talents(wow_class)]
+
+
+##
+## @brief      Gets the main stat and role
+##
+## @param      wow_class  The class name as string
+## @param      wow_spec   The specifier name as string
+##
+## @return     List of [main_stat, role]
+##
+def get_stat_role(wow_class, wow_spec):
+  return [get_stat(wow_class, wow_spec), get_role(wow_class, wow_spec)]
+
+
+##
+## @brief      Determines if class and spec are correct and fit each other.
+##
+## @param      wow_class  The wow class
+## @param      wow_spec   The wow specifier
+##
+## @return     True if class specifier, False otherwise.
+##
+def is_class_spec(wow_class, wow_spec):
+  if is_class(wow_class):
+    if is_spec(wow_class, wow_spec):
+      return True
+  return False
 
 
 ##
@@ -200,7 +242,7 @@ def get_spec_info(class_name, spec_name):
 ##
 def __validity_check():
   for wow_class in __classes_data:
-    for spec in __classes_data[wow_class]["specs"]:
-      if (__classes_data[wow_class]["specs"][spec]["role"] == "ranged" and __classes_data[wow_class]["specs"][spec]["stat"] == "str") or (__classes_data[wow_class]["specs"][spec]["role"] == "melee" and __classes_data[wow_class]["specs"][spec]["stat"] == "int"):
+    for spec in get_specs(wow_class):
+      if (get_role(wow_class, wow_spec) == "ranged" and get_stat(wow_class, wow_spec) == "str") or (get_role(wow_class, wow_spec) == "melee" and get_stat(wow_class, wow_spec) == "int"):
         return False
   return True

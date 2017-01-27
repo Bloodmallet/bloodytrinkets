@@ -1,5 +1,5 @@
 # File containing all trinket items and functions for retrieval of a spec's possible trinkets
-from lib.spec_utils import get_spec_info
+from lib.spec_utils import get_role_stat
 from collections import defaultdict
 
 # Ranged trinkets are usable by casters and hunters
@@ -213,7 +213,7 @@ def __combine_trinket_dicts(role_trinkets,stat_trinkets):
 ## @return     Relevant trinkets as a dict of lists
 ##
 def get_trinkets_for_spec(class_name, spec_name):
-  spec_info = get_spec_info(class_name, spec_name)
+  spec_info = get_role_stat(class_name, spec_name)
   role_trinkets, stat_trinkets = __get_relevant_trinkets(spec_info[0], spec_info[1])
   combined_trinkets = __combine_trinket_dicts(role_trinkets, stat_trinkets)
   return combined_trinkets
