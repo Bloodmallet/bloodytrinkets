@@ -131,7 +131,10 @@ def get_dps_talents(wow_class):
 ## @return     The specs as a list.
 ##
 def get_specs(wow_class):
-  return __classes_data[wow_class]["specs"].keys()
+  spec_collection = []
+  for spec in __classes_data[wow_class]["specs"]:
+    spec_collection.append(spec)
+  return spec_collection
 
 
 ##
@@ -158,7 +161,7 @@ def is_class(wow_class):
 def is_spec(wow_spec):
   spec_list = []
   for wow_class in __classes_data:
-    spec_list.append(get_specs(wow_class))
+    spec_list = spec_list + get_specs(wow_class)
   if wow_spec in spec_list:
     return True
   else:
@@ -204,7 +207,7 @@ def get_role_stat(wow_class, wow_spec):
 ##
 ## @return     The specifier information.
 ##
-def get_spec_info(wow_class, wow_spec)
+def get_spec_info(wow_class, wow_spec):
  return [get_role(wow_class, wow_spec), get_stat(wow_class, wow_spec), get_dps_talents(wow_class)]
 
 
@@ -230,8 +233,9 @@ def get_stat_role(wow_class, wow_spec):
 ##
 def is_class_spec(wow_class, wow_spec):
   if is_class(wow_class):
-    if is_spec(wow_class, wow_spec):
-      return True
+    if is_spec(wow_spec):
+      if wow_spec in get_specs(wow_class):
+        return True
   return False
 
 

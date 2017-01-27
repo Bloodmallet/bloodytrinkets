@@ -13,11 +13,11 @@ import os
 # Library to print fancy one line output
 import sys
 # Bloodytrinkets lib imports
-import lib.spec_utils
-import lib.trinkets
 import lib.output.highcharts
 import lib.output.json
-
+import lib.simc_checks
+import lib.spec_utils
+import lib.trinkets
 ##
 #-------------------------------------------------------------------------------------
 # Options
@@ -43,9 +43,9 @@ simc_settings["class"] = "shaman"
 simc_settings["spec"]  = "elemental"
 
 # You want to use a custom profile? Set c_profile to True and add the relative path and name
-simc_settings["c_profile"]          = False
+simc_settings["c_profile"]      = False
 simc_settings["c_profile_path"] = "example_dir/"
-simc_settings["c_profile_name"]     = "example_name.simc"
+simc_settings["c_profile_name"] = "example_name.simc"
 
 
 
@@ -217,10 +217,26 @@ def sim_all(trinkets, ilevels, simc_settings):
 
 baseline = {"none": [["none", "", 840, 1200]]}
 error_collector = []
+if not lib.simc_checks.is_iteration(simc_settings["iterations"]):
+  error_collector.append("simc_settings[iterations] not strong or out of bounds")
+if not lib.simc_checks.is_target_error(simc_settings["target_error"]):
+  error_collector.append("simc_settings[target_error] not string or out of bounds")
+if not lib.simc_checks.is_fight_style(simc_settings["fight_style"]):
+  error_collector.append("simc_settings[fight_style] not a recognised fight style")
+if not lib.spec_utils.is_class(simc_settings["class"]):
+  error_collector.append("simc_settings[class] wrong name")
+if not lib.spec_utils.is_spec(simc_settings["spec"]):
+  error_collector.append("simc_settings[spec] not appropriate spec name")
 if lib.spec_utils.is_class_spec(simc_settings["class"], simc_settings["spec"]):
   trinkets = lib.trinkets.get_trinkets_for_spec(simc_settings["class"], simc_settings["spec"])
 else:
-  error_collector.append("invalid_class_spec")
+  error_collector.append("simc_settings[class] and simc_settings[spec] don't fit each other")
+
+if error_collector:
+  print("Some data got corrupted. The following errors were cought:")
+  for error in error_collector:
+    print(error)
+  sys.exit("Program termintes due to errors in data.")
 
 print("Name of the graph: '" + graph_name + "'")
 
