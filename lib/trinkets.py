@@ -116,7 +116,7 @@ melee_trinkets["emerald_nightmare"] = [
 melee_trinkets["nighthold"] = [
   [ "Convergence of Fates",       "140806", 860, 1200 ],
   [ "Draught of Souls",           "140808", 865, 1200 ],
-  [ "Entwined Elemental Foci",    "140796", 860, 1200 ],
+  [ "Entwined Elemental Foci",    "140796", 860, 1200 ]
 ]
 
 # Unfinished
@@ -124,7 +124,13 @@ agi_trinkets = {}
 agi_trinkets["world"] = [
   [ "Ley Spark",               "140027", 805, 1200 ],
   [ "Six-Feather Fan",         "141585", 810, 1200 ],
-  [ "Thrice-Accursed Compass", "141537", 860, 1200 ]
+    # 142506 is Eye of Guarm, used as a reference stat stick
+  [ "Stat Stick (Crit)",              "142506,bonus_id=603", 865, 1200 ],
+  [ "Stat Stick (Haste)",             "142506,bonus_id=604", 865, 1200 ],
+  [ "Stat Stick (Mastery)",           "142506,bonus_id=605", 865, 1200 ],
+  [ "Stat Stick (Versatility)",       "142506,bonus_id=607", 865, 1200 ],
+  [ "Thrice-Accursed Compass", "141537", 860, 1200 ],
+  [ "Unstable Arcano Crystal",        "141482", 860, 1200 ]
 ]
 
 agi_trinkets["dungeon"] = [
