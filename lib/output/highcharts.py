@@ -16,8 +16,8 @@
 ##
 ## @return     True if writing to file was successfull
 ##
-def print_highchart(trinket_list, ordered_trinket_names, ilevels, graph_colours, graph_name, simc_settings):
-  with open(create_filename(simc_settings) + ".js", "w") as ofile:
+def print_highchart(trinket_list, ordered_trinket_names, ilevels, graph_colours, graph_name, simc_settings, filename):
+  with open(filename + ".js", "w") as ofile:
     ofile.write("jQuery(function ($) {\n")
     ofile.write("    Highcharts.chart('if-container', {\n")
     ofile.write("        chart: {\n")

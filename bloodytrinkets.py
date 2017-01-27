@@ -1,15 +1,13 @@
 # Project to automate trinket sims for dps specs
 
+# params
+#import argparse
 # Library to use command line
 import subprocess
 # Library to get date and calcutiontime for program
 import datetime
-# Library to create json output
-import json
 # Library to look for files and create them if needed
 import os
-# params
-#import argparse
 # Library to print fancy one line output
 import sys
 # Bloodytrinkets lib imports
@@ -217,6 +215,7 @@ def sim_all(trinkets, ilevels, simc_settings):
 
 baseline = {"none": [["none", "", 840, 1200]]}
 error_collector = []
+filename = create_filename(simc_settings)
 if not lib.simc_checks.is_iteration(simc_settings["iterations"]):
   error_collector.append("simc_settings[iterations] not strong or out of bounds")
 if not lib.simc_checks.is_target_error(simc_settings["target_error"]):
@@ -262,13 +261,13 @@ if output_type == "highchart":
     print(sim_results)
   
   print("Printing results to js file.")
-  if lib.output.highcharts.print_highchart(sim_results, ordered_trinket_names, ilevels, graph_colours, graph_name, simc_settings):
+  if lib.output.highcharts.print_highchart(sim_results, ordered_trinket_names, ilevels, graph_colours, graph_name, simc_settings, filename):
     print("Output successful.")
   else:
     print("Output failed.")
 elif output_type == "json":
   print("Printing results to json file.")
-  if lib.output.json.print_json(sim_results, ilevels, graph_name, simc_settings):
+  if lib.output.json.print_json(sim_results, ilevels, graph_name, simc_settings, filename):
     print("Output successful.")
   else:
     print("Output failed.")
