@@ -2,7 +2,9 @@
 
 import datetime
 import json
-
+# Library to look for files and create them if needed
+import os
+import settings
 
 ##
 ## @brief      Prints all data to json file
@@ -18,11 +20,11 @@ import json
 ##
 ## @return     True after json output
 ##
-def print_json(trinket_list, ilevels, graph_name, simc_settings, filename):
+def print_json(trinket_list, filename):
   sim_data = {}
-  sim_data["Name"] = graph_name
-  sim_data["Simulated itemlevels"] = ilevels
-  sim_data["Simc setting"] = simc_settings
+  sim_data["Name"] = settings.graph_name
+  sim_data["Simulated itemlevels"] = settings.ilevels
+  sim_data["Simc setting"] = settings.simc_settings
   sim_data["Date"] = "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.now())
   sim_data["trinkets"] = trinket_list
   with open(filename + ".json", "w") as ofile:

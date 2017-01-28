@@ -8,13 +8,14 @@ graph_name = "Icefury trinket sims 7.1.5"
 ilevels = [ "925", "915", "905", "895", "885", "875", "865" ]
 
 output_screen = False
-# "json" or "highchart"
-output_type = "json" 
+# "json", "highchart"
+output_types = ["json", "highchart"]
 
 simc_settings = {}
 simc_settings["fight_style"]  = "patchwerk"
 simc_settings["iterations"]   = "20000"
 simc_settings["target_error"] = "0.1"
+simc_settings["threads"]      = "6"
 simc_settings["tier"]         = "T19M_NH"
 
 simc_settings["class"] = "shaman"

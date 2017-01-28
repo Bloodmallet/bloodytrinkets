@@ -3,7 +3,6 @@
 
 # Library to get date and calcutiontime for program
 import datetime
-
 import lib.output.highcharts
 import lib.output.json
 import settings
@@ -18,13 +17,13 @@ import settings
 ##
 ## @return     Returns a filename which contains the current date
 ##
-def create_filename(simc_settings):
+def __create_filename():
   filename = ""
   filename += "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.now())
-  filename += "_" + simc_settings["fight_style"]
-  filename += "_" + simc_settings["class"]
-  filename += "_" + simc_settings["spec"]
-  filename += "_" + simc_settings["tier"]
+  filename += "_" + settings.simc_settings["fight_style"]
+  filename += "_" + settings.simc_settings["class"]
+  filename += "_" + settings.simc_settings["spec"]
+  filename += "_" + settings.simc_settings["tier"]
   return filename
 
 
@@ -42,9 +41,9 @@ def create_filename(simc_settings):
 ##
 ## @return     Dictionary of all simmed trinkets with all their normalised dps
 ##             values as strings {trinket_name s:{ilevel s:{dps s}}}. dps is "0"
-##             if to be simmed itemlevel don't match available trinket itemlevel
+##             if the simmed itemlevel doesn't match available trinket itemlevel
 ##
-def normalise_trinkets(sim_results, base_dps, base_ilevel):
+def __normalise_trinkets(base_dps, sim_results, base_ilevel):
   for trinket in sim_results:
     for ilevel in sim_results[trinket]:
       if not sim_results[trinket][ilevel] == "0":
@@ -64,8 +63,8 @@ def normalise_trinkets(sim_results, base_dps, base_ilevel):
 ## @return     Trinket list ordered ascending from lowest to highest dps for
 ##             highest available itemlevel
 ##
-def order_results(sim_results, ilevels):
-  highest_ilevel = ilevels[0]
+def __order_results(sim_results):
+  highest_ilevel = settings.ilevels[0]
   current_best_dps = "-1"
   last_best_dps = "-1"
   name = ""
@@ -89,13 +88,14 @@ def order_results(sim_results, ilevels):
   return trinket_list
 
 
-def print_manager(print_types, base_dps_dic, trinket_dic, ilevels, graph_colours, graph_name, simc_settings, output_screen):
-  filename = create_filename(simc_settings)
-  for print_type in print_types:
+def print_manager(base_dps_dic, sim_results):
+  filename = __create_filename()
+  for print_type in settings.output_types:
+    print("")
 
     if print_type is "json":
       print("Initiating json output.")
-      if json.print_json(trinket_dic, ilevels, graph_name, simc_settings, filename):
+      if lib.output.json.print_json(sim_results, filename):
         print("Generating json file: Done")
       else:
         print("Generating json file: Failed")
@@ -103,14 +103,15 @@ def print_manager(print_types, base_dps_dic, trinket_dic, ilevels, graph_colours
     elif print_type is "highchart":
       print("Initiating highchart output")
       print("Ordering trinkets by dps.")
-      ordered_trinket_names = order_results(sim_results, ilevels)
-      if output_screen:
+      ordered_trinket_names = __order_results(sim_results)
+      if settings.output_screen:
         print(ordered_trinket_names)
       print("Normalising dps values.")
-      sim_results = normalise_trinkets(sim_results, base_dps_dic, ilevels[-1])
-      if output_screen:
+      sim_results = __normalise_trinkets(base_dps_dic, sim_results, settings.ilevels[-1])
+      if settings.output_screen:
         print(sim_results)
-      if lib.output.highcharts.print_highchart(sim_results, ordered_trinket_names, ilevels, graph_colours, graph_name, simc_settings, filename):
+      if lib.output.highcharts.print_highchart(sim_results, ordered_trinket_names, filename):
         print("Generating highchart file: Done")
       else:
         print("Generating highchart file: Failed")
+  return True
