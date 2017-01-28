@@ -79,6 +79,8 @@ def sim_all( trinkets, ilevels ):
         dps = "0"
         if trinket[2] <= int( ilevel ) and trinket[3] >= int( ilevel ):
           dps = get_dps( trinket[1], ilevel )
+        elif source == "legendary" and ilevel == ilevels[-1]:
+          dps = get_dps( trinket[1], trinket[2] )
         all_simmed[trinket[0]][ilevel] = dps
         sim_counter += 1
         sys.stdout.write( "Already simed: %d of %d\r" % ( sim_counter, sim_ceiling ))
