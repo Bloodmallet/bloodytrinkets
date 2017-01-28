@@ -13,6 +13,7 @@ import sys
 # Bloodytrinkets lib imports
 import lib.output.highcharts
 import lib.output.json
+import lib.output.main
 import lib.simc_checks
 import lib.spec_utils
 import lib.trinkets
