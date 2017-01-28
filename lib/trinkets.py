@@ -69,7 +69,7 @@ int_trinkets["emerald_nightmare"] = [
 
 int_trinkets["nighthold"] = [
   [ "Erratic Metronome",              "140792", 855, 1200 ],
-  [ "Pharameres Forbidden Guidance",  "140800", 860, 1200 ],
+  [ "Pharameres Forbidden Grimoire",  "140800", 860, 1200 ],
   [ "Star Gate",                      "140804", 860, 1200 ],
   [ "Whispers in the Dark",           "140809", 865, 1200 ]
 ]
