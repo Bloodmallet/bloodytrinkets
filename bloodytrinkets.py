@@ -1,3 +1,4 @@
+#!python3
 # Project to automate trinket sims for dps specs
 
 # params
