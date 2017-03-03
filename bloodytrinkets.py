@@ -118,7 +118,7 @@ if error_collector:
   print("Some data got corrupted. The following errors were cought:")
   for error in error_collector:
     print(error)
-  sys.exit("Program termintes due to errors in data.")
+  sys.exit("Program terminates due to errors in data.")
 
 
 print("Name of the graph: '" + settings.graph_name + "'")
