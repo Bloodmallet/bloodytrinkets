@@ -84,11 +84,12 @@ int_trinkets["crafted"] = [
   [ "Infernal Alchemist Stone",       "127842", 815, 865 ]
 ]
 
-# Melee trinkets usable by melee classes. Unfinished
+# Melee trinkets usable by melee classes.
 melee_trinkets = {}
 melee_trinkets["world"] = [
   [ "Darkmoon Deck: Dominion",        "128705", 815, 865],
-  [ "The Devilsaur's Bite",           "140026", 805, 1200 ]
+  [ "The Devilsaur's Bite",           "140026", 805, 1200 ],
+  [ "Unstable Arcano Crystal",        "141482", 860, 1200 ]
 ]
 
 melee_trinkets["dungeon"] = [
@@ -107,6 +108,12 @@ melee_trinkets["dungeon"] = [
   [ "Windscar Whetstone",       "137486", 840, 1200 ]
 ]
 
+melee_trinkets["karazhan"] = [
+  [ "Bloodstained Handkerchief",  "142159", 855, 1200],
+  [ "Eye of Command",             "142167", 860, 1200],
+  [ "Toe Knee's Promise",         "142164", 855, 1200]
+]
+
 melee_trinkets["emerald_nightmare"] = [
   [ "Nature's Call",             "139334", 835, 1200 ],
   [ "Ravaged Seed Pod",          "139320", 835, 1200 ],
@@ -119,7 +126,6 @@ melee_trinkets["nighthold"] = [
   [ "Entwined Elemental Foci",    "140796", 860, 1200 ]
 ]
 
-# Unfinished
 agi_trinkets = {}
 agi_trinkets["world"] = [
   [ "Ley Spark",               "140027", 805, 1200 ],
@@ -129,8 +135,7 @@ agi_trinkets["world"] = [
   [ "Stat Stick (Haste)",             "142506,bonus_id=604", 865, 1200 ],
   [ "Stat Stick (Mastery)",           "142506,bonus_id=605", 865, 1200 ],
   [ "Stat Stick (Versatility)",       "142506,bonus_id=607", 865, 1200 ],
-  [ "Thrice-Accursed Compass", "141537", 860, 1200 ],
-  [ "Unstable Arcano Crystal",        "141482", 860, 1200 ]
+  [ "Thrice-Accursed Compass", "141537", 860, 1200 ]
 ]
 
 agi_trinkets["dungeon"] = [
@@ -147,16 +152,33 @@ agi_trinkets["nighthold"] = [
   [ "Nightblooming Frond",         "140802", 860, 1200 ]
 ]
 
-# Unfinished
-str_trinkets = {}
-str_trinkets["world"] = []
-str_trinkets["dungeon"] = []
-str_trinkets["emerald_nightmare"] = [
-  [ "Ursoc's Rending Pawn",         "139328", 835, 1200 ]
+agi_trinkets["pvp"] = [
+  [ "PVP Insignia of Conquest"    "142662", 840, 1200],
+  [ "PVP Badge of Conquest",      "142773", 840, 1200]
 ]
+
+str_trinkets = {}
+str_trinkets["world"] = [
+  # 142508 is Chains of the Valorous, used as a reference stat stick
+  [ "Stat Stick (Crit)",              "142508,bonus_id=603", 865, 1200 ],
+  [ "Stat Stick (Haste)",             "142508,bonus_id=604", 865, 1200 ],
+  [ "Stat Stick (Mastery)",           "142508,bonus_id=605", 865, 1200 ],
+  [ "Stat Stick (Versatility)",       "142508,bonus_id=607", 865, 1200 ],
+  [ "Ettin Fingernail",           "141535", 860, 1200]
+]
+
+str_trinkets["emerald_nightmare"] = [
+  [ "Ursoc's Rending Paw",         "139328", 835, 1200 ]
+]
+
 str_trinkets["nighthold"] = [
   [ "Claw of the Crystalline Scorpid",   "140790", 855, 1200 ],
   [ "Might of Krosus",                   "140799", 860, 1200 ]
+]
+
+str_trinkets["pvp"] = [
+  [ "PVP Insignia of Victory",           "142784", 840, 1200],
+  [ "PVP Badge of Victory",              "142669", 840, 1200]
 ]
 
 ##
