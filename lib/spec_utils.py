@@ -88,6 +88,18 @@ __classes_data = {
   }
 }
 
+
+##
+## @brief      Gets the wow classes.
+##
+## @return     The classes.
+##
+def get_classes():
+  classes = []
+  for wow_class in __classes_data:
+    classes.append(wow_class)
+  return classes
+
 ##
 ## @brief      Gets the role from class and spec.
 ##
@@ -145,7 +157,7 @@ def get_specs(wow_class):
 ## @return     True if class, False otherwise.
 ##
 def is_class(wow_class):
-  if wow_class in __classes_data.keys():
+  if wow_class in get_classes():
     return True
   else:
     return False
@@ -237,6 +249,23 @@ def is_class_spec(wow_class, wow_spec):
       if wow_spec in get_specs(wow_class):
         return True
   return False
+
+
+##
+## @brief      Determines if dps talent combination fits data.
+##
+## @param      talent_combination  The talent combination
+## @param      wow_class           The wow class
+##
+## @return     True if dps talent combination fits, False otherwise.
+##
+def is_dps_talent_combination(talent_combination, wow_class):
+  for i in range(0, 7):
+    if talent_combination[i] == "0" and __classes_data[wow_class]["talents"][i] == "1":
+      return False
+    elif not talent_combination[i] == "0" and __classes_data[wow_class]["talents"][i] == "0":
+      return False
+  return True
 
 
 ##

@@ -1,5 +1,9 @@
 # File for handling all Highcharts
 
+# Library to look for files and create them if needed
+import os
+import settings
+
 ##
 ## @brief      Generates js output for http://www.highcharts.com/ bars of
 ##             http://www.stormearthandlava.com/elemental-shaman-hub/elemental-trinket-sims/
@@ -16,7 +20,7 @@
 ##
 ## @return     True if writing to file was successfull
 ##
-def print_highchart(trinket_list, ordered_trinket_names, ilevels, graph_colours, graph_name, simc_settings, filename):
+def print_highchart(trinket_list, ordered_trinket_names, filename):
   with open(filename + ".js", "w") as ofile:
     ofile.write("jQuery(function ($) {\n")
     ofile.write("    Highcharts.chart('if-container', {\n")
@@ -24,7 +28,7 @@ def print_highchart(trinket_list, ordered_trinket_names, ilevels, graph_colours,
     ofile.write("            type: 'bar'\n")
     ofile.write("        },\n")
     ofile.write("        title: {\n")
-    ofile.write("            text: '" + graph_name + "'\n")
+    ofile.write("            text: '" + settings.graph_name + "'\n")
     ofile.write("        },\n")
     ofile.write("        xAxis: {\n")
     ofile.write("      categories: [")
@@ -92,26 +96,29 @@ def print_highchart(trinket_list, ordered_trinket_names, ilevels, graph_colours,
     ofile.write("            }\n")
     ofile.write("        },\n")
     ofile.write("                series: [")
-    for i in range(0, len(ilevels)):
-      ilevel = ilevels[i]
-      if i < len(ilevels) - 1:
-        next_ilevel = ilevels[i + 1]
+    for i in range(0, len(settings.ilevels)):
+      ilevel = settings.ilevels[i]
+      if i < len(settings.ilevels) - 1:
+        next_ilevel = settings.ilevels[i + 1]
       else:
         next_ilevel = False
-      if not ilevel == ilevels[0]:
+      if not ilevel == settings.ilevels[0]:
         ofile.write(", ")
       ofile.write("{\n")
       ofile.write("            name: '" + ilevel + "',\n")
-      ofile.write("            color: '" + graph_colours[ilevel] + "',\n")
+      ofile.write("            color: '" + settings.graph_colours[ilevel] + "',\n")
       ofile.write("            data: [")
       for trinket_name in ordered_trinket_names:
-        if ilevel == ilevels[-1]:
+        if ilevel == settings.ilevels[-1]:
           ofile.write(trinket_list[trinket_name][ilevel])
         else:
           if trinket_list[trinket_name][ilevel] == "0":
             ofile.write("0")
           else:
-            ofile.write(str(int(trinket_list[trinket_name][ilevel]) - int(trinket_list[trinket_name][next_ilevel])))
+            if int(trinket_list[trinket_name][ilevel]) - int(trinket_list[trinket_name][next_ilevel]) < 0:
+              ofile.write("0")
+            else:
+              ofile.write(str(int(trinket_list[trinket_name][ilevel]) - int(trinket_list[trinket_name][next_ilevel])))
         if not trinket_name == ordered_trinket_names[-1]:
           ofile.write(",")
       ofile.write("]\n")

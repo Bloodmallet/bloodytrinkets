@@ -2,6 +2,20 @@
 
 
 ##
+## @brief      Gets all fight styles.
+##
+## @return     The fight styles.
+##
+def get_fight_styles():
+  return (
+    "patchwerk",
+    "lightmovement", 
+    "heavymovement", 
+    "hecticaddcleave", 
+    "beastlord", 
+    "helterskelter" )
+
+##
 ## @brief      Validates the input fight style.
 ##
 ## @param      fight_style  The fight style like in SimC options
@@ -9,12 +23,7 @@
 ## @return     True if fight_style matches predetermined SimC-styles
 ##
 def is_fight_style(fight_style):
-  fight_style_list = ("patchwerk",
-                      "lightmovement", 
-                      "heavymovement", 
-                      "hecticaddcleave", 
-                      "beastlord", 
-                      "helterskelter")
+  fight_style_list = get_fight_styles()
   if type(fight_style) is str:
     if fight_style in fight_style_list:
         return True
