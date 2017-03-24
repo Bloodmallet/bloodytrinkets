@@ -128,7 +128,7 @@ if len(settings.simc_settings["fight_styles"]) > 1:
   print("Calculating multiple fight styles.")
 
 fight_style_counter = 0
-for fight_style in range(settings.simc_settings["fight_styles"]):
+for fight_style in settings.simc_settings["fight_styles"]:
   fight_style_counter += 1
 
   print("Loading base dps value.")
@@ -139,7 +139,7 @@ for fight_style in range(settings.simc_settings["fight_styles"]):
   print("Loading dps-values for all trinkets.")
   sim_results = sim_all( trinkets, settings.ilevels, fight_style )
 
-  if lib.output.output.print_manager( base_dps, sim_results ):
+  if lib.output.output.print_manager( base_dps, sim_results, fight_style ):
     print("Output successful.")
 
 print("Program exists without errors.")

@@ -1,5 +1,5 @@
 ## File contains all settings for 
-## 
+## Bloodytrinkets
 ## 
 
 graph_colours = { 
@@ -11,7 +11,7 @@ graph_colours = {
   "915": "#db843d", 
   "925": "#00E676" 
 }
-graph_name = "Icefury trinket sims 7.1.5"
+graph_name = "Lightning Rod trinket sims 7.2"
 # Defines itemlevels that shall be simed ordered from highest to lowest (graph output will have this order reversed)
 ilevels = [ 
   "925", 
@@ -28,10 +28,10 @@ output_screen = False
 output_types = ["json", "highchart"]
 
 simc_settings = {}
-simc_settings["fight_styles"]  = ["patchwerk", "helterskelter"]
-simc_settings["iterations"]   = "20000"
+simc_settings["fight_styles"] = ["patchwerk", "helterskelter"]
+simc_settings["iterations"]   = "250000"
 simc_settings["target_error"] = "0.1"
-simc_settings["threads"]      = "6"
+simc_settings["threads"]      = ""
 simc_settings["tier"]         = "T19M_NH"
 
 simc_settings["class"] = "shaman"

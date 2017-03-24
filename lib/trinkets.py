@@ -37,8 +37,8 @@ ranged_trinkets["nighthold"] = [
 ]
 
 ranged_trinkets["pvp"] = [   
-  ["PVP Badge of Dominance",         "142779", 840, 1200],
-  ["PVP Insignia of Dominance",       "142668", 840, 1200]
+  ["PVP Badge of Dominance",         "142779", 840, 1200 ],
+  ["PVP Insignia of Dominance",      "142668", 840, 1200 ]
 ]
 
 
@@ -75,8 +75,8 @@ int_trinkets["nighthold"] = [
 ]
 
 int_trinkets["pvp"] = [ 
-  ["PVP Insignia of Dominance",       "142668", 840, 1200],
-  ["PVP Badge of Dominance",          "142779", 840, 1200]
+  ["PVP Insignia of Dominance",       "142668", 840, 1200 ],
+  ["PVP Badge of Dominance",          "142779", 840, 1200 ]
 ]
 
 int_trinkets["crafted"] = [
@@ -87,7 +87,7 @@ int_trinkets["crafted"] = [
 ## Melee trinkets usable by melee classes.
 melee_trinkets = {}
 melee_trinkets["world"] = [
-  [ "Darkmoon Deck: Dominion",        "128705", 815, 865],
+  [ "Darkmoon Deck: Dominion",        "128705", 815, 865  ],
   [ "The Devilsaur's Bite",           "140026", 805, 1200 ],
   [ "Unstable Arcano Crystal",        "141482", 860, 1200 ]
 ]
@@ -109,9 +109,9 @@ melee_trinkets["dungeon"] = [
 ]
 
 melee_trinkets["karazhan"] = [
-  [ "Bloodstained Handkerchief",  "142159", 855, 1200],
-  [ "Eye of Command",             "142167", 860, 1200],
-  [ "Toe Knee's Promise",         "142164", 855, 1200]
+  [ "Bloodstained Handkerchief",  "142159", 855, 1200 ],
+  [ "Eye of Command",             "142167", 860, 1200 ],
+  [ "Toe Knee's Promise",         "142164", 855, 1200 ]
 ]
 
 melee_trinkets["emerald_nightmare"] = [
@@ -135,7 +135,7 @@ agi_trinkets["world"] = [
   [ "Stat Stick (Haste)",             "142506,bonus_id=604", 865, 1200 ],
   [ "Stat Stick (Mastery)",           "142506,bonus_id=605", 865, 1200 ],
   [ "Stat Stick (Versatility)",       "142506,bonus_id=607", 865, 1200 ],
-  [ "Thrice-Accursed Compass", "141537", 860, 1200 ]
+  [ "Thrice-Accursed Compass",        "141537",              860, 1200 ]
 ]
 
 agi_trinkets["dungeon"] = [
@@ -153,8 +153,8 @@ agi_trinkets["nighthold"] = [
 ]
 
 agi_trinkets["pvp"] = [
-  [ "PVP Insignia of Conquest"    "142662", 840, 1200],
-  [ "PVP Badge of Conquest",      "142773", 840, 1200]
+  [ "PVP Insignia of Conquest"    "142662", 840, 1200 ],
+  [ "PVP Badge of Conquest",      "142773", 840, 1200 ]
 ]
 
 str_trinkets = {}
@@ -164,11 +164,11 @@ str_trinkets["world"] = [
   [ "Stat Stick (Haste)",             "142508,bonus_id=604", 865, 1200 ],
   [ "Stat Stick (Mastery)",           "142508,bonus_id=605", 865, 1200 ],
   [ "Stat Stick (Versatility)",       "142508,bonus_id=607", 865, 1200 ],
-  [ "Ettin Fingernail",           "141535", 860, 1200]
+  [ "Ettin Fingernail",               "141535",              860, 1200 ]
 ]
 
 str_trinkets["emerald_nightmare"] = [
-  [ "Ursoc's Rending Paw",         "139328", 835, 1200 ]
+  [ "Ursoc's Rending Paw",        "139328", 835, 1200 ]
 ]
 
 str_trinkets["nighthold"] = [
@@ -177,8 +177,13 @@ str_trinkets["nighthold"] = [
 ]
 
 str_trinkets["pvp"] = [
-  [ "PVP Insignia of Victory",           "142784", 840, 1200],
-  [ "PVP Badge of Victory",              "142669", 840, 1200]
+  [ "PVP Insignia of Victory",           "142784", 840, 1200 ],
+  [ "PVP Badge of Victory",              "142669", 840, 1200 ]
+]
+
+legendary_trinkets = {}
+legendary_trinkets["legendary"] = [
+  [ "Kil'jaeden's Burning Wish",  "144259", 940, 1200 ]
 ]
 
 
@@ -189,8 +194,10 @@ str_trinkets["pvp"] = [
 ## @param      stat  The specialisation's main stat (str/int/agi) as a string
 ##
 ## @return     A group of trinkets relevant to the role as a dictionary of lists
-## @return     A group of trinkets relevant to the main stat as a dictionary of lists
-def __get_relevant_trinkets(role,stat):
+## @return     A group of trinkets relevant to the main stat as a dictionary of
+##             lists
+##
+def __get_relevant_trinkets(role, stat):
   # Inelegant solution. No good way to do this.
   if role == "ranged":
     role_trinkets = ranged_trinkets
@@ -209,12 +216,14 @@ def __get_relevant_trinkets(role,stat):
 ##
 ## @brief      Combines role and stat trinket
 ##
-## @param      role_trinkets  The trinkets relevant to role (ranged/melee) as a dict of lists
-## @param      stat_trinkets  The trinkets relevant to a spec's stat (int/str/agi) as a dict of lists
+## @param      role_trinkets  The trinkets relevant to role (ranged/melee) as a
+##                            dict of lists
+## @param      stat_trinkets  The trinkets relevant to a spec's stat
+##                            (int/str/agi) as a dict of lists
 ##
 ## @return     A group of trinkets relevant to the spec as a dictionary of lists
 ##
-def __combine_trinket_dicts(role_trinkets,stat_trinkets):  
+def __combine_trinket_dicts(role_trinkets, stat_trinkets):  
   # Populate a new trinkets dict with role trinkets
   trinkets = role_trinkets
 
@@ -225,6 +234,13 @@ def __combine_trinket_dicts(role_trinkets,stat_trinkets):
     else:
       # Just set the int/str/agi trinket list to the newly created dict's source key  
       trinkets[source] = stat_trinkets[source]
+  for source in legendary_trinkets:
+    if trinkets.get(source) is not None:
+      # Append int/str/agi trinkets to existing list in the newly created dict
+      trinkets[source] = trinkets[source] + legendary_trinkets[source]
+    else:
+      # Just set the int/str/agi trinket list to the newly created dict's source key  
+      trinkets[source] = legendary_trinkets[source]
   return trinkets
 
 

@@ -17,10 +17,10 @@ import settings
 ##
 ## @return     Returns a filename which contains the current date
 ##
-def __create_filename():
+def __create_filename(fight_style):
   filename = ""
   filename += "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.now())
-  filename += "_" + settings.simc_settings["fight_style"]
+  filename += "_" + fight_style
   filename += "_" + settings.simc_settings["class"]
   filename += "_" + settings.simc_settings["spec"]
   filename += "_" + settings.simc_settings["tier"]
@@ -88,8 +88,8 @@ def __order_results(sim_results):
   return trinket_list
 
 
-def print_manager(base_dps_dic, sim_results):
-  filename = __create_filename()
+def print_manager(base_dps_dic, sim_results, fight_style):
+  filename = __create_filename(fight_style)
   for print_type in settings.output_types:
     print("")
 
