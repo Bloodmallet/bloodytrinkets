@@ -23,7 +23,7 @@ ranged_trinkets["dungeon"] = [
 ranged_trinkets["karazhan"] = [  
   [ "Arans Relaxed Ruby",          "142157", 860, 1200 ],
   [ "Deteriorated Construct Core", "142165", 860, 1200 ],
-  [ "Mrrgrias_Favor",              "142160", 855, 1200 ] 
+  [ "Mrrgria's Favor",             "142160", 855, 1200 ] 
 ]
 
 ranged_trinkets["emerald_nightmare"] = [  
