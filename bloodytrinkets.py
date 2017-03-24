@@ -34,6 +34,10 @@ def get_dps(trinket_id, item_level, fight_style):
   argument += "fight_style=" + fight_style + " "
   argument += "fixed_time=1 "
   argument += "default_actions=1 "
+  if settings.simc_settings["ptr"]:
+    argument += "ptr=1 "
+  else:
+    argument += "ptr=0 "
   argument += "threads=" + settings.simc_settings["threads"] + " "
   if settings.simc_settings["c_profile"]:
     argument += settings.simc_settings["c_profile_path"] + settings.simc_settings["c_profile_name"] + " "
@@ -81,8 +85,8 @@ def sim_all( trinkets, ilevels, fight_style ):
         dps = "0"
         if trinket[2] <= int( ilevel ) and trinket[3] >= int( ilevel ):
           dps = get_dps( trinket[1], ilevel, fight_style )
-        elif source == "legendary" and ilevel == ilevels[-1]:
-          dps = get_dps( trinket[1], trinket[2], fight_style )
+        elif source == "legendary" and ilevel == ilevels[0]:
+          dps = get_dps( trinket[1], str(trinket[2]), fight_style )
         all_simmed[trinket[0]][ilevel] = dps
         sim_counter += 1
         sys.stdout.write( "Already simed: %d of %d\r" % ( sim_counter, sim_ceiling ))
