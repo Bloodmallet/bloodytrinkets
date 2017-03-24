@@ -28,6 +28,24 @@ def __create_filename(fight_style):
 
 
 ##
+## @brief      Gets the highest trinket dps.
+##
+## @param      sim_results  The simulation results
+## @param      trinket      The trinket
+##
+## @return     The highest trinket dps.
+##
+def __get_highest_trinket_dps(sim_results, trinket):
+  if not sim_results[trinket][settings.ilevels[0]] == "0":
+    return sim_results[trinket][settings.ilevels[0]]
+  dps = "0"
+  for ilevel in settings.ilevels:
+    if int( sim_results[trinket][ilevel] ) > int( dps ):
+      dps = sim_results[trinket][ilevel]
+  return dps
+
+
+##
 ## @brief      Reduces trinket dps to the actual gain those trinkets provide in
 ##             comparison to the baseline dps.
 ##
@@ -71,20 +89,24 @@ def __order_results(sim_results):
   trinket_list = []
   # gets highest dps value of all trinkets
   for trinket in sim_results:
-    if int(last_best_dps) < int(sim_results[trinket][highest_ilevel]) :
-      last_best_dps = sim_results[trinket][highest_ilevel]
+    trinket_dps = __get_highest_trinket_dps( sim_results, trinket )
+    if int( last_best_dps ) < int( trinket_dps ) :
+      last_best_dps = trinket_dps
       name = trinket
-  trinket_list.append(name)
+  trinket_list.append( name )
+
   for outerline in sim_results:
     name = "error"
     current_best_dps = "-1"
     for trinket in sim_results:
-      if int(current_best_dps) < int(sim_results[trinket][highest_ilevel]) and int(last_best_dps) > int(sim_results[trinket][highest_ilevel]):
-        current_best_dps = sim_results[trinket][highest_ilevel]
+      trinket_dps = __get_highest_trinket_dps( sim_results, trinket )
+      if int( current_best_dps ) < int( trinket_dps ) and int( last_best_dps ) > int( trinket_dps ):
+        current_best_dps = trinket_dps
         name = trinket
     if not name == "error": 
-      trinket_list.append(name)
+      trinket_list.append( name )
       last_best_dps = current_best_dps
+
   return trinket_list
 
 
