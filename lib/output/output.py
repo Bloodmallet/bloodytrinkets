@@ -1,7 +1,7 @@
 ## File to manage outputs
  
 
-# Library to get date and calcutiontime for program
+## Library needed to get date and calculationtime for program
 import datetime
 import lib.output.highcharts
 import lib.output.json
@@ -17,14 +17,32 @@ import settings
 ##
 ## @return     Returns a filename which contains the current date
 ##
-def __create_filename():
+def __create_filename(fight_style):
   filename = ""
   filename += "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.now())
-  filename += "_" + settings.simc_settings["fight_style"]
+  filename += "_" + fight_style
   filename += "_" + settings.simc_settings["class"]
   filename += "_" + settings.simc_settings["spec"]
   filename += "_" + settings.simc_settings["tier"]
   return filename
+
+
+##
+## @brief      Gets the highest trinket dps.
+##
+## @param      sim_results  The simulation results
+## @param      trinket      The trinket
+##
+## @return     The highest trinket dps.
+##
+def __get_highest_trinket_dps(sim_results, trinket):
+  if not sim_results[trinket][settings.ilevels[0]] == "0":
+    return sim_results[trinket][settings.ilevels[0]]
+  dps = "0"
+  for ilevel in settings.ilevels:
+    if int( sim_results[trinket][ilevel] ) > int( dps ):
+      dps = sim_results[trinket][ilevel]
+  return dps
 
 
 ##
@@ -71,25 +89,29 @@ def __order_results(sim_results):
   trinket_list = []
   # gets highest dps value of all trinkets
   for trinket in sim_results:
-    if int(last_best_dps) < int(sim_results[trinket][highest_ilevel]) :
-      last_best_dps = sim_results[trinket][highest_ilevel]
+    trinket_dps = __get_highest_trinket_dps( sim_results, trinket )
+    if int( last_best_dps ) < int( trinket_dps ) :
+      last_best_dps = trinket_dps
       name = trinket
-  trinket_list.append(name)
+  trinket_list.append( name )
+
   for outerline in sim_results:
     name = "error"
     current_best_dps = "-1"
     for trinket in sim_results:
-      if int(current_best_dps) < int(sim_results[trinket][highest_ilevel]) and int(last_best_dps) > int(sim_results[trinket][highest_ilevel]):
-        current_best_dps = sim_results[trinket][highest_ilevel]
+      trinket_dps = __get_highest_trinket_dps( sim_results, trinket )
+      if int( current_best_dps ) < int( trinket_dps ) and int( last_best_dps ) > int( trinket_dps ):
+        current_best_dps = trinket_dps
         name = trinket
     if not name == "error": 
-      trinket_list.append(name)
+      trinket_list.append( name )
       last_best_dps = current_best_dps
+
   return trinket_list
 
 
-def print_manager(base_dps_dic, sim_results):
-  filename = __create_filename()
+def print_manager(base_dps_dic, sim_results, fight_style):
+  filename = __create_filename(fight_style)
   for print_type in settings.output_types:
     print("")
 
