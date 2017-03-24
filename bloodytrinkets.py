@@ -102,20 +102,20 @@ def sim_all( trinkets, ilevels, fight_style ):
 ##
 
 
-baseline = {"none": [["none", "", 840, 1200]]}
+
 error_collector = []
-if not lib.simc_checks.is_iteration(settings.simc_settings["iterations"]):
+if not lib.simc_checks.is_iteration( settings.simc_settings["iterations"] ):
   error_collector.append("simc_settings[iterations] not strong or out of bounds")
-if not lib.simc_checks.is_target_error(settings.simc_settings["target_error"]):
+if not lib.simc_checks.is_target_error( settings.simc_settings["target_error"] ):
   error_collector.append("simc_settings[target_error] not string or out of bounds")
-if not lib.simc_checks.is_fight_style(settings.simc_settings["fight_styles"]):
+if not lib.simc_checks.is_fight_style( settings.simc_settings["fight_styles"] ):
   error_collector.append("simc_settings[fight_styles] not a recognised fight style")
-if not lib.spec_utils.is_class(settings.simc_settings["class"]):
+if not lib.spec_utils.is_class( settings.simc_settings["class"] ):
   error_collector.append("simc_settings[class] wrong name")
-if not lib.spec_utils.is_spec(settings.simc_settings["spec"]):
+if not lib.spec_utils.is_spec( settings.simc_settings["spec"] ):
   error_collector.append("simc_settings[spec] not appropriate spec name")
-if lib.spec_utils.is_class_spec(settings.simc_settings["class"], settings.simc_settings["spec"]):
-  trinkets = lib.trinkets.get_trinkets_for_spec(settings.simc_settings["class"], settings.simc_settings["spec"])
+if lib.spec_utils.is_class_spec( settings.simc_settings["class"], settings.simc_settings["spec"] ):
+  trinkets = lib.trinkets.get_trinkets_for_spec( settings.simc_settings["class"], settings.simc_settings["spec"] )
 else:
   error_collector.append("simc_settings[class] and simc_settings[spec] don't fit each other")
 
@@ -131,6 +131,7 @@ print("Name of the graph: '" + settings.graph_name + "'")
 if len(settings.simc_settings["fight_styles"]) > 1:
   print("Calculating multiple fight styles.")
 
+baseline = {"none": [["none", "", 840, 1200]]}
 fight_style_counter = 0
 for fight_style in settings.simc_settings["fight_styles"]:
   fight_style_counter += 1
