@@ -1,8 +1,8 @@
-# File containing all trinket items and functions for retrieval of a spec's possible trinkets
+## File containing all trinket items and functions for retrieval of a spec's possible trinkets
 from lib.spec_utils import get_role_stat
 from collections import defaultdict
 
-# Ranged trinkets are usable by casters and hunters
+## Ranged trinkets are usable by casters and hunters
 ranged_trinkets = {}
 ranged_trinkets["dungeon"] = [
   [ "Caged Horror",                       "136716", 840, 1200 ],
@@ -42,7 +42,7 @@ ranged_trinkets["pvp"] = [
 ]
 
 
-# Int trinkets are only usable by casters
+## Int trinkets are only usable by casters
 int_trinkets = {}
 int_trinkets["world"] = [
   [ "Devilsaur Shock-Baton",          "140030", 840, 1200 ],
@@ -84,7 +84,7 @@ int_trinkets["crafted"] = [
   [ "Infernal Alchemist Stone",       "127842", 815, 865 ]
 ]
 
-# Melee trinkets usable by melee classes.
+## Melee trinkets usable by melee classes.
 melee_trinkets = {}
 melee_trinkets["world"] = [
   [ "Darkmoon Deck: Dominion",        "128705", 815, 865],
@@ -181,6 +181,7 @@ str_trinkets["pvp"] = [
   [ "PVP Badge of Victory",              "142669", 840, 1200]
 ]
 
+
 ##
 ## @brief      Selects the relevant trinket dictionaries for a given spec
 ##
@@ -203,6 +204,7 @@ def __get_relevant_trinkets(role,stat):
   else:
     stat_trinkets = str_trinkets
   return (role_trinkets, stat_trinkets)
+
 
 ##
 ## @brief      Combines role and stat trinket

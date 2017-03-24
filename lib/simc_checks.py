@@ -16,18 +16,20 @@ def get_fight_styles():
     "helterskelter" )
 
 ##
-## @brief      Validates the input fight style.
+## @brief      Validates the input fight styles.
 ##
-## @param      fight_style  The fight style like in SimC options
+## @param      fight_styles  The fight style like in SimC options
 ##
 ## @return     True if fight_style matches predetermined SimC-styles
 ##
-def is_fight_style(fight_style):
+def is_fight_style(fight_styles):
   fight_style_list = get_fight_styles()
-  if type(fight_style) is str:
-    if fight_style in fight_style_list:
-        return True
-  return False
+  for fight_style in fight_styles:
+    if not type(fight_style) is str:
+      return False
+    if not fight_style.lower() in fight_style_list:
+      return False
+  return True
 
 
 ##

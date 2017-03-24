@@ -28,7 +28,7 @@ output_screen = False
 output_types = ["json", "highchart"]
 
 simc_settings = {}
-simc_settings["fight_style"]  = "patchwerk"
+simc_settings["fight_styles"]  = ["patchwerk", "helterskelter"]
 simc_settings["iterations"]   = "20000"
 simc_settings["target_error"] = "0.1"
 simc_settings["threads"]      = "6"

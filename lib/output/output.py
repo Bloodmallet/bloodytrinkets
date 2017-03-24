@@ -1,7 +1,7 @@
 ## File to manage outputs
  
 
-# Library to get date and calcutiontime for program
+## Library needed to get date and calculationtime for program
 import datetime
 import lib.output.highcharts
 import lib.output.json

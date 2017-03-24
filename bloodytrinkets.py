@@ -27,11 +27,11 @@ import lib.trinkets
 ##
 ## @return     The dps s.
 ##
-def get_dps(trinket_id, item_level):
+def get_dps(trinket_id, item_level, fight_style):
   argument = "../simc.exe "
   argument += "iterations=" + settings.simc_settings["iterations"] + " "
   argument += "target_error=" + settings.simc_settings["target_error"] + " "
-  argument += "fight_style=" + settings.simc_settings["fight_style"] + " "
+  argument += "fight_style=" + fight_style + " "
   argument += "fixed_time=1 "
   argument += "default_actions=1 "
   argument += "threads=" + settings.simc_settings["threads"] + " "
@@ -55,9 +55,10 @@ def get_dps(trinket_id, item_level):
 ##
 ## @brief      Sim all trinkets at all itemlevels when available.
 ##
-## @param      trinkets       The trinkets dictionary {source s:{[trinket_name
-##                            s, id s, base_ilevel i, max_itemlevel i]}}
-## @param      ilevels        The ilevels list
+## @param      trinkets     The trinkets dictionary {source s:{[trinket_name s,
+##                          id s, base_ilevel i, max_itemlevel i]}}
+## @param      ilevels      The ilevels list
+## @param      fight_style  The fight style
 ## @param      simc_settings  The simc options dictionary {iterations s, target
 ##                            error s, fight style s, class s, spec s, tier s
 ##                            "T19M_NH"}
@@ -66,7 +67,7 @@ def get_dps(trinket_id, item_level):
 ##             strings {trinket_name s:{ilevel s:{dps s}}}. dps is "0" if to be
 ##             simmed itemlevel don't match available trinket itemlevel
 ##
-def sim_all( trinkets, ilevels ):
+def sim_all( trinkets, ilevels, fight_style ):
   sim_counter = 0
   sim_ceiling = 0
   for source in trinkets:
@@ -79,9 +80,9 @@ def sim_all( trinkets, ilevels ):
       for ilevel in ilevels:
         dps = "0"
         if trinket[2] <= int( ilevel ) and trinket[3] >= int( ilevel ):
-          dps = get_dps( trinket[1], ilevel )
+          dps = get_dps( trinket[1], ilevel, fight_style )
         elif source == "legendary" and ilevel == ilevels[-1]:
-          dps = get_dps( trinket[1], trinket[2] )
+          dps = get_dps( trinket[1], trinket[2], fight_style )
         all_simmed[trinket[0]][ilevel] = dps
         sim_counter += 1
         sys.stdout.write( "Already simed: %d of %d\r" % ( sim_counter, sim_ceiling ))
@@ -103,8 +104,8 @@ if not lib.simc_checks.is_iteration(settings.simc_settings["iterations"]):
   error_collector.append("simc_settings[iterations] not strong or out of bounds")
 if not lib.simc_checks.is_target_error(settings.simc_settings["target_error"]):
   error_collector.append("simc_settings[target_error] not string or out of bounds")
-if not lib.simc_checks.is_fight_style(settings.simc_settings["fight_style"]):
-  error_collector.append("simc_settings[fight_style] not a recognised fight style")
+if not lib.simc_checks.is_fight_style(settings.simc_settings["fight_styles"]):
+  error_collector.append("simc_settings[fight_styles] not a recognised fight style")
 if not lib.spec_utils.is_class(settings.simc_settings["class"]):
   error_collector.append("simc_settings[class] wrong name")
 if not lib.spec_utils.is_spec(settings.simc_settings["spec"]):
@@ -123,13 +124,22 @@ if error_collector:
 
 print("Name of the graph: '" + settings.graph_name + "'")
 
-print("Loading base dps value.")
-base_dps = sim_all( baseline, [settings.ilevels[-1]] )
-if settings.output_screen:
-  print( base_dps )
+if len(settings.simc_settings["fight_styles"]) > 1:
+  print("Calculating multiple fight styles.")
 
-print("Loading dps-values for all trinkets.")
-sim_results = sim_all( trinkets, settings.ilevels  )
+fight_style_counter = 0
+for fight_style in range(settings.simc_settings["fight_styles"]):
+  fight_style_counter += 1
 
-if lib.output.output.print_manager( base_dps, sim_results ):
-  print("Program ends.")
+  print("Loading base dps value.")
+  base_dps = sim_all( baseline, [settings.ilevels[-1]], fight_style )
+  if settings.output_screen:
+    print( base_dps )
+
+  print("Loading dps-values for all trinkets.")
+  sim_results = sim_all( trinkets, settings.ilevels, fight_style )
+
+  if lib.output.output.print_manager( base_dps, sim_results ):
+    print("Output successful.")
+
+print("Program exists without errors.")
