@@ -144,7 +144,7 @@ agi_trinkets["dungeon"] = [
 ]
 
 agi_trinkets["emerald_nightmare"] = [
-  [ "Bloodythirsty Instinct",       "139239", 835, 1200 ]
+  [ "Bloodthirsty Instinct",       "139329", 835, 1200 ]
 ]
 
 agi_trinkets["nighthold"] = [
