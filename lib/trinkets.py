@@ -134,6 +134,8 @@ int_trinkets["crafted"] = [
   [ "Darkmoon Deck: Hellfire",           "128709", 815, 875 ],
 ]
 int_trinkets["dungeon"] = [
+# not in simc yet
+#  [ "Dreadstone of Endless Shadows",     "144480", 845, 1200 ],
   [ "Infernal Writ",                     "137485", 840, 1200 ] 
 ]
 int_trinkets["emerald_nightmare"] = [
