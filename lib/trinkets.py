@@ -2,189 +2,191 @@
 from lib.spec_utils import get_role_stat
 from collections import defaultdict
 
-## Ranged trinkets are usable by casters and hunters
+## Available types:
+##   legendary - legendary trinkets for everyone
+##   shared    - trinkets for everyone
+##   melee     - agi + str (melee + hunter)
+##   ranged    - int + agi (caster + hunter)
+##   agi       - pure agi (lether wearer + hunter)
+##   int       - pure int (pure caster)
+##   str       - pure str (plate wearer)
+
+
+## legendary trinkets for everyone
+legendary_trinkets = {}
+legendary_trinkets["legendary"] = [
+  [ "Kil'jaeden's Burning Wish",         "144259", 940, 1200 ],
+]
+
+
+## Usable by everyone
+shared_trinkets = {}
+shared_trinkets["crafted"] = [
+  [ "Infernal Alchemist Stone",          "127842", 815, 875 ],
+]
+
+
+## Usable by melee classes.
+melee_trinkets = {}
+melee_trinkets["crafted"] = [
+  [ "Darkmoon Deck: Dominion",           "128705", 815, 875  ],
+]
+melee_trinkets["dungeon"] = [
+  [ "Bloodstained Handkerchief",         "142159", 855, 1200 ],
+  [ "Chaos Talisman",                    "137459", 805, 1200 ],
+  [ "Chrono Shard",                      "137419", 840, 1200 ],
+  [ "Eye of Command",                    "142167", 860, 1200 ],
+  [ "Faulty Countermeasure",             "137539", 805, 1200 ],
+  [ "Giant Ornamental Pearl",            "137369", 805, 1200 ],
+  [ "Horn of Valor",                     "133642", 805, 1200 ],
+  [ "Hunger of the Pack",                "136975", 805, 1200 ],
+  [ "Mark of Dargrul",                   "137357", 805, 1200 ],
+  [ "Memento of Angerboda",              "133644", 805, 1200 ],
+  [ "Nightmare Egg Shell",               "137312", 805, 1200 ],
+  [ "Spiked Counterweight",              "136715", 805, 1200 ],
+  [ "Terrorbound Nexus",                 "137406", 840, 1200 ],
+  [ "Tiny Oozeling in a Jar",            "137439", 805, 1200 ],
+  [ "Toe Knee's Promise",                "142164", 855, 1200 ],
+  [ "Windscar Whetstone",                "137486", 840, 1200 ]
+]
+melee_trinkets["emerald_nightmare"] = [
+  [ "Nature's Call",                     "139334", 835, 1200 ],
+  [ "Ravaged Seed Pod",                  "139320", 835, 1200 ],
+  [ "Spontaneous Appendages",            "139325", 835, 1200 ]
+]
+melee_trinkets["nighthold"] = [
+  [ "Convergence of Fates",              "140806", 860, 1200 ],
+  [ "Draught of Souls",                  "140808", 865, 1200 ],
+  [ "Entwined Elemental Foci",           "140796", 860, 1200 ]
+]
+melee_trinkets["world"] = [
+  [ "The Devilsaur's Bite",              "140026", 805, 1200 ],
+  [ "Unstable Arcano Crystal",           "141482", 860, 1200 ]
+]
+
+
+## Usable by casters and hunters
 ranged_trinkets = {}
 ranged_trinkets["dungeon"] = [
+  [ "Arans Relaxed Ruby",                 "142157", 860, 1200 ],
   [ "Caged Horror",                       "136716", 840, 1200 ],
   [ "Chrono Shard",                       "137419", 840, 1200 ],
   [ "Corrupted Starlight",                "137301", 840, 1200 ],
+  [ "Deteriorated Construct Core",        "142165", 860, 1200 ],
   [ "Elementium Bomb Squirrel Generator", "137446", 840, 1200 ],
-  [ "Eye of Skovald",           					"133641", 840, 1200 ],
-  [ "Figurehead of the Naglfar",       		"137329", 840, 1200 ],
-  [ "Horn of Valor",             					"133642", 840, 1200 ],
-  [ "Moonlit Prism",             					"137541", 840, 1200 ],
-  [ "Naraxas Spiked Tongue",        			"137349", 840, 1200 ],
-  [ "Oakhearts Gnarled Root",       			"137306", 840, 1200 ],
-  [ "Obelisk of the Void",         				"137433", 840, 1200 ],
-  [ "Portable Manacracker",         			"137398", 840, 1200 ],
-  [ "Stormsinger Fulmination Charge",   	"137367", 840, 1200 ]
+  [ "Eye of Skovald",                     "133641", 840, 1200 ],
+  [ "Figurehead of the Naglfar",          "137329", 840, 1200 ],
+  [ "Horn of Valor",                      "133642", 840, 1200 ],
+  [ "Moonlit Prism",                      "137541", 840, 1200 ],
+  [ "Mrrgria's Favor",                    "142160", 855, 1200 ],
+  [ "Naraxas Spiked Tongue",              "137349", 840, 1200 ],
+  [ "Oakhearts Gnarled Root",             "137306", 840, 1200 ],
+  [ "Obelisk of the Void",                "137433", 840, 1200 ],
+  [ "Portable Manacracker",               "137398", 840, 1200 ],
+  [ "Stormsinger Fulmination Charge",     "137367", 840, 1200 ]
 ]
-
-ranged_trinkets["karazhan"] = [  
-  [ "Arans Relaxed Ruby",          "142157", 860, 1200 ],
-  [ "Deteriorated Construct Core", "142165", 860, 1200 ],
-  [ "Mrrgria's Favor",             "142160", 855, 1200 ] 
-]
-
 ranged_trinkets["emerald_nightmare"] = [  
-  [ "Twisting Wind",                "139323", 835, 1200 ],
-  [ "Unstable Horrorslime",         "138224", 835, 1200 ]
+  [ "Twisting Wind",                     "139323", 835, 1200 ],
+  [ "Unstable Horrorslime",              "138224", 835, 1200 ]
 ]
-
 ranged_trinkets["nighthold"] = [  
-  [ "Fury of the Burning Sky",        "140801", 860, 1200 ],
-  [ "Icon of Rot",                    "140798", 860, 1200 ] 
+  [ "Fury of the Burning Sky",           "140801", 860, 1200 ],
+  [ "Icon of Rot",                       "140798", 860, 1200 ] 
 ]
-
 ranged_trinkets["pvp"] = [   
-  ["PVP Badge of Dominance",         "142779", 840, 1200 ],
-  ["PVP Insignia of Dominance",      "142668", 840, 1200 ]
+  ["PVP Badge of Dominance",             "142779", 840, 1200 ],
+  ["PVP Insignia of Dominance",          "142668", 840, 1200 ]
 ]
 
 
-## Int trinkets are only usable by casters
-int_trinkets = {}
-int_trinkets["world"] = [
-  [ "Devilsaur Shock-Baton",          "140030", 840, 1200 ],
-  [ "Padawsen's Unlucky Charm",       "141536", 860, 1200 ],
-  # 142507 is Brinewater Slime in a Bottle, used as a reference stat stick
-  [ "Stat Stick (Crit)",              "142507,bonus_id=603", 865, 1200 ],
-  [ "Stat Stick (Haste)",             "142507,bonus_id=604", 865, 1200 ],
-  [ "Stat Stick (Mastery)",           "142507,bonus_id=605", 865, 1200 ],
-  [ "Stat Stick (Versatility)",       "142507,bonus_id=607", 865, 1200 ],
-  [ "Unstable Arcano Crystal",        "141482", 860, 1200 ]
-]
-
-int_trinkets["dungeon"] = [
-  [ "Infernal Writ",                "137485", 840, 1200 ] 
-]
-
-int_trinkets["emerald_nightmare"] = [
-  [ "Bough of Corruption",          "139323", 835, 1200 ],
-  [ "Swarming Plaguehive",          "139321", 835, 1200 ],
-  [ "Twisting Wind",                "139323", 835, 1200 ],
-  [ "Unstable Horrorslime",         "138224", 835, 1200 ],
-  [ "Wriggling Sinew",              "139326", 835, 1200 ] 
-]
-
-int_trinkets["nighthold"] = [
-  [ "Erratic Metronome",              "140792", 855, 1200 ],
-  [ "Pharameres Forbidden Grimoire",  "140800", 860, 1200 ],
-  [ "Star Gate",                      "140804", 860, 1200 ],
-  [ "Whispers in the Dark",           "140809", 865, 1200 ]
-]
-
-int_trinkets["pvp"] = [ 
-  ["PVP Insignia of Dominance",       "142668", 840, 1200 ],
-  ["PVP Badge of Dominance",          "142779", 840, 1200 ]
-]
-
-int_trinkets["crafted"] = [
-  [ "Darkmoon Deck: Hellfire",        "128709", 815, 865 ],
-  [ "Infernal Alchemist Stone",       "127842", 815, 865 ]
-]
-
-## Melee trinkets usable by melee classes.
-melee_trinkets = {}
-melee_trinkets["world"] = [
-  [ "Darkmoon Deck: Dominion",        "128705", 815, 865  ],
-  [ "The Devilsaur's Bite",           "140026", 805, 1200 ],
-  [ "Unstable Arcano Crystal",        "141482", 860, 1200 ]
-]
-
-melee_trinkets["dungeon"] = [
-  [ "Chaos Talisman",           "137459", 805, 1200 ],
-  [ "Chrono Shard",             "137419", 840, 1200 ],
-  [ "Faulty Countermeasure",    "137539", 805, 1200 ],
-  [ "Giant Ornamental Pearl",   "137369", 805, 1200 ],
-  [ "Horn of Valor",            "133642", 805, 1200 ],
-  [ "Hunger of the Pack",       "136975", 805, 1200 ],
-  [ "Mark of Dargrul",          "137357", 805, 1200 ],
-  [ "Memento of Angerboda",     "133644", 805, 1200 ],
-  [ "Nightmare Egg Shell",      "137312", 805, 1200 ],
-  [ "Spiked Counterweight",     "136715", 805, 1200 ],
-  [ "Terrorbound Nexus",        "137406", 840, 1200 ],
-  [ "Tiny Oozeling in a Jar",   "137439", 805, 1200 ],
-  [ "Windscar Whetstone",       "137486", 840, 1200 ]
-]
-
-melee_trinkets["karazhan"] = [
-  [ "Bloodstained Handkerchief",  "142159", 855, 1200 ],
-  [ "Eye of Command",             "142167", 860, 1200 ],
-  [ "Toe Knee's Promise",         "142164", 855, 1200 ]
-]
-
-melee_trinkets["emerald_nightmare"] = [
-  [ "Nature's Call",             "139334", 835, 1200 ],
-  [ "Ravaged Seed Pod",          "139320", 835, 1200 ],
-  [ "Spontaneous Appendages",    "139325", 835, 1200 ]
-]
-
-melee_trinkets["nighthold"] = [
-  [ "Convergence of Fates",       "140806", 860, 1200 ],
-  [ "Draught of Souls",           "140808", 865, 1200 ],
-  [ "Entwined Elemental Foci",    "140796", 860, 1200 ]
-]
-
+## Usable by lether wearers and hunters
 agi_trinkets = {}
-agi_trinkets["world"] = [
-  [ "Ley Spark",               "140027", 805, 1200 ],
-  [ "Six-Feather Fan",         "141585", 810, 1200 ],
-    # 142506 is Eye of Guarm, used as a reference stat stick
-  [ "Stat Stick (Crit)",              "142506,bonus_id=603", 865, 1200 ],
-  [ "Stat Stick (Haste)",             "142506,bonus_id=604", 865, 1200 ],
-  [ "Stat Stick (Mastery)",           "142506,bonus_id=605", 865, 1200 ],
-  [ "Stat Stick (Versatility)",       "142506,bonus_id=607", 865, 1200 ],
-  [ "Thrice-Accursed Compass",        "141537",              860, 1200 ]
-]
-
 agi_trinkets["dungeon"] = [
-  [ "Tempered Egg of Serpentrix",  "137373", 805, 1200 ],
-  [ "Tirathon's Betrayal",         "137537", 805, 1200 ]
+  [ "Tempered Egg of Serpentrix",        "137373", 805, 1200 ],
+  [ "Tirathon's Betrayal",               "137537", 805, 1200 ]
 ]
-
 agi_trinkets["emerald_nightmare"] = [
-  [ "Bloodthirsty Instinct",       "139329", 835, 1200 ]
+  [ "Bloodthirsty Instinct",             "139329", 835, 1200 ]
 ]
-
 agi_trinkets["nighthold"] = [
-  [ "Arcanogolem Digit",           "140794", 855, 1200 ],
-  [ "Nightblooming Frond",         "140802", 860, 1200 ]
+  [ "Arcanogolem Digit",                 "140794", 855, 1200 ],
+  [ "Nightblooming Frond",               "140802", 860, 1200 ]
 ]
-
 agi_trinkets["pvp"] = [
-  [ "PVP Insignia of Conquest"    "142662", 840, 1200 ],
-  [ "PVP Badge of Conquest",      "142773", 840, 1200 ]
+  [ "PVP Insignia of Conquest"           "142662", 840, 1200 ],
+  [ "PVP Badge of Conquest",             "142773", 840, 1200 ]
+]
+agi_trinkets["world"] = [
+  [ "Ley Spark",                         "140027", 805, 1200 ],
+  [ "Six-Feather Fan",                   "141585", 810, 1200 ],
+    # 142506 is Eye of Guarm, used as a reference stat stick
+  [ "Stat Stick (Crit)",                 "142506,bonus_id=603", 865, 1200 ],
+  [ "Stat Stick (Haste)",                "142506,bonus_id=604", 865, 1200 ],
+  [ "Stat Stick (Mastery)",              "142506,bonus_id=605", 865, 1200 ],
+  [ "Stat Stick (Versatility)",          "142506,bonus_id=607", 865, 1200 ],
+  [ "Thrice-Accursed Compass",           "141537",              860, 1200 ]
 ]
 
+
+## Usable by casters
+int_trinkets = {}
+int_trinkets["crafted"] = [
+  [ "Darkmoon Deck: Hellfire",           "128709", 815, 875 ],
+]
+int_trinkets["dungeon"] = [
+  [ "Infernal Writ",                     "137485", 840, 1200 ] 
+]
+int_trinkets["emerald_nightmare"] = [
+  [ "Bough of Corruption",               "139323", 835, 1200 ],
+  [ "Swarming Plaguehive",               "139321", 835, 1200 ],
+  [ "Twisting Wind",                     "139323", 835, 1200 ],
+  [ "Unstable Horrorslime",              "138224", 835, 1200 ],
+  [ "Wriggling Sinew",                   "139326", 835, 1200 ] 
+]
+int_trinkets["nighthold"] = [
+  [ "Erratic Metronome",                 "140792", 855, 1200 ],
+  [ "Pharameres Forbidden Grimoire",     "140800", 860, 1200 ],
+  [ "Star Gate",                         "140804", 860, 1200 ],
+  [ "Whispers in the Dark",              "140809", 865, 1200 ]
+]
+int_trinkets["pvp"] = [ 
+  ["PVP Insignia of Dominance",          "142668", 840, 1200 ],
+  ["PVP Badge of Dominance",             "142779", 840, 1200 ]
+]
+int_trinkets["world"] = [
+  [ "Devilsaur Shock-Baton",             "140030", 840, 1200 ],
+  [ "Padawsen's Unlucky Charm",          "141536", 860, 1200 ],
+  # 142507 is Brinewater Slime in a Bottle, used as a reference stat stick
+  [ "Stat Stick (Crit)",                 "142507,bonus_id=603", 865, 1200 ],
+  [ "Stat Stick (Haste)",                "142507,bonus_id=604", 865, 1200 ],
+  [ "Stat Stick (Mastery)",              "142507,bonus_id=605", 865, 1200 ],
+  [ "Stat Stick (Versatility)",          "142507,bonus_id=607", 865, 1200 ],
+  [ "Unstable Arcano Crystal",           "141482", 860, 1200 ]
+]
+
+
+## Usable by plate wearers
 str_trinkets = {}
-str_trinkets["world"] = [
-  # 142508 is Chains of the Valorous, used as a reference stat stick
-  [ "Stat Stick (Crit)",              "142508,bonus_id=603", 865, 1200 ],
-  [ "Stat Stick (Haste)",             "142508,bonus_id=604", 865, 1200 ],
-  [ "Stat Stick (Mastery)",           "142508,bonus_id=605", 865, 1200 ],
-  [ "Stat Stick (Versatility)",       "142508,bonus_id=607", 865, 1200 ],
-  [ "Ettin Fingernail",               "141535",              860, 1200 ]
-]
-
 str_trinkets["emerald_nightmare"] = [
-  [ "Ursoc's Rending Paw",        "139328", 835, 1200 ]
+  [ "Ursoc's Rending Paw",               "139328", 835, 1200 ],
 ]
-
 str_trinkets["nighthold"] = [
   [ "Claw of the Crystalline Scorpid",   "140790", 855, 1200 ],
   [ "Might of Krosus",                   "140799", 860, 1200 ]
 ]
-
 str_trinkets["pvp"] = [
   [ "PVP Insignia of Victory",           "142784", 840, 1200 ],
   [ "PVP Badge of Victory",              "142669", 840, 1200 ]
 ]
-
-legendary_trinkets = {}
-legendary_trinkets["legendary"] = [
-  [ "Kil'jaeden's Burning Wish",  "144259", 940, 1200 ]
+str_trinkets["world"] = [
+  # 142508 is Chains of the Valorous, used as a reference stat stick
+  [ "Stat Stick (Crit)",                 "142508,bonus_id=603", 865, 1200 ],
+  [ "Stat Stick (Haste)",                "142508,bonus_id=604", 865, 1200 ],
+  [ "Stat Stick (Mastery)",              "142508,bonus_id=605", 865, 1200 ],
+  [ "Stat Stick (Versatility)",          "142508,bonus_id=607", 865, 1200 ],
+  [ "Ettin Fingernail",                  "141535",              860, 1200 ]
 ]
+
 
 
 ##
@@ -234,12 +236,15 @@ def __combine_trinket_dicts(role_trinkets, stat_trinkets):
     else:
       # Just set the int/str/agi trinket list to the newly created dict's source key  
       trinkets[source] = stat_trinkets[source]
+  for source in shared_trinkets:
+    if trinkets.get(source) is not None:
+      trinkets[source] = trinkets[source] + shared_trinkets[source]
+    else:
+      trinkets[source] = shared_trinkets[source]
   for source in legendary_trinkets:
     if trinkets.get(source) is not None:
-      # Append int/str/agi trinkets to existing list in the newly created dict
       trinkets[source] = trinkets[source] + legendary_trinkets[source]
     else:
-      # Just set the int/str/agi trinket list to the newly created dict's source key  
       trinkets[source] = legendary_trinkets[source]
   return trinkets
 
