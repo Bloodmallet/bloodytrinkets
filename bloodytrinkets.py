@@ -36,8 +36,6 @@ def get_dps(trinket_id, item_level, fight_style):
   argument += "default_actions=1 "
   if settings.simc_settings["ptr"]:
     argument += "ptr=1 "
-  else:
-    argument += "ptr=0 "
   argument += "threads=" + settings.simc_settings["threads"] + " "
   if settings.simc_settings["c_profile"]:
     argument += settings.simc_settings["c_profile_path"] + settings.simc_settings["c_profile_name"] + " "
@@ -147,4 +145,4 @@ for fight_style in settings.simc_settings["fight_styles"]:
   if lib.output.output.print_manager( base_dps, sim_results, fight_style ):
     print("Output successful.")
 
-print("Program exists without errors.")
+print("Program exists flawless.")

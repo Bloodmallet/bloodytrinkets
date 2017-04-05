@@ -43,7 +43,7 @@ def is_fight_style(fight_styles):
 ##
 def is_iteration(iterations):
   if type(iterations) is str:
-    if int(iterations) > 5000:
+    if int(iterations) >= 5000:
       return True
   return False
 
@@ -58,6 +58,6 @@ def is_iteration(iterations):
 ##
 def is_target_error(target_error):
   if type(target_error) is str:
-    if 0.5 > float(target_error) >= 0.0:
+    if 0.5 >= float(target_error) >= 0.0:
       return True
   return False
