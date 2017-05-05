@@ -1,4 +1,4 @@
-#!python3
+#!/usr/bin/env python3
 # Project to automate trinket sims for dps specs
 
 # params
