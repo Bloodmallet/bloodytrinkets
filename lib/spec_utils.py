@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ## Utility file for class specialisations
 ## Contains wow class names, spec names, dps talent rows
 

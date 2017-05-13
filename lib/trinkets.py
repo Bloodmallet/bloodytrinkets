@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ## File containing all trinket items and functions for retrieval of a spec's possible trinkets
 from lib.spec_utils import get_role_stat
 from collections import defaultdict
