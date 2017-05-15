@@ -3,24 +3,24 @@
 ## 
 
 graph_colours = { 
-  "865": "#4572a7", 
-  "875": "#aa4643", 
-  "885": "#89a54e", 
-  "895": "#71588f", 
-  "905": "#4198af", 
-  "915": "#db843d", 
-  "925": "#00E676" 
+  "880": "#4572a7", 
+  "890": "#aa4643", 
+  "900": "#89a54e", 
+  "910": "#71588f", 
+  "920": "#4198af", 
+  "930": "#db843d", 
+  "940": "#00E676" 
 }
-graph_name = "Lightning Rod trinket sims 7.2"
-# Defines itemlevels that shall be simed ordered from highest to lowest (graph output will have this order reversed)
+graph_name = "Lightning Rod trinket sims 7.2.5"
+# Defines itemlevels that shall be simed, ordered from highest to lowest (graph output will have this order reversed)
 ilevels = [ 
-  "925", 
-  "915", 
-  "905", 
-  "895", 
-  "885", 
-  "875", 
-  "865"
+  "940", 
+  "930", 
+  "920", 
+  "910", 
+  "900", 
+  "890", 
+  "880"
 ]
 
 output_screen = False

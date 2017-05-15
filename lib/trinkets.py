@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 ## File containing all trinket items and functions for retrieval of a spec's possible trinkets
-from lib.spec_utils import get_role_stat
+if __name__ != '__main__':
+  from lib.spec_utils import get_role_stat
 from collections import defaultdict
 
 ## Available types:
 ##   legendary - legendary trinkets for everyone
 ##   shared    - trinkets for everyone
-##   melee     - agi + str (melee + hunter)
-##   ranged    - int + agi (caster + hunter)
+##   melee     - agi + str (melee + sv hunter)
+##   ranged    - int + agi (caster + bm/mm hunter)
 ##   agi       - pure agi (lether wearer + hunter)
 ##   int       - pure int (pure caster)
 ##   str       - pure str (plate wearer)
@@ -16,14 +18,21 @@ from collections import defaultdict
 ## legendary trinkets for everyone
 legendary_trinkets = {}
 legendary_trinkets["legendary"] = [
-  [ "Kil'jaeden's Burning Wish",         "144259", 940, 1200 ],
+  [ "Kil'jaeden's Burning Wish",         "144259", 970, 1200 ],
 ]
 
 
 ## Usable by everyone
 shared_trinkets = {}
+shared_trinkets["dungeon"] = [
+  [ "Chrono Shard",                      "137419", 840, 1200 ],
+  [ "Horn of Valor",                     "133642", 805, 1200 ],
+]
 shared_trinkets["crafted"] = [
-  [ "Infernal Alchemist Stone",          "127842", 815, 875 ],
+  [ "Infernal Alchemist Stone",          "127842", 815, 875  ],
+]
+shared_trinkets["world"] = [
+  [ "Unstable Arcano Crystal",           "141482", 860, 1200 ],
 ]
 
 
@@ -35,11 +44,10 @@ melee_trinkets["crafted"] = [
 melee_trinkets["dungeon"] = [
   [ "Bloodstained Handkerchief",         "142159", 855, 1200 ],
   [ "Chaos Talisman",                    "137459", 805, 1200 ],
-  [ "Chrono Shard",                      "137419", 840, 1200 ],
   [ "Eye of Command",                    "142167", 860, 1200 ],
   [ "Faulty Countermeasure",             "137539", 805, 1200 ],
+  [ "Gift of Radiance",                  "133647", 805, 1200 ],
   [ "Giant Ornamental Pearl",            "137369", 805, 1200 ],
-  [ "Horn of Valor",                     "133642", 805, 1200 ],
   [ "Hunger of the Pack",                "136975", 805, 1200 ],
   [ "Mark of Dargrul",                   "137357", 805, 1200 ],
   [ "Memento of Angerboda",              "133644", 805, 1200 ],
@@ -60,28 +68,30 @@ melee_trinkets["nighthold"] = [
   [ "Draught of Souls",                  "140808", 865, 1200 ],
   [ "Entwined Elemental Foci",           "140796", 860, 1200 ]
 ]
+melee_trinkets["tomb_of_sargeras"] = [
+  [ "Infernal Cinders",                  "147009", 885, 1200 ],
+  [ "Umbral Moonglaives",                "147012", 890, 1200 ],
+  [ "Vial of Ceaseless Toxins",          "147011", 890, 1200 ]
+]
 melee_trinkets["world"] = [
   [ "The Devilsaur's Bite",              "140026", 805, 1200 ],
-  [ "Unstable Arcano Crystal",           "141482", 860, 1200 ]
 ]
 
 
 ## Usable by casters and hunters
 ranged_trinkets = {}
 ranged_trinkets["dungeon"] = [
-  [ "Arans Relaxed Ruby",                 "142157", 860, 1200 ],
+  [ "Aran's Relaxing Ruby",               "142157", 860, 1200 ],
   [ "Caged Horror",                       "136716", 840, 1200 ],
-  [ "Chrono Shard",                       "137419", 840, 1200 ],
   [ "Corrupted Starlight",                "137301", 840, 1200 ],
   [ "Deteriorated Construct Core",        "142165", 860, 1200 ],
   [ "Elementium Bomb Squirrel Generator", "137446", 840, 1200 ],
   [ "Eye of Skovald",                     "133641", 840, 1200 ],
   [ "Figurehead of the Naglfar",          "137329", 840, 1200 ],
-  [ "Horn of Valor",                      "133642", 840, 1200 ],
   [ "Moonlit Prism",                      "137541", 840, 1200 ],
   [ "Mrrgria's Favor",                    "142160", 855, 1200 ],
-  [ "Naraxas Spiked Tongue",              "137349", 840, 1200 ],
-  [ "Oakhearts Gnarled Root",             "137306", 840, 1200 ],
+  [ "Naraxas' Spiked Tongue",             "137349", 840, 1200 ],
+  [ "Oakheart's Gnarled Root",            "137306", 840, 1200 ],
   [ "Obelisk of the Void",                "137433", 840, 1200 ],
   [ "Portable Manacracker",               "137398", 840, 1200 ],
   [ "Stormsinger Fulmination Charge",     "137367", 840, 1200 ]
@@ -95,14 +105,20 @@ ranged_trinkets["nighthold"] = [
   [ "Icon of Rot",                       "140798", 860, 1200 ] 
 ]
 ranged_trinkets["pvp"] = [   
-  ["PVP Badge of Dominance",             "142779", 840, 1200 ],
-  ["PVP Insignia of Dominance",          "142668", 840, 1200 ]
+  [ "PVP Badge of Dominance",            "142779", 840, 1200 ],
+  [ "PVP Insignia of Dominance",         "142668", 840, 1200 ]
+]
+ranged_trinkets["tomb_of_sargeras"] = [
+  [ "Spectral Thurible",                 "147018", 890, 1200 ],
+  [ "Tarnished Sentinel Medallion",      "147017", 890, 1200 ],
+  [ "Terror From Below",                 "147016", 890, 1200 ]
 ]
 
 
 ## Usable by lether wearers and hunters
 agi_trinkets = {}
 agi_trinkets["dungeon"] = [
+  [ "Splinters of Agronax",              "144477", 845, 1200 ],
   [ "Tempered Egg of Serpentrix",        "137373", 805, 1200 ],
   [ "Tirathon's Betrayal",               "137537", 805, 1200 ]
 ]
@@ -114,8 +130,12 @@ agi_trinkets["nighthold"] = [
   [ "Nightblooming Frond",               "140802", 860, 1200 ]
 ]
 agi_trinkets["pvp"] = [
-  [ "PVP Insignia of Conquest"           "142662", 840, 1200 ],
+  [ "PVP Insignia of Conquest",          "142662", 840, 1200 ],
   [ "PVP Badge of Conquest",             "142773", 840, 1200 ]
+]
+agi_trinkets["tomb_of_sargeras"] = [
+  [ "Cradle of Anguish",                 "147010", 885, 1200 ],
+  [ "Engine of Eradication",             "147015", 890, 1200 ]
 ]
 agi_trinkets["world"] = [
   [ "Ley Spark",                         "140027", 805, 1200 ],
@@ -152,8 +172,12 @@ int_trinkets["nighthold"] = [
   [ "Whispers in the Dark",              "140809", 865, 1200 ]
 ]
 int_trinkets["pvp"] = [ 
-  ["PVP Insignia of Dominance",          "142668", 840, 1200 ],
-  ["PVP Badge of Dominance",             "142779", 840, 1200 ]
+  [ "PVP Insignia of Dominance",         "142668", 840, 1200 ],
+  [ "PVP Badge of Dominance",            "142779", 840, 1200 ]
+]
+int_trinkets["tomb_of_sargeras"] = [
+  [ "Charm of the Rising Tide",          "147002", 885, 1200 ],
+  [ "Tome of Unraveling Sanity",         "147019", 895, 1200 ]
 ]
 int_trinkets["world"] = [
   [ "Devilsaur Shock-Baton",             "140030", 840, 1200 ],
@@ -162,13 +186,15 @@ int_trinkets["world"] = [
   [ "Stat Stick (Crit)",                 "142507,bonus_id=603", 865, 1200 ],
   [ "Stat Stick (Haste)",                "142507,bonus_id=604", 865, 1200 ],
   [ "Stat Stick (Mastery)",              "142507,bonus_id=605", 865, 1200 ],
-  [ "Stat Stick (Versatility)",          "142507,bonus_id=607", 865, 1200 ],
-  [ "Unstable Arcano Crystal",           "141482", 860, 1200 ]
+  [ "Stat Stick (Versatility)",          "142507,bonus_id=607", 865, 1200 ]
 ]
 
 
 ## Usable by plate wearers
 str_trinkets = {}
+str_trinkets["dungeon"] = [
+  [ "Fel-Oiled Infernal Machine",        "144482", 845, 1200 ],
+]
 str_trinkets["emerald_nightmare"] = [
   [ "Ursoc's Rending Paw",               "139328", 835, 1200 ],
 ]
@@ -179,6 +205,10 @@ str_trinkets["nighthold"] = [
 str_trinkets["pvp"] = [
   [ "PVP Insignia of Victory",           "142784", 840, 1200 ],
   [ "PVP Badge of Victory",              "142669", 840, 1200 ]
+]
+str_trinkets["tomb_of_sargeras"] = [
+  [ "Cradle of Anguish",                 "147010", 885, 1200 ],
+  [ "Engine of Eradication",             "147015", 890, 1200 ]
 ]
 str_trinkets["world"] = [
   # 142508 is Chains of the Valorous, used as a reference stat stick
@@ -252,6 +282,24 @@ def __combine_trinket_dicts(role_trinkets, stat_trinkets):
 
 
 ##
+## @brief      Function to test a trinket group for data
+##
+## @param      trinket_group  The trinket group
+##
+## @return     True
+##
+def __test_trinkets(trinket_group):
+  for location in trinket_group:
+    print("  Location: " + location)
+    for trinket in trinket_group[location]:
+      print("    Name:\t\t" + trinket[0])
+      print("    ID:\t\t\t" + trinket[1])
+      print("    Min-iLevel:\t" + str(trinket[2]))
+      print("    Max-iLevel:\t" + str(trinket[3]))
+      print("")
+  return True
+
+##
 ## @brief      Uses class and spec names to return a dict of relevant trinkets
 ##
 ## @param      class_name  The class name as string
@@ -264,3 +312,31 @@ def get_trinkets_for_spec(class_name, spec_name):
   role_trinkets, stat_trinkets = __get_relevant_trinkets(spec_info[0], spec_info[1])
   combined_trinkets = __combine_trinket_dicts(role_trinkets, stat_trinkets)
   return combined_trinkets
+
+
+
+
+
+if __name__ == '__main__':
+  print("Selftest")
+  print("Testing Legendary trinkets.")
+  __test_trinkets(legendary_trinkets)
+  print("Done")
+  print("Testing Shared Trinkets.")
+  __test_trinkets(shared_trinkets)
+  print("Done")
+  print("Testing Melee Trinkets.")
+  __test_trinkets(melee_trinkets)
+  print("Done")
+  print("Testing Ranged Trinkets.")
+  __test_trinkets(ranged_trinkets)
+  print("Done")
+  print("Testing Agi Trinkets.")
+  __test_trinkets(agi_trinkets)
+  print("Done")
+  print("Testing Int Trinkets.")
+  __test_trinkets(int_trinkets)
+  print("Done")
+  print("Testing Str Trinkets.")
+  __test_trinkets(str_trinkets)
+  print("Done")
