@@ -28,7 +28,7 @@ import lib.trinkets
 ## @return     The dps s.
 ##
 def get_dps(trinket_id, item_level, fight_style):
-  argument = "../simc.exe "
+  argument = settings.simc_settings["simc"] + " "
   argument += "iterations=" + settings.simc_settings["iterations"] + " "
   argument += "target_error=" + settings.simc_settings["target_error"] + " "
   argument += "fight_style=" + fight_style + " "
