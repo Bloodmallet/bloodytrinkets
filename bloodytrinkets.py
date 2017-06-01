@@ -78,6 +78,9 @@ def sim_all( trinkets, ilevels, fight_style ):
   all_simmed = {}
   for source in trinkets:
     for trinket in trinkets[source]:
+      # if max trinket itemlevel is lower than lowest to sim ilevel, don't add it to the result
+      if int( trinket[3] ) < int( ilevels[-1] ):
+        continue
       all_simmed[trinket[0]] = {}
       for ilevel in ilevels:
         dps = "0"
