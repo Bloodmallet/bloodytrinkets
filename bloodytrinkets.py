@@ -43,8 +43,19 @@ def get_dps(trinket_id, item_level, fight_style):
     argument += settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "_" + settings.simc_settings["tier"] + ".simc "
   argument += "trinket1= "
   argument += "trinket2=,id=" + trinket_id + ",ilevel=" + item_level + " "
+
   # call simulationcraft in the background. grab output for processing and getting dps value
-  simulation_output = subprocess.run(argument, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+  startupinfo = subprocess.STARTUPINFO()
+  startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+  simulation_output = subprocess.run(
+    argument, 
+    stdout=subprocess.PIPE, 
+    stderr=subprocess.STDOUT, 
+    universal_newlines=True, 
+    startupinfo=startupinfo
+  )
+  
   owndps = True
   for line in simulation_output.stdout.splitlines():
     # needs this check to prevent grabbing the enemy dps
