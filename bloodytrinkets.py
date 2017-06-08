@@ -28,35 +28,41 @@ import lib.trinkets
 ## @return     The dps s.
 ##
 def get_dps(trinket_id, item_level, fight_style):
-  argument = settings.simc_settings["simc"] + " "
-  argument += "iterations=" + settings.simc_settings["iterations"] + " "
-  argument += "target_error=" + settings.simc_settings["target_error"] + " "
-  argument += "fight_style=" + fight_style + " "
-  argument += "fixed_time=1 "
-  argument += "default_actions=1 "
+  argument = [ settings.simc_settings["simc"] ]
+  argument.append( "iterations="   + settings.simc_settings["iterations"] )
+  argument.append( "target_error=" + settings.simc_settings["target_error"] )
+  argument.append( "fight_style="  + fight_style )
+  argument.append( "fixed_time=1" )
+  argument.append( "default_actions=1" )
   if settings.simc_settings["ptr"]:
-    argument += "ptr=1 "
-  argument += "threads=" + settings.simc_settings["threads"] + " "
+    argument.append( "ptr=1" )
+  argument.append( "threads="      + settings.simc_settings["threads"] )
   if settings.simc_settings["c_profile"]:
-    argument += settings.simc_settings["c_profile_path"] + settings.simc_settings["c_profile_name"] + " "
+    argument.append( settings.simc_settings["c_profile_path"] + settings.simc_settings["c_profile_name"] )
   else:
-    argument += settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "_" + settings.simc_settings["tier"] + ".simc "
-  argument += "trinket1= "
-  argument += "trinket2=,id=" + trinket_id + ",ilevel=" + item_level + " "
+    argument.append( settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "_" + settings.simc_settings["tier"] + ".simc" )
+  argument.append( "trinket1=" )
+  argument.append( "trinket2=,id=" + trinket_id + ",ilevel=" + item_level )
 
-  # call simulationcraft in the background. grab output for processing and getting dps value
-  startupinfo = subprocess.STARTUPINFO()
-  startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+  # should prevent additional empty windows popping up...on win32 systems without breaking different OS
+  if sys.platform == 'win32':
+    print("win32")
+    # call simulationcraft in the background. grab output for processing and get dps value
+    startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-  simulation_output = subprocess.run(
-    argument, 
-    stdout=subprocess.PIPE, 
-    stderr=subprocess.STDOUT, 
-    universal_newlines=True, 
-    startupinfo=startupinfo
-  )
+    simulation_output = subprocess.run(
+      argument, 
+      stdout=subprocess.PIPE, 
+      stderr=subprocess.STDOUT, 
+      universal_newlines=True, 
+      startupinfo=startupinfo
+    )
+  else:
+    simulation_output = subprocess.run(argument, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
   
   owndps = True
+  dps = "DPS: 0.0"
   for line in simulation_output.stdout.splitlines():
     # needs this check to prevent grabbing the enemy dps
     if "DPS:" in line and owndps:
