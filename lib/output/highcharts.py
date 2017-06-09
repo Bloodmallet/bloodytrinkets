@@ -157,7 +157,7 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
           else:
             if int(trinket_list[trinket_name][ilevel]) - int(trinket_list[trinket_name][next_ilevel]) < 0:
               ofile.write("0")
-            elif trinket_list[trinket_name][next_ilevel] == "0" and int(next_ilevel) > int(lowest_ilevel):
+            elif trinket_list[trinket_name][next_ilevel] == "0" and int(next_ilevel) > int(lowest_dps_ilevel):
               ofile.write(
                 str(
                   int(
