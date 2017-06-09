@@ -142,16 +142,12 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
           # if a trinket doesn't have the current ilevel, or for some unknown reason the dps value couldn't be generated
           if trinket_list[trinket_name][ilevel] == "0":
             # if the dps of trinket wasn't saved from the sim-run, print the average of the former and later
-            if int(ilevel) > int(lowest_ilevel) and int(ilevel) < int(highest_ilevel):
+            if int(ilevel) > int(lowest_dps_ilevel) and int(ilevel) < int(highest_dps_ilevel):
               ofile.write( 
                 str( 
                   int( 
                     ( 
-                      int( 
-                        trinket_list[trinket_name][settings.ilevels[i - 1]] 
-                      ) - int( 
-                        trinket_list[trinket_name][settings.ilevels[i + 1]] 
-                      ) 
+                      int( trinket_list[trinket_name][settings.ilevels[i - 1]] ) - int( trinket_list[trinket_name][settings.ilevels[i + 1]] ) 
                     ) / 2.0
                   ) 
                 )
@@ -160,9 +156,21 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
               ofile.write("0")
           else:
             if int(trinket_list[trinket_name][ilevel]) - int(trinket_list[trinket_name][next_ilevel]) < 0:
-              ofile.write("1")
+              ofile.write("0")
+            elif trinket_list[trinket_name][next_ilevel] == "0" and int(next_ilevel) > int(lowest_ilevel):
+              ofile.write(
+                str(
+                  int(
+                    int( trinket_list[trinket_name][ilevel] ) - int( trinket_list[trinket_name][settings.ilevels[i + 2]] )
+                  ) / 2.0
+                )
+              )
             else:
-              ofile.write(str(int(trinket_list[trinket_name][ilevel]) - int(trinket_list[trinket_name][next_ilevel])))
+              ofile.write(
+                str(
+                  int( trinket_list[trinket_name][ilevel] ) - int( trinket_list[trinket_name][next_ilevel] )
+                )
+              )
 
         # if it's not the last trinket in the trinket list, add a comma
         if not trinket_name == ordered_trinket_names[-1]:

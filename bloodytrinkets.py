@@ -58,9 +58,34 @@ def get_dps(trinket_id, item_level, fight_style):
       universal_newlines=True, 
       startupinfo=startupinfo
     )
+
+    while simulation_output.returncode != 0:
+      simulation_output = subprocess.run(
+        argument, 
+        stdout=subprocess.PIPE, 
+        stderr=subprocess.STDOUT, 
+        universal_newlines=True,
+        startupinfo=startupinfo
+      )
+      
   else:
-    simulation_output = subprocess.run(argument, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+    simulation_output = subprocess.run(
+      argument, 
+      stdout=subprocess.PIPE, 
+      stderr=subprocess.STDOUT, 
+      universal_newlines=True
+    )
+
+    while simulation_output.returncode != 0:
+      simulation_output = subprocess.run(
+        argument, 
+        stdout=subprocess.PIPE, 
+        stderr=subprocess.STDOUT, 
+        universal_newlines=True
+      )
   
+  
+
   owndps = True
   dps = "DPS: 0.0"
   for line in simulation_output.stdout.splitlines():
