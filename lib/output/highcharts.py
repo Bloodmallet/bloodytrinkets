@@ -152,9 +152,7 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
                       ) - int( 
                         trinket_list[trinket_name][settings.ilevels[i + 1]] 
                       ) 
-                    ) / 2.0 + int(
-                      trinket_list[trinket_name][settings.ilevels[i + 1]] 
-                    )
+                    ) / 2.0
                   ) 
                 )
               )
