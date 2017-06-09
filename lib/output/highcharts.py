@@ -4,6 +4,29 @@
 import os
 import settings
 
+
+##
+## @brief      Gets the dps ilevel borders which helds dps values of a trinket.
+##
+## @param      trinket  The trinket with all ilevel dps values
+##
+## @return     The lowest ilevel and highest dps ilevel as string in a list
+##             [lowest, highest].
+##
+def __get_dps_ilevel_borders(trinket):
+  # this value should be greater than any possible ilevel value
+  lowest_ilevel = "1200"
+  highest_ilevel = "0"
+
+  for ilevel in trinket:
+    if int(ilevel) < int(lowest_ilevel) and trinket[ilevel] != "0":
+      lowest_ilevel = ilevel
+    if int(ilevel) > int(highest_ilevel) and trinket[ilevel] != "0":
+      highest_ilevel = ilevel
+
+  return [lowest_ilevel, highest_ilevel]
+
+
 ##
 ## @brief      Generates js output for http://www.highcharts.com/ bars of
 ##             http://www.stormearthandlava.com/elemental-shaman-hub/elemental-trinket-sims/
@@ -96,6 +119,7 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
     ofile.write("            }\n")
     ofile.write("        },\n")
     ofile.write("                series: [")
+
     for i in range(0, len(settings.ilevels)):
       ilevel = settings.ilevels[i]
       if i < len(settings.ilevels) - 1:
@@ -108,21 +132,47 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
       ofile.write("            name: '" + ilevel + "',\n")
       ofile.write("            color: '" + settings.graph_colours[ilevel] + "',\n")
       ofile.write("            data: [")
+
       for trinket_name in ordered_trinket_names:
+        lowest_dps_ilevel, highest_dps_ilevel = __get_dps_ilevel_borders(trinket_list[trinket_name])
+        # if it's the lowest itemlevel, just print the values
         if ilevel == settings.ilevels[-1]:
           ofile.write(trinket_list[trinket_name][ilevel])
         else:
+          # if a trinket doesn't have the current ilevel, or for some unknown reason the dps value couldn't be generated
           if trinket_list[trinket_name][ilevel] == "0":
-            ofile.write("0")
+            # if the dps of trinket wasn't saved from the sim-run, print the average of the former and later
+            if int(ilevel) > int(lowest_ilevel) and int(ilevel) < int(highest_ilevel):
+              ofile.write( 
+                str( 
+                  int( 
+                    ( 
+                      int( 
+                        trinket_list[trinket_name][settings.ilevels[i - 1]] 
+                      ) - int( 
+                        trinket_list[trinket_name][settings.ilevels[i + 1]] 
+                      ) 
+                    ) / 2.0 + int(
+                      trinket_list[trinket_name][settings.ilevels[i + 1]] 
+                    )
+                  ) 
+                )
+              )
+            else:
+              ofile.write("0")
           else:
             if int(trinket_list[trinket_name][ilevel]) - int(trinket_list[trinket_name][next_ilevel]) < 0:
-              ofile.write("0")
+              ofile.write("1")
             else:
               ofile.write(str(int(trinket_list[trinket_name][ilevel]) - int(trinket_list[trinket_name][next_ilevel])))
+
+        # if it's not the last trinket in the trinket list, add a comma
         if not trinket_name == ordered_trinket_names[-1]:
           ofile.write(",")
+
       ofile.write("]\n")
       ofile.write("        }")
+
     ofile.write("]\n")
     ofile.write("    });\n")
     ofile.write("});")
