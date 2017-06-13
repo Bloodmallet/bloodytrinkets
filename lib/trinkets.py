@@ -29,7 +29,7 @@ shared_trinkets["dungeon"] = [
   [ "Horn of Valor",                     "133642", 805, 1200 ],
 ]
 shared_trinkets["crafted"] = [
-  [ "Infernal Alchemist Stone",          "127842", 815, 875  ],
+  [ "Infernal Alchemist Stone",          "127842", 815, 900  ],
 ]
 shared_trinkets["world"] = [
   [ "Unstable Arcano Crystal",           "141482", 860, 1200 ],
@@ -39,7 +39,7 @@ shared_trinkets["world"] = [
 ## Usable by melee classes.
 melee_trinkets = {}
 melee_trinkets["crafted"] = [
-  [ "Darkmoon Deck: Dominion",           "128705", 815, 875  ],
+  [ "Darkmoon Deck: Dominion",           "128705", 815, 900  ],
 ]
 melee_trinkets["dungeon"] = [
   [ "Bloodstained Handkerchief",         "142159", 855, 1200 ],
@@ -152,7 +152,7 @@ agi_trinkets["world"] = [
 ## Usable by casters
 int_trinkets = {}
 int_trinkets["crafted"] = [
-  [ "Darkmoon Deck: Hellfire",           "128709", 815, 875 ],
+  [ "Darkmoon Deck: Hellfire",           "128709", 815, 900 ],
 ]
 int_trinkets["dungeon"] = [
   [ "Dreadstone of Endless Shadows",     "144480", 845, 1200 ],
