@@ -10,9 +10,9 @@ import settings
 import sys
 # Bloodytrinkets lib imports
 import lib.output.output
-import lib.simc_checks
-import lib.spec_utils
-import lib.trinkets
+import lib.simc_support.Simc_checks as Simc_checks
+import lib.simc_support.Wow_lib     as Wow_lib
+import lib.simc_support.trinkets    as Trinkets
 
 
 
@@ -146,18 +146,18 @@ def sim_all( trinkets, ilevels, fight_style ):
 
 
 error_collector = []
-if not lib.simc_checks.is_iteration( settings.simc_settings["iterations"] ):
+if not Simc_checks.is_iteration( settings.simc_settings["iterations"] ):
   error_collector.append("simc_settings[iterations] not strong or out of bounds")
-if not lib.simc_checks.is_target_error( settings.simc_settings["target_error"] ):
+if not Simc_checks.is_target_error( settings.simc_settings["target_error"] ):
   error_collector.append("simc_settings[target_error] not string or out of bounds")
-if not lib.simc_checks.is_fight_style( settings.simc_settings["fight_styles"] ):
+if not Simc_checks.is_fight_style( settings.simc_settings["fight_styles"] ):
   error_collector.append("simc_settings[fight_styles] not a recognised fight style")
-if not lib.spec_utils.is_class( settings.simc_settings["class"] ):
+if not Wow_lib.is_class( settings.simc_settings["class"] ):
   error_collector.append("simc_settings[class] wrong name")
-if not lib.spec_utils.is_spec( settings.simc_settings["spec"] ):
+if not Wow_lib.is_spec( settings.simc_settings["spec"] ):
   error_collector.append("simc_settings[spec] not appropriate spec name")
-if lib.spec_utils.is_class_spec( settings.simc_settings["class"], settings.simc_settings["spec"] ):
-  trinkets = lib.trinkets.get_trinkets_for_spec( settings.simc_settings["class"], settings.simc_settings["spec"] )
+if Wow_lib.is_class_spec( settings.simc_settings["class"], settings.simc_settings["spec"] ):
+  trinkets = Trinkets.get_trinkets_for_spec( settings.simc_settings["class"], settings.simc_settings["spec"] )
 else:
   error_collector.append("simc_settings[class] and simc_settings[spec] don't fit each other")
 
