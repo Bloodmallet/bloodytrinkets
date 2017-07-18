@@ -43,8 +43,7 @@ def __get_dps_ilevel_borders(trinket):
 ##  
 def print_highchart(trinket_list, ordered_trinket_names, filename):
   with open(filename + ".js", "w") as ofile:
-    ofile.write("jQuery(function ($) {\n")
-    ofile.write("    Highcharts.chart('" + settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "', {\n")
+    ofile.write("Highcharts.chart('" + settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "', {\n")
     ofile.write("        chart: {\n")
     ofile.write("            type: 'bar'\n")
     ofile.write("        },\n")
@@ -181,7 +180,6 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
       ofile.write("        }")
 
     ofile.write("]\n")
-    ofile.write("    });\n")
-    ofile.write("});")
+    ofile.write("});\n")
     return True
   return False
