@@ -10,20 +10,17 @@ import settings
 import sys
 # Bloodytrinkets lib imports
 import lib.output.output
-import lib.simc_support.Simc_checks as Simc_checks
-import lib.simc_support.Wow_lib     as Wow_lib
-import lib.simc_support.trinkets    as Trinkets
+import lib.simc_support.simc_checks as Simc_checks
+import lib.simc_support.wow_lib     as Wow_lib
 
 
 
 ##
 ## @brief      Gets the dps for one trinket.
 ##
-## @param      trinket_id     The trinket identifier
-## @param      item_level     The item level
-## @param      simc_settings  The simc options dictionary {iterations s, target
-##                            error s, fight style s, class s, spec s, tier s
-##                            "T19M_NH"}
+## @param      trinket_id   The trinket identifier
+## @param      item_level   The item level
+## @param      fight_style  The fight style
 ##
 ## @return     The dps s.
 ##
@@ -82,8 +79,6 @@ def get_dps(trinket_id, item_level, fight_style):
         stderr=subprocess.STDOUT, 
         universal_newlines=True
       )
-  
-  
 
   owndps = True
   dps = "DPS: 0.0"
@@ -157,7 +152,7 @@ if not Wow_lib.is_class( settings.simc_settings["class"] ):
 if not Wow_lib.is_spec( settings.simc_settings["spec"] ):
   error_collector.append("simc_settings[spec] not appropriate spec name")
 if Wow_lib.is_class_spec( settings.simc_settings["class"], settings.simc_settings["spec"] ):
-  trinkets = Trinkets.get_trinkets_for_spec( settings.simc_settings["class"], settings.simc_settings["spec"] )
+  trinkets = Wow_lib.get_trinkets_for_spec( settings.simc_settings["class"], settings.simc_settings["spec"] )
 else:
   error_collector.append("simc_settings[class] and simc_settings[spec] don't fit each other")
 

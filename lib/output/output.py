@@ -3,8 +3,8 @@
 
 ## Library needed to get date and calculationtime for program
 import datetime
-import lib.output.highcharts
-import lib.output.json
+import lib.output.highcharts as highcharts
+import lib.output.json as json
 import settings
 
 
@@ -18,12 +18,19 @@ import settings
 ## @return     Returns a filename which contains the current date
 ##
 def __create_filename(fight_style):
+  # old format
+  #filename = ""
+  #filename += "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.now())
+  #filename += "_" + fight_style
+  #filename += "_" + settings.simc_settings["class"]
+  #filename += "_" + settings.simc_settings["spec"]
+  #filename += "_" + settings.simc_settings["tier"]
+  # 
+  # format to use for automated website
   filename = ""
-  filename += "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.now())
-  filename += "_" + fight_style
-  filename += "_" + settings.simc_settings["class"]
-  filename += "_" + settings.simc_settings["spec"]
-  filename += "_" + settings.simc_settings["tier"]
+  filename += settings.simc_settings["class"] + "_"
+  filename += settings.simc_settings["spec"]
+  # TODO: add fightstyle to automated system
   return filename
 
 
@@ -117,7 +124,7 @@ def print_manager(base_dps_dic, sim_results, fight_style):
 
     if print_type is "json":
       print("Initiating json output.")
-      if lib.output.json.print_json(sim_results, filename):
+      if json.print_json(sim_results, filename):
         print("Generating json file: Done")
       else:
         print("Generating json file: Failed")
@@ -132,7 +139,7 @@ def print_manager(base_dps_dic, sim_results, fight_style):
       sim_results = __normalise_trinkets(base_dps_dic, sim_results, settings.ilevels[-1])
       if settings.output_screen:
         print(sim_results)
-      if lib.output.highcharts.print_highchart(sim_results, ordered_trinket_names, filename):
+      if highcharts.print_highchart(sim_results, ordered_trinket_names, filename):
         print("Generating highchart file: Done")
       else:
         print("Generating highchart file: Failed")

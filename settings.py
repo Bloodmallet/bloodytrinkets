@@ -2,6 +2,7 @@
 ## Bloodytrinkets
 ## 
 
+# graph_colours needs colours for all ilevels!
 graph_colours = { 
   "880": "#4572a7", 
   "890": "#aa4643", 
@@ -11,7 +12,7 @@ graph_colours = {
   "930": "#db843d", 
   "940": "#00E676" 
 }
-graph_name = "Lightning Rod trinket sims 7.2.5"
+graph_name = "Elemental Shaman"
 # Defines itemlevels that shall be simed, ordered from highest to lowest (graph output will have this order reversed)
 ilevels = [ 
   "940", 
@@ -33,7 +34,7 @@ simc_settings["fight_styles"] = ["patchwerk", "helterskelter"]
 simc_settings["iterations"]   = "250000"
 simc_settings["target_error"] = "0.1"
 simc_settings["threads"]      = ""
-simc_settings["tier"]         = "T19M_NH"
+simc_settings["tier"]         = "T20M"
 
 simc_settings["class"] = "shaman"
 simc_settings["spec"]  = "elemental"
@@ -43,4 +44,4 @@ simc_settings["c_profile"]      = False
 simc_settings["c_profile_path"] = "example_dir/"
 simc_settings["c_profile_name"] = "example_name.simc"
 
-simc_settings["ptr"] = True
+simc_settings["ptr"] = False

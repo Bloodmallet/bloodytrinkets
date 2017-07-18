@@ -1,5 +1,6 @@
 # File for handling all Highcharts
 
+import datetime
 # Library to look for files and create them if needed
 import os
 import settings
@@ -34,24 +35,24 @@ def __get_dps_ilevel_borders(trinket):
 ## @param      trinket_list           The normalised trinkets dictionary
 ##                                    {trinket_name s:{ilevel s:{dps s}}}
 ## @param      ordered_trinket_names  The ordered trinket names
-## @param      ilevels                The ilevels list
-## @param      graph_colours          The graph_colours list for ilevels
-## @param      graph_name             The graph name
-## @param      simc_settings          The simc options dictionary {iterations s,
-##                                    target error s, fight style s, class s,
-##                                    spec s, tier s "T19M_NH"}
+## @param      filename               The filename
+## TODO        Rewrite                Rewrite this whole function to use actual data types and
+##                                    and convert that into json itself.
 ##
 ## @return     True if writing to file was successfull
-##
+##  
 def print_highchart(trinket_list, ordered_trinket_names, filename):
   with open(filename + ".js", "w") as ofile:
     ofile.write("jQuery(function ($) {\n")
-    ofile.write("    Highcharts.chart('if-container', {\n")
+    ofile.write("    Highcharts.chart('" + settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "', {\n")
     ofile.write("        chart: {\n")
     ofile.write("            type: 'bar'\n")
     ofile.write("        },\n")
     ofile.write("        title: {\n")
     ofile.write("            text: '" + settings.graph_name + "'\n")
+    ofile.write("        },\n")
+    ofile.write("        subtitle: {\n")
+    ofile.write("            text: 'Last generated: " + datetime.datetime.now() + "'\n")
     ofile.write("        },\n")
     ofile.write("        xAxis: {\n")
     ofile.write("      categories: [")
