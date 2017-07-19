@@ -161,10 +161,10 @@ def sim_all( trinkets, ilevels, fight_style ):
         ## create fancy progress bar:
         progress = "["
         ## progress is split in 10% steps
-        for i in xrange(0,11):
+        for i in range(1,11):
           ## if sim_counter is less than a 10% step add a dot to the progress 
           ## bar
-          if sim_ceiling / ( 10 * i ) > sim_counter:
+          if sim_ceiling * 10 * i / 100 > sim_counter:
             progress += "."
           else:
             progress += "="
