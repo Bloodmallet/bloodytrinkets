@@ -27,10 +27,9 @@ def __create_filename(fight_style):
   #filename += "_" + settings.simc_settings["tier"]
   # 
   # format to use for automated website
-  filename = ""
-  filename += settings.simc_settings["class"] + "_"
-  filename += settings.simc_settings["spec"]
-  # TODO: add fightstyle to automated system
+  filename = settings.simc_settings["class"] + "_"
+  filename += settings.simc_settings["spec"] + "_"
+  filename += fight_style
   return filename
 
 
