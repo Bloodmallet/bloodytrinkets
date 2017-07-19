@@ -46,7 +46,7 @@ def __get_highest_trinket_dps(sim_results, trinket):
   if not sim_results[trinket][settings.ilevels[0]] == "0":
     return sim_results[trinket][settings.ilevels[0]]
   dps = "0"
-  for ilevel in settings.ilevels:
+  for ilevel in sim_results[trinket]:
     if int( sim_results[trinket][ilevel] ) > int( dps ):
       dps = sim_results[trinket][ilevel]
   return dps

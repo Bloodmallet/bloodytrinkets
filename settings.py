@@ -24,6 +24,9 @@ ilevels = [
   "880"
 ]
 
+legendary_colour = "#cccccc"
+legendary_ilevel = "970"
+
 output_screen = False
 # "json", "highchart"
 output_types = ["json", "highchart"]

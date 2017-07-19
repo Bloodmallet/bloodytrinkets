@@ -97,36 +97,82 @@ def get_dps(trinket_id, item_level, fight_style):
 ##                          id s, base_ilevel i, max_itemlevel i]}}
 ## @param      ilevels      The ilevels list
 ## @param      fight_style  The fight style
-## @param      simc_settings  The simc options dictionary {iterations s, target
-##                            error s, fight style s, class s, spec s, tier s
-##                            "T19M_NH"}
 ##
 ## @return     Dictionary of all simmed trinkets with all their dps values as
 ##             strings {trinket_name s:{ilevel s:{dps s}}}. dps is "0" if to be
-##             simmed itemlevel don't match available trinket itemlevel
+##             simmed itemlevel doesn't match available trinket itemlevel
 ##
 def sim_all( trinkets, ilevels, fight_style ):
   sim_counter = 0
   sim_ceiling = 0
+
+  ## calculate the max number of to be simmed values
+  ## this number is larger than what will be simmed, because some trinkets
+  ## aren't available at all itemlevels
   for source in trinkets:
     sim_ceiling += len( trinkets[source] )
   sim_ceiling *= len( ilevels )
+
+  ## dictionary for all trinkets
+  ## {trinket_name s:{ilevel s:{dps s}}}
   all_simmed = {}
+
+  ## reminder of structure of trinkets:
+  ## {source s:[[trinket_name s, id s, base_ilevel i, max_itemlevel i]]}
+  ## source can be a dungeon etc
   for source in trinkets:
     for trinket in trinkets[source]:
-      # if max trinket itemlevel is lower than lowest to sim ilevel, don't add it to the result
+
+      ## if max trinket itemlevel is lower than lowest to sim ilevel, don't add
+      ## it to the result
       if int( trinket[3] ) < int( ilevels[-1] ):
         continue
+
+      ## add a trinket to all simmed and make it a dictionary as well
       all_simmed[trinket[0]] = {}
+
+      ## handle legendaries
+      if source == "legendary":
+        all_simmed[trinket[0]][settings.legendary_ilevel] = get_dps( trinket[1], settings.legendary_ilevel, fight_style )
+      else:
+        all_simmed[trinket[0]][settings.legendary_ilevel] = "0"
+
+      ## get dps values from all normal trinkets for all necessary itemlevels
       for ilevel in ilevels:
         dps = "0"
+
+        ## if the trinkets minimum itemlevel <= current itemlevel and trinket
+        ## maximum itemlevel >= current itemlevel
         if trinket[2] <= int( ilevel ) and trinket[3] >= int( ilevel ):
           dps = get_dps( trinket[1], ilevel, fight_style )
-        elif source == "legendary" and ilevel == ilevels[0]:
-          dps = get_dps( trinket[1], str(trinket[2]), fight_style )
+
+        ## Handled for now before this ilevel for-loop starts
+        ## legendary trinket and if the very first trinket run is in progress, 
+        ## we handle the legendary trinket differently
+        #elif source == "legendary" and ilevel == ilevels[0]:
+        #  ## get dps for the legendary trinket using its own ilevel 
+        #  ## str(trinket[2])
+        #  dps = get_dps( trinket[1], str(trinket[2]), fight_style )
+
+        ## add data
         all_simmed[trinket[0]][ilevel] = dps
         sim_counter += 1
-        sys.stdout.write( "Already simed: %d of %d\r" % ( sim_counter, sim_ceiling ))
+
+        ## create fancy progress bar:
+        progress = "["
+        ## progress is split in 10% steps
+        for i in xrange(0,11):
+          ## if sim_counter is less than a 10% step add a dot to the progress 
+          ## bar
+          if sim_ceiling / ( 10 * i ) > sim_counter:
+            progress += "."
+          else:
+            progress += "="
+        ## end of the progress bar
+        progress += "]"
+
+        ## print user feedback       
+        sys.stdout.write( "Already simed: %s %d of %d\r" % ( progress, sim_counter, sim_ceiling ))
         sys.stdout.flush()
   return all_simmed
 
@@ -139,7 +185,7 @@ def sim_all( trinkets, ilevels, fight_style ):
 ##
 
 
-
+## Check for errors in the data
 error_collector = []
 if not Simc_checks.is_iteration( settings.simc_settings["iterations"] ):
   error_collector.append("simc_settings[iterations] not strong or out of bounds")
@@ -151,36 +197,41 @@ if not Wow_lib.is_class( settings.simc_settings["class"] ):
   error_collector.append("simc_settings[class] wrong name")
 if not Wow_lib.is_spec( settings.simc_settings["spec"] ):
   error_collector.append("simc_settings[spec] not appropriate spec name")
+## get all necessary trinkets for this class/spec at the same time
 if Wow_lib.is_class_spec( settings.simc_settings["class"], settings.simc_settings["spec"] ):
   trinkets = Wow_lib.get_trinkets_for_spec( settings.simc_settings["class"], settings.simc_settings["spec"] )
 else:
   error_collector.append("simc_settings[class] and simc_settings[spec] don't fit each other")
 
+## Print errors and terminate
 if error_collector:
   print("Some data got corrupted. The following errors were cought:")
   for error in error_collector:
     print(error)
   sys.exit("Program terminates due to errors in data.")
 
-
+## Remind the user of his graph name input
 print("Name of the graph: '" + settings.graph_name + "'")
 
+## Print information about multiple fight styles, if that was choosen
 if len(settings.simc_settings["fight_styles"]) > 1:
   print("Calculating multiple fight styles.")
 
+## Generating baseline damage of a profile (no trinkets)
 baseline = {"none": [["none", "", 840, 1200]]}
-fight_style_counter = 0
 for fight_style in settings.simc_settings["fight_styles"]:
-  fight_style_counter += 1
 
   print("Loading base dps value.")
+  ## simulate baseline dps value from the empty trinket, minimum itemlevel and the current fight style
   base_dps = sim_all( baseline, [settings.ilevels[-1]], fight_style )
   if settings.output_screen:
     print( base_dps )
 
+  ## simulate all trinkets for this fight style
   print("Loading dps-values for all trinkets.")
   sim_results = sim_all( trinkets, settings.ilevels, fight_style )
 
+  ## output results
   if lib.output.output.print_manager( base_dps, sim_results, fight_style ):
     print("Output successful.")
 
