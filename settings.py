@@ -12,7 +12,6 @@ graph_colours = {
   "930": "#db843d", 
   "940": "#00E676" 
 }
-graph_name = "Elemental Shaman"
 # Defines itemlevels that shall be simed, ordered from highest to lowest (graph output will have this order reversed)
 ilevels = [ 
   "940", 
@@ -24,7 +23,7 @@ ilevels = [
   "880"
 ]
 
-legendary_colour = "#cccccc"
+legendary_colour = "#ffeb3b"
 legendary_ilevel = "970"
 
 output_screen = False
@@ -39,6 +38,7 @@ simc_settings["target_error"] = "0.1"
 simc_settings["threads"]      = ""
 simc_settings["tier"]         = "T20M"
 
+graph_name = "Shaman - Elemental - Patchwerk"
 simc_settings["class"] = "shaman"
 simc_settings["spec"]  = "elemental"
 
