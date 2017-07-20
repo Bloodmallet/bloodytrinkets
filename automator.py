@@ -7,32 +7,44 @@ fight_styles = [
   ( "hecticaddcleave", "0.2" ) 
 ]
 
+use_second_trinket = "False"
+
 profiles = [
-  ( "death_knight", "frost" ),
-  ( "death_knight", "unholy" ),
-  ( "demon_hunter", "havoc" ),
-  ( "druid", "balance" ),
-  ( "druid", "feral" ),
-  ( "hunter", "beast_mastery" ),
-  ( "hunter", "marksmanship" ),
-  ( "hunter", "survival" ),
-  ( "mage", "arcane" ),
-  ( "mage", "fire" ),
-  ( "mage", "frost" ),
-  ( "monk", "windwalker" ),
-  ( "paladin", "retribution" ),
-  ( "priest", "shadow" ),
-  ( "rogue", "assassination" ),
-  ( "rogue", "outlaw" ),
-  ( "rogue", "subtlety" ),
-  ( "shaman", "elemental" ),
-  ( "shaman", "enhancement" ),
-  ( "warlock", "affliction" ),
-  ( "warlock", "demonology" ),
-  ( "warlock", "destruction" ),
-  ( "warrior", "arms" ),
-  ( "warrior", "fury" )
+  ( "death_knight", "frost",          "str" ),
+  ( "death_knight", "unholy",         "str" ),
+  ( "demon_hunter", "havoc",          "agi" ),
+  ( "druid",        "balance",        "int" ),
+  ( "druid",        "feral",          "agi" ),
+  ( "hunter",       "beast_mastery",  "agi" ),
+  ( "hunter",       "marksmanship",   "agi" ),
+  ( "hunter",       "survival",       "agi" ),
+  ( "mage",         "arcane",         "int" ),
+  ( "mage",         "fire",           "int" ),
+  ( "mage",         "frost",          "int" ),
+  ( "monk",         "windwalker",     "agi" ),
+  ( "paladin",      "retribution",    "str" ),
+  ( "priest",       "shadow",         "int" ),
+  ( "rogue",        "assassination",  "agi" ),
+  ( "rogue",        "outlaw",         "agi" ),
+  ( "rogue",        "subtlety",       "agi" ),
+  ( "shaman",       "elemental",      "int" ),
+  ( "shaman",       "enhancement",    "agi" ),
+  ( "warlock",      "affliction",     "int" ),
+  ( "warlock",      "demonology",     "int" ),
+  ( "warlock",      "destruction",    "int" ),
+  ( "warrior",      "arms",           "str" ),
+  ( "warrior",      "fury",           "str" )
 ]
+
+second_trinket = {
+  # agi
+  "agi": "( \"142506,bonus_id=607\", \"880\" )",
+  # int
+  "int": "( \"142507,bonus_id=607\", \"880\" )",
+  # str
+  "str": "( \"142508,bonus_id=607\", \"880\" )"  
+}
+
 
 start = datetime.datetime.now()
 
@@ -45,6 +57,8 @@ for fight_style in fight_styles:
       ofile.write("simc_settings[\"spec\"] = \"" + profile[1] + "\"\n")
       ofile.write("simc_settings[\"fight_style\"] = \"" + fight_style[0] + "\"\n")
       ofile.write("simc_settings[\"target_error\"] = \"" + fight_style[1] + "\"\n")
+      ofile.write("simc_settings[\"use_second_trinket\"] = " + use_second_trinket + "\n")
+      ofile.write("simc_settings[\"second_trinket\"] = " + second_trinket[profile[2]] + "\n")
 
     print("")
 
@@ -97,3 +111,5 @@ print( "Done after " + str( end - start ))
 # simc_settings["spec"]  = automator_input.simc_settings["spec"]
 # simc_settings["fight_styles"] = automator_input.simc_settings["fight_styles"]
 # simc_settings["target_error"] = automator_input.simc_settings["target_error"]
+# simc_settings["use_second_trinket"] = automator_input.simc_settings["use_second_trinket"]
+# simc_settings["second_trinket"] = automator_input.simc_settings["second_trinket"]
