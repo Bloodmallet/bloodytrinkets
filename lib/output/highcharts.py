@@ -48,7 +48,7 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
     ofile.write("        type: 'bar'\n")
     ofile.write("    },\n")
     ofile.write("    title: {\n")
-    ofile.write("        text: '" + settings.graph_name + "'\n")
+    ofile.write("        text: '" + settings.graph_title + "'\n")
     ofile.write("    },\n")
     ofile.write("    subtitle: {\n")
     ofile.write("        text: 'Last generated: " + str(datetime.datetime.now()) + "'\n")

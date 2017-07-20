@@ -40,7 +40,7 @@ simc_settings["target_error"] = "0.1"
 simc_settings["threads"]      = ""
 simc_settings["tier"]         = "T20M"
 
-graph_name = "Shaman - Elemental - Patchwerk"
+graph_title = "Shaman - Elemental - Patchwerk"
 simc_settings["class"] = "shaman"
 simc_settings["spec"]  = "elemental"
 
