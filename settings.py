@@ -12,7 +12,8 @@ graph_colours = {
   "930": "#db843d", 
   "940": "#00E676" 
 }
-# Defines itemlevels that shall be simed, ordered from highest to lowest (graph output will have this order reversed)
+# Defines itemlevels that shall be simed, ordered from highest to lowest (graph
+# output will have this order reversed)
 ilevels = [ 
   "940", 
   "930", 
@@ -23,6 +24,7 @@ ilevels = [
   "880"
 ]
 
+legendary = True
 legendary_colour = "#ffeb3b"
 legendary_ilevel = "970"
 
@@ -42,7 +44,13 @@ graph_name = "Shaman - Elemental - Patchwerk"
 simc_settings["class"] = "shaman"
 simc_settings["spec"]  = "elemental"
 
-# You want to use a custom profile? Set c_profile to True and add the relative path and name
+# Be aware that this feature basically makes the trinket disappear in the graph
+# but has the benefit of showing a bit more realistic trinket values
+simc_settings["use_second_trinket"] = False
+simc_settings["second_trinket"] = ( "141482", "860" )     # ( id s, ilevel s)
+
+# You want to use a custom profile? Set c_profile to True and add a relative 
+# path and name
 simc_settings["c_profile"]      = False
 simc_settings["c_profile_path"] = "example_dir/"
 simc_settings["c_profile_name"] = "example_name.simc"

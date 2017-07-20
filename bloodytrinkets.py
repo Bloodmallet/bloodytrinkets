@@ -38,7 +38,10 @@ def get_dps(trinket_id, item_level, fight_style):
     argument.append( settings.simc_settings["c_profile_path"] + settings.simc_settings["c_profile_name"] )
   else:
     argument.append( settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "_" + settings.simc_settings["tier"] + ".simc" )
-  argument.append( "trinket1=" )
+  if settings.simc_settings["use_second_trinket"]:
+    argument += "trinket1=,id=" + settings.simc_settings["second_trinket"][0] + ",ilevel=" + settings.simc_settings["second_trinket"][1] + " "
+  else:
+    argument += "trinket1= "
   argument.append( "trinket2=,id=" + trinket_id + ",ilevel=" + item_level )
 
   # should prevent additional empty windows popping up...on win32 systems without breaking different OS
@@ -123,16 +126,23 @@ def sim_all( trinkets, ilevels, fight_style ):
   for source in trinkets:
     for trinket in trinkets[source]:
 
+      ## don't simulate a char with two identical trinkets
+      if settings.simc_settings["use_second_trinket"] and trinket[1] == settings.simc_settings["second_trinket"][0]:
+        continue
+
       ## if max trinket itemlevel is lower than lowest to sim ilevel, don't add
       ## it to the result
       if int( trinket[3] ) < int( ilevels[-1] ):
         continue
 
+      ## handle legendaries
+      if source == "legendary" and not settings.legendary:
+        continue
+      
       ## add a trinket to all simmed and make it a dictionary as well
       all_simmed[trinket[0]] = {}
 
-      ## handle legendaries
-      if source == "legendary":
+      if source == "legendary" and settings.legendary:
         all_simmed[trinket[0]][settings.legendary_ilevel] = get_dps( trinket[1], settings.legendary_ilevel, fight_style )
       else:
         all_simmed[trinket[0]][settings.legendary_ilevel] = "0"
@@ -141,18 +151,10 @@ def sim_all( trinkets, ilevels, fight_style ):
       for ilevel in ilevels:
         dps = "0"
 
-        ## if the trinkets minimum itemlevel <= current itemlevel and trinket
-        ## maximum itemlevel >= current itemlevel
+        ## if the trinkets minimum itemlevel <= current itemlevel AND 
+        ## trinket maximum itemlevel >= current itemlevel
         if trinket[2] <= int( ilevel ) and trinket[3] >= int( ilevel ):
           dps = get_dps( trinket[1], ilevel, fight_style )
-
-        ## Handled for now before this ilevel for-loop starts
-        ## legendary trinket and if the very first trinket run is in progress, 
-        ## we handle the legendary trinket differently
-        #elif source == "legendary" and ilevel == ilevels[0]:
-        #  ## get dps for the legendary trinket using its own ilevel 
-        #  ## str(trinket[2])
-        #  dps = get_dps( trinket[1], str(trinket[2]), fight_style )
 
         ## add data
         all_simmed[trinket[0]][ilevel] = dps
