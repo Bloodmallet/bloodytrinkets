@@ -39,9 +39,9 @@ def get_dps(trinket_id, item_level, fight_style):
   else:
     argument.append( settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "_" + settings.simc_settings["tier"] + ".simc" )
   if settings.simc_settings["use_second_trinket"]:
-    argument += "trinket1=,id=" + settings.simc_settings["second_trinket"][0] + ",ilevel=" + settings.simc_settings["second_trinket"][1] + " "
+    argument.append( "trinket1=,id=" + settings.simc_settings["second_trinket"][0] + ",ilevel=" + settings.simc_settings["second_trinket"][1] + " " )
   else:
-    argument += "trinket1= "
+    argument.append( "trinket1= " )
   argument.append( "trinket2=,id=" + trinket_id + ",ilevel=" + item_level )
 
   # should prevent additional empty windows popping up...on win32 systems without breaking different OS
@@ -213,7 +213,7 @@ if error_collector:
   sys.exit("Program terminates due to errors in data.")
 
 ## Remind the user of his graph name input
-print("Name of the graph: '" + settings.graph_name + "'")
+print("Name of the graph: '" + settings.graph_title + "'")
 
 ## Print information about multiple fight styles, if that was choosen
 if len(settings.simc_settings["fight_styles"]) > 1:
