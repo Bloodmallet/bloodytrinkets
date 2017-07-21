@@ -1,0 +1,3 @@
+[submodule "lib/simc_support"]
+	path = lib/simc_support
+	url = https://github.com/Bloodmallet/simc_support.git
