@@ -55,7 +55,7 @@ for fight_style in fight_styles:
       ofile.write("simc_settings = {}\n")
       ofile.write("simc_settings[\"class\"] = \"" + profile[0] + "\"\n")
       ofile.write("simc_settings[\"spec\"] = \"" + profile[1] + "\"\n")
-      ofile.write("simc_settings[\"fight_style\"] = \"" + fight_style[0] + "\"\n")
+      ofile.write("simc_settings[\"fight_styles\"] = [\"" + fight_style[0] + "\"]\n")
       ofile.write("simc_settings[\"target_error\"] = \"" + fight_style[1] + "\"\n")
       ofile.write("simc_settings[\"use_second_trinket\"] = " + use_second_trinket + "\n")
       ofile.write("simc_settings[\"second_trinket\"] = " + second_trinket[profile[2]] + "\n")
