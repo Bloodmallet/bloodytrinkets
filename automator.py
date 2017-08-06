@@ -4,24 +4,29 @@ import sys
 
 fight_styles = [ 
   ( "patchwerk", "0.1" ), 
-  ( "hecticaddcleave", "0.2" ) 
+  ( "beastlord", "0.25" ) 
 ]
 
-use_second_trinket = "False"
+use_second_trinket = "True"
 
 profiles = [
+  #( "death_knight", "blood",          "str" ),
   ( "death_knight", "frost",          "str" ),
   ( "death_knight", "unholy",         "str" ),
   ( "demon_hunter", "havoc",          "agi" ),
+  #( "demon_hunter", "vengance",       "agi" ),
   ( "druid",        "balance",        "int" ),
   ( "druid",        "feral",          "agi" ),
+  #( "druid",        "guardian",       "agi" ),
   ( "hunter",       "beast_mastery",  "agi" ),
   ( "hunter",       "marksmanship",   "agi" ),
   ( "hunter",       "survival",       "agi" ),
   ( "mage",         "arcane",         "int" ),
   ( "mage",         "fire",           "int" ),
   ( "mage",         "frost",          "int" ),
+  #( "monk",         "brewmaster",     "agi" ),
   ( "monk",         "windwalker",     "agi" ),
+  #( "paladin",      "protection",     "str" ),
   ( "paladin",      "retribution",    "str" ),
   ( "priest",       "shadow",         "int" ),
   ( "rogue",        "assassination",  "agi" ),
@@ -33,7 +38,8 @@ profiles = [
   ( "warlock",      "demonology",     "int" ),
   ( "warlock",      "destruction",    "int" ),
   ( "warrior",      "arms",           "str" ),
-  ( "warrior",      "fury",           "str" )
+  ( "warrior",      "fury",           "str" ),
+  #( "warrior",      "protection",     "str" )
 ]
 
 second_trinket = {
