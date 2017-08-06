@@ -47,7 +47,8 @@ simc_settings["spec"]  = "elemental"
 # Be aware that this feature basically makes the trinket disappear in the graph
 # but has the benefit of showing a bit more realistic trinket values
 simc_settings["use_second_trinket"] = False
-simc_settings["second_trinket"] = ( "141482", "860" )     # ( id s, ilevel s)
+simc_settings["second_trinket"] = ( "141482", "880" )     # ( id s, ilevel s),
+                                                          # this is a int-vers stat stick
 
 # You want to use a custom profile? Set c_profile to True and add a relative 
 # path and name

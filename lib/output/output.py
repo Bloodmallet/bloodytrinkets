@@ -4,7 +4,7 @@
 ## Library needed to get date and calculationtime for program
 import datetime
 import lib.output.highcharts as highcharts
-import lib.output.json as json
+import lib.output.json_print as json
 import settings
 
 
@@ -27,9 +27,12 @@ def __create_filename(fight_style):
   #filename += "_" + settings.simc_settings["tier"]
   # 
   # format to use for automated website
-  filename = settings.simc_settings["class"] + "_"
+  filename = "./results/"
+  filename += settings.simc_settings["class"] + "_"
   filename += settings.simc_settings["spec"] + "_"
   filename += fight_style
+  if settings.simc_settings["ptr"]:
+    filename += "_ptr"
   return filename
 
 
@@ -71,7 +74,7 @@ def __normalise_trinkets(base_dps, sim_results, base_ilevel):
   for trinket in sim_results:
     for ilevel in sim_results[trinket]:
       if not sim_results[trinket][ilevel] == "0":
-        sim_results[trinket][ilevel] = str(int(sim_results[trinket][ilevel]) - int(base_dps["none"][base_ilevel]))
+        sim_results[trinket][ilevel] = str(int(sim_results[trinket][ilevel]) - int(base_dps["baseline"][base_ilevel]))
   return sim_results
 
 
@@ -123,7 +126,9 @@ def print_manager(base_dps_dic, sim_results, fight_style):
 
     if print_type is "json":
       print("Initiating json output.")
-      if json.print_json(sim_results, filename):
+      all_simulations = dict(sim_results)
+      all_simulations["baseline"] = dict(base_dps_dic["baseline"])
+      if json.print_json(all_simulations, filename):
         print("Generating json file: Done")
       else:
         print("Generating json file: Failed")

@@ -144,6 +144,9 @@ def sim_all( trinkets, ilevels, fight_style ):
 
       if source == "legendary" and settings.legendary:
         all_simmed[trinket[0]][settings.legendary_ilevel] = get_dps( trinket[1], settings.legendary_ilevel, fight_style )
+      elif source == "none" and trinket[0] == "baseline":
+        # don't add a 0 dps value to the baseline for legendary itemlevel 
+        pass
       else:
         all_simmed[trinket[0]][settings.legendary_ilevel] = "0"
 
@@ -220,7 +223,7 @@ if len(settings.simc_settings["fight_styles"]) > 1:
   print("Calculating multiple fight styles.")
 
 ## Generating baseline damage of a profile (no trinkets)
-baseline = {"none": [["none", "", 840, 1200]]}
+baseline = {"none": [["baseline", "", 840, 1200]]}
 for fight_style in settings.simc_settings["fight_styles"]:
 
   print("Loading base dps value.")
@@ -237,4 +240,4 @@ for fight_style in settings.simc_settings["fight_styles"]:
   if lib.output.output.print_manager( base_dps, sim_results, fight_style ):
     print("Output successful.")
 
-print("Program exists flawless.")
+print("Program exits flawless.")
