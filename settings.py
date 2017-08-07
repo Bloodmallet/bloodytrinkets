@@ -49,6 +49,8 @@ simc_settings["spec"]  = "elemental"
 simc_settings["use_second_trinket"] = False
 simc_settings["second_trinket"] = ( "141482", "880" )     # ( id s, ilevel s),
                                                           # this is a int-vers stat stick
+simc_settings["allow_double_trinkets"] = True             # True, allows two identical trinkets to be simmed
+                                                          # False, prevents identical trinkets to be simmed
 
 # You want to use a custom profile? Set c_profile to True and add a relative 
 # path and name

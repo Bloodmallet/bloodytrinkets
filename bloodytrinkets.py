@@ -126,8 +126,8 @@ def sim_all( trinkets, ilevels, fight_style ):
   for source in trinkets:
     for trinket in trinkets[source]:
 
-      ## don't simulate a char with two identical trinkets
-      if settings.simc_settings["use_second_trinket"] and trinket[1] == settings.simc_settings["second_trinket"][0]:
+      ## don't simulate a char with two identical trinkets if allow_double_trinkets is not checked
+      if settings.simc_settings["use_second_trinket"] and not settings.simc_settings["allow_double_trinkets"] and trinket[1] == settings.simc_settings["second_trinket"][0]:
         continue
 
       ## if max trinket itemlevel is lower than lowest to sim ilevel, don't add
