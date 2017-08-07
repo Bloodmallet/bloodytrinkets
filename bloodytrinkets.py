@@ -227,6 +227,7 @@ baseline = {"none": [["baseline", "", 840, 1200]]}
 for fight_style in settings.simc_settings["fight_styles"]:
 
   print("Loading base dps value.")
+  print("")
   ## simulate baseline dps value from the empty trinket, minimum itemlevel and the current fight style
   base_dps = sim_all( baseline, [settings.ilevels[-1]], fight_style )
   if settings.output_screen:
@@ -234,6 +235,7 @@ for fight_style in settings.simc_settings["fight_styles"]:
 
   ## simulate all trinkets for this fight style
   print("Loading dps-values for all trinkets.")
+  print("")
   sim_results = sim_all( trinkets, settings.ilevels, fight_style )
 
   ## output results
