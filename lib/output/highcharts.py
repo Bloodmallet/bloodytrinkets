@@ -171,7 +171,18 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
         "color": "#1E90FF",
         "value": mean,
         "width": 2,
-        "zIndex": 2
+        "zIndex": 2,
+        "label": {
+          "text": 'mean at ' + str(int(mean)),
+          "align": 'left',
+          "verticalAlign": 'bottom',
+          "rotation": -90,
+          "x": 10,
+          "y": -25,
+          "style": {
+            "color": "#1E90FF"
+          }
+        }
       }]
     },
     "legend": {
@@ -235,7 +246,7 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
                       align: 'left',
                       verticalAlign: 'bottom',
                       rotation: 0,
-                      y: -7
+                      y: -5
                     }
                 });
               }'''"""
