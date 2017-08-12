@@ -48,6 +48,19 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
   for name in ordered_trinket_names:
     categories.append(name)
 
+  # variables to be used for the mean bar in the chart
+  dps_sum = 0
+  dps_counter = 0
+
+  for trinket_name in ordered_trinket_names:
+    lowest_dps_ilevel, highest_dps_ilevel = __get_dps_ilevel_borders(trinket_list[trinket_name])
+    # add highest dps value to the mean
+    dps_sum += int(trinket_list[trinket_name][highest_dps_ilevel])
+    dps_counter += 1
+  mean = dps_sum / dps_counter
+  dps_sum = 0
+  dps_counter = 0
+
   # data handle for all series
   series = []
 
@@ -75,6 +88,7 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
 
     for trinket_name in ordered_trinket_names:
       lowest_dps_ilevel, highest_dps_ilevel = __get_dps_ilevel_borders(trinket_list[trinket_name])
+
       # if it's the lowest itemlevel, just print the values
       if ilevel == settings.ilevels[-1]:
         series_ilevel_data.append(int(trinket_list[trinket_name][ilevel]))
@@ -138,15 +152,27 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
         "text": '\\u0394 Damage per second'
       },
       "labels": {
-        "enabled": True
+        "enabled": False
       },
       "stackLabels": {
         "enabled": False,
         "style": {
           "fontWeight": "bold",
           "color": "'''(Highcharts.theme && Highcharts.theme.textColor) || 'white''''" 
-        }
-      }
+        },
+        "formatter": """'''function() {
+            // I need to figure out how to get the mean value here,
+            // to allow the percent diff to mean as label
+            //console.log(this);
+            return;
+          }'''"""
+      },
+      "plotLines": [{
+        "color": "#1E90FF",
+        "value": mean,
+        "width": 2,
+        "zIndex": 2
+      }]
     },
     "legend": {
       "align": "right",
@@ -192,6 +218,28 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
         "dataLabels": {
           "enabled": False,
           "color": "'''(Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white''''"
+        },
+        "point": {
+          "events": {
+            "click": """'''function (event) {
+                var chart = this.series.yAxis;
+                chart.removePlotLine("helperLine");
+                chart.addPlotLine({
+                    value: this.stackY,
+                    color: '#000',
+                    width: 2,
+                    id: 'helperLine',
+                    zIndex: 5,
+                    label: {
+                      text: this.series.name + " " + this.category,
+                      align: "left",
+                      verticalAlign: "bottom",
+                      rotation: 0,
+                      y: -7
+                    }
+                });
+              }'''"""
+          }
         }
       }
     },
