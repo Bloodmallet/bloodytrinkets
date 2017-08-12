@@ -161,9 +161,9 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
           "color": "'''(Highcharts.theme && Highcharts.theme.textColor) || 'white''''" 
         },
         "formatter": """'''function() {
-            // I need to figure out how to get the mean value here,
-            // to allow the percent diff to mean as label
-            //console.log(this);
+            /* I need to figure out how to get the mean value here,
+            ** to allow the percent diff to mean as label
+            ** console.log(this); */
             return;
           }'''"""
       },
@@ -223,7 +223,7 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
           "events": {
             "click": """'''function (event) {
                 var chart = this.series.yAxis;
-                chart.removePlotLine("helperLine");
+                chart.removePlotLine('helperLine');
                 chart.addPlotLine({
                     value: this.stackY,
                     color: '#000',
@@ -231,9 +231,9 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
                     id: 'helperLine',
                     zIndex: 5,
                     label: {
-                      text: this.series.name + " " + this.category,
-                      align: "left",
-                      verticalAlign: "bottom",
+                      text: this.series.name + ' ' + this.category,
+                      align: 'left',
+                      verticalAlign: 'bottom',
                       rotation: 0,
                       y: -7
                     }
