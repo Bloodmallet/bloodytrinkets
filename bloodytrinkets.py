@@ -30,6 +30,7 @@ def get_dps(trinket_id, item_level, fight_style):
   argument.append( "target_error=" + settings.simc_settings["target_error"] )
   argument.append( "fight_style="  + fight_style )
   argument.append( "fixed_time=1" )
+  argument.append( "optimize_expressions=1" )
   argument.append( "default_actions=1" )
   if settings.simc_settings["ptr"]:
     argument.append( "ptr=1" )
@@ -39,10 +40,20 @@ def get_dps(trinket_id, item_level, fight_style):
   else:
     argument.append( settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "_" + settings.simc_settings["tier"] + ".simc" )
   if settings.simc_settings["use_second_trinket"]:
-    argument.append( "trinket1=,id=" + settings.simc_settings["second_trinket"][0] + ",ilevel=" + settings.simc_settings["second_trinket"][1] + " " )
+
+    second_trinket_string = "trinket1=,id=" + settings.simc_settings["second_trinket"][0] + ",ilevel=" + settings.simc_settings["second_trinket"][1]
+    if trinket_id == "crit" or trinket_id == "haste" or trinket_id == "mastery" or trinket_id == "versatility":
+      second_trinket_string += ",enchant=1500" + trinket_id
+    second_trinket_string += " "
+
+    argument.append( second_trinket_string )
   else:
     argument.append( "trinket1= " )
-  argument.append( "trinket2=,id=" + trinket_id + ",ilevel=" + item_level )
+  if trinket_id != "crit" and trinket_id != "haste" and trinket_id != "mastery" and trinket_id != "versatility":
+    argument.append( "trinket2=,id=" + trinket_id + ",ilevel=" + item_level )
+  else:
+    argument.append( "trinket2=,id=,ilevel=" + item_level )
+  argument.append( "ready_trigger=1" )
 
   # should prevent additional empty windows popping up...on win32 systems without breaking different OS
   if sys.platform == 'win32':
@@ -142,9 +153,18 @@ def sim_all( trinkets, ilevels, fight_style ):
       ## add a trinket to all simmed and make it a dictionary as well
       all_simmed[trinket[0]] = {}
 
+      # special handling of the baseline profile to simulate a socket too
+      if trinket[1] == "":
+        all_simmed[trinket[0]][ilevels[0]] = get_dps( trinket[1], ilevels[0], fight_style )
+        all_simmed[trinket[0]]["10_crit_gems"] = get_dps( "crit", ilevels[0], fight_style )
+        all_simmed[trinket[0]]["10_haste_gems"] = get_dps( "haste", ilevels[0], fight_style )
+        all_simmed[trinket[0]]["10_mastery_gems"] = get_dps( "mastery", ilevels[0], fight_style )
+        all_simmed[trinket[0]]["10_versatility_gems"] = get_dps( "versatility", ilevels[0], fight_style )        
+        continue
+
       if source == "legendary" and settings.legendary:
         all_simmed[trinket[0]][settings.legendary_ilevel] = get_dps( trinket[1], settings.legendary_ilevel, fight_style )
-      elif source == "none" and trinket[0] == "baseline":
+      elif source == "none" and trinket[0] == "baseline" and trinket[1] == "":
         # don't add a 0 dps value to the baseline for legendary itemlevel 
         pass
       else:
