@@ -43,7 +43,7 @@ def get_dps(trinket_id, item_level, fight_style):
 
     second_trinket_string = "trinket1=,id=" + settings.simc_settings["second_trinket"][0] + ",ilevel=" + settings.simc_settings["second_trinket"][1]
     if trinket_id == "crit" or trinket_id == "haste" or trinket_id == "mastery" or trinket_id == "versatility":
-      second_trinket_string += ",enchant=1500" + trinket_id
+      second_trinket_string += ",enchant=2000" + trinket_id
     second_trinket_string += " "
 
     argument.append( second_trinket_string )
