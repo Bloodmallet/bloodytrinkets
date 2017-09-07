@@ -18,13 +18,18 @@ import lib.simc_support.wow_lib     as Wow_lib
 ##
 ## @brief      Gets the dps for one trinket.
 ##
-## @param      trinket_id   The trinket identifier
-## @param      item_level   The item level
-## @param      fight_style  The fight style
+## @param      trinket_id      The trinket identifier for the trinket for the
+##                             chart
+## @param      item_level      The item level
+## @param      fight_style     The fight style
+## @param      enchantment     The enchantment if one is interested in using
+##                             that, used for gem simulation in this case
+## @param      use_trinket_id  Decided whether the trinket_id is used or not,
+##                             important for gem simulation
 ##
 ## @return     The dps s.
 ##
-def get_dps(trinket_id, item_level, fight_style):
+def get_dps(trinket_id, item_level, fight_style, enchantment="", use_trinket_id=True):
   argument = [ settings.simc_settings["simc"] ]
   argument.append( "iterations="   + settings.simc_settings["iterations"] )
   argument.append( "target_error=" + settings.simc_settings["target_error"] )
@@ -32,28 +37,31 @@ def get_dps(trinket_id, item_level, fight_style):
   argument.append( "fixed_time=1" )
   argument.append( "optimize_expressions=1" )
   argument.append( "default_actions=1" )
+
   if settings.simc_settings["ptr"]:
     argument.append( "ptr=1" )
   argument.append( "threads="      + settings.simc_settings["threads"] )
+
   if settings.simc_settings["c_profile"]:
     argument.append( settings.simc_settings["c_profile_path"] + settings.simc_settings["c_profile_name"] )
   else:
     argument.append( settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "_" + settings.simc_settings["tier"] + ".simc" )
+
   if settings.simc_settings["use_second_trinket"]:
-
     second_trinket_string = "trinket1=,id=" + settings.simc_settings["second_trinket"][0] + ",ilevel=" + settings.simc_settings["second_trinket"][1]
-    if trinket_id == "crit" or trinket_id == "haste" or trinket_id == "mastery" or trinket_id == "versatility":
-      second_trinket_string += ",enchant=2000" + trinket_id
-    second_trinket_string += " "
-
+    if enchantment and not use_trinket_id:
+      second_trinket_string += ",enchant=" + enchantment
     argument.append( second_trinket_string )
   else:
-    argument.append( "trinket1= " )
-  if trinket_id != "crit" and trinket_id != "haste" and trinket_id != "mastery" and trinket_id != "versatility":
-    argument.append( "trinket2=,id=" + trinket_id + ",ilevel=" + item_level )
+    argument.append( "trinket1=" )
+
+  if use_trinket_id:
+    argument.append( "trinket2=,id=" + trinket_id + ",ilevel=" + item_level + ",enchant=" + enchantment )
   else:
-    argument.append( "trinket2=,id=,ilevel=" + item_level )
+    argument.append( "trinket2=" )
   argument.append( "ready_trigger=1" )
+
+  #print(argument)
 
   # should prevent additional empty windows popping up...on win32 systems without breaking different OS
   if sys.platform == 'win32':
@@ -156,10 +164,15 @@ def sim_all( trinkets, ilevels, fight_style ):
       # special handling of the baseline profile to simulate a socket too
       if trinket[1] == "":
         all_simmed[trinket[0]][ilevels[0]] = get_dps( trinket[1], ilevels[0], fight_style )
-        all_simmed[trinket[0]]["10_crit_gems"] = get_dps( "crit", ilevels[0], fight_style )
-        all_simmed[trinket[0]]["10_haste_gems"] = get_dps( "haste", ilevels[0], fight_style )
-        all_simmed[trinket[0]]["10_mastery_gems"] = get_dps( "mastery", ilevels[0], fight_style )
-        all_simmed[trinket[0]]["10_versatility_gems"] = get_dps( "versatility", ilevels[0], fight_style )        
+        #print("Base: " + all_simmed[trinket[0]][ilevels[0]])
+        all_simmed[trinket[0]]["10_crit_gems"] = get_dps( "", ilevels[0], fight_style, enchantment="2000crit", use_trinket_id=False )
+        #print("Crit: " + all_simmed[trinket[0]]["10_crit_gems"])
+        all_simmed[trinket[0]]["10_haste_gems"] = get_dps( "", ilevels[0], fight_style, enchantment="2000haste", use_trinket_id=False )
+        #print("Haste: " + all_simmed[trinket[0]]["10_haste_gems"])
+        all_simmed[trinket[0]]["10_mastery_gems"] = get_dps( "", ilevels[0], fight_style, enchantment="2000mastery", use_trinket_id=False )
+        #print("Mastery: " + all_simmed[trinket[0]]["10_mastery_gems"])
+        all_simmed[trinket[0]]["10_versatility_gems"] = get_dps( "", ilevels[0], fight_style, enchantment="2000vers", use_trinket_id=False )
+        #print("Vers: " + all_simmed[trinket[0]]["10_versatility_gems"])
         continue
 
       if source == "legendary" and settings.legendary:
