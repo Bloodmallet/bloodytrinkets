@@ -147,15 +147,18 @@ def sim_all( trinkets, ilevels, fight_style ):
 
       ## don't simulate a char with two identical trinkets if allow_double_trinkets is not checked
       if settings.simc_settings["use_second_trinket"] and not settings.simc_settings["allow_double_trinkets"] and trinket[1] == settings.simc_settings["second_trinket"][0]:
+        sim_counter += 1
         continue
 
       ## if max trinket itemlevel is lower than lowest to sim ilevel, don't add
       ## it to the result
       if int( trinket[3] ) < int( ilevels[-1] ):
+        sim_counter += 1
         continue
 
       ## handle legendaries
       if source == "legendary" and not settings.legendary:
+        sim_counter += 1
         continue
       
       ## add a trinket to all simmed and make it a dictionary as well
@@ -177,6 +180,7 @@ def sim_all( trinkets, ilevels, fight_style ):
 
       if source == "legendary" and settings.legendary:
         all_simmed[trinket[0]][settings.legendary_ilevel] = get_dps( trinket[1], settings.legendary_ilevel, fight_style )
+        sim_counter += 1
       elif source == "none" and trinket[0] == "baseline" and trinket[1] == "":
         # don't add a 0 dps value to the baseline for legendary itemlevel 
         pass
