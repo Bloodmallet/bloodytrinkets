@@ -2,6 +2,8 @@ import datetime
 import subprocess
 import sys
 
+simc_build = "43201b2"
+
 fight_styles = [ 
   ( "patchwerk", "0.1" ), 
   ( "beastlord", "0.25" ) 
@@ -58,6 +60,7 @@ for fight_style in fight_styles:
   for profile in profiles:
     with open("automator_input.py", "w") as ofile:
       ofile.write("graph_title = \"" + profile[0].title() + " - " + profile[1].title() + " - " + fight_style[0].title() + "\"\n")
+      ofile.write("graph_subtitle = \"" + start.strftime("%Y-%m-%d %H:%M") + " SimC build: " + simc_build + "\"\n")
       ofile.write("simc_settings = {}\n")
       ofile.write("simc_settings[\"class\"] = \"" + profile[0] + "\"\n")
       ofile.write("simc_settings[\"spec\"] = \"" + profile[1] + "\"\n")
@@ -113,6 +116,7 @@ print( "Done after " + str( end - start ))
 ## Add this to settings to automate the process
 # import automator_input
 # graph_title = automator_input.graph_title
+# graph_subtitle = automator_input.graph_subtitle
 # simc_settings["class"] = automator_input.simc_settings["class"]
 # simc_settings["spec"]  = automator_input.simc_settings["spec"]
 # simc_settings["fight_styles"] = automator_input.simc_settings["fight_styles"]

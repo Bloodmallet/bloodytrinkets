@@ -141,7 +141,7 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
       "text": settings.graph_title
     },
     "subtitle": {
-      "text": "Last generated: " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+      "text": settings.graph_subtitle
     },
     "xAxis": {
       "categories": categories
