@@ -43,7 +43,7 @@ simc_settings["threads"]      = ""
 simc_settings["tier"]         = "T20M"
 
 graph_title = "Shaman - Elemental - Patchwerk"
-graph_subtitle = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + " SimC build: 43201b2"
+graph_subtitle = "UTC " + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M") + " SimC build: 43201b2"
 simc_settings["class"] = "shaman"
 simc_settings["spec"]  = "elemental"
 

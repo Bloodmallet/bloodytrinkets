@@ -54,13 +54,13 @@ second_trinket = {
 }
 
 
-start = datetime.datetime.now()
+start = datetime.datetime.utcnow()
 
 for fight_style in fight_styles:
   for profile in profiles:
     with open("automator_input.py", "w") as ofile:
       ofile.write("graph_title = \"" + profile[0].title() + " - " + profile[1].title() + " - " + fight_style[0].title() + "\"\n")
-      ofile.write("graph_subtitle = \"" + start.strftime("%Y-%m-%d %H:%M") + " SimC build: " + simc_build + "\"\n")
+      ofile.write("graph_subtitle = \"UTC " + start.strftime("%Y-%m-%d %H:%M") + " SimC build: " + simc_build + "\"\n")
       ofile.write("simc_settings = {}\n")
       ofile.write("simc_settings[\"class\"] = \"" + profile[0] + "\"\n")
       ofile.write("simc_settings[\"spec\"] = \"" + profile[1] + "\"\n")
@@ -109,7 +109,7 @@ for fight_style in fight_styles:
           stderr=subprocess.STDOUT, 
           universal_newlines=True
         )
-end = datetime.datetime.now()
+end = datetime.datetime.utcnow()
 print( "Done after " + str( end - start ))
 
 

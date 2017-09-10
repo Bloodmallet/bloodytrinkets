@@ -2,7 +2,6 @@
  
 
 ## Library needed to get date and calculationtime for program
-import datetime
 import lib.output.highcharts as highcharts
 import lib.output.json_print as json
 import settings
@@ -18,15 +17,6 @@ import settings
 ## @return     Returns a filename which contains the current date
 ##
 def __create_filename(fight_style):
-  # old format
-  #filename = ""
-  #filename += "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.now())
-  #filename += "_" + fight_style
-  #filename += "_" + settings.simc_settings["class"]
-  #filename += "_" + settings.simc_settings["spec"]
-  #filename += "_" + settings.simc_settings["tier"]
-  # 
-  # format to use for automated website
   filename = "./results/"
   filename += settings.simc_settings["class"] + "_"
   filename += settings.simc_settings["spec"] + "_"
