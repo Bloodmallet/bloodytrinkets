@@ -2,7 +2,7 @@ import datetime
 import subprocess
 import sys
 
-simc_build = "43201b2"
+simc_build = "<a href=\\\"https://github.com/simulationcraft/simc/commit/c56773bf9e4845bb68b68dccb8ce6015ee67375a\\\" target=\\\"blank\\\">c56773b</a>"
 
 fight_styles = [ 
   ( "patchwerk", "0.1" ), 
