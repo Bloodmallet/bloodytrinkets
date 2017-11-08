@@ -37,6 +37,9 @@ def get_dps(trinket_id, item_level, fight_style, enchantment="", use_trinket_id=
   argument.append( "fixed_time=1" )
   argument.append( "optimize_expressions=1" )
   argument.append( "default_actions=1" )
+  # necessary for tank simulations, so those get hit (Q:Melekus)
+  argument.append( "tmi_boss=TMI_Standard_Boss_T19M" )
+  argument.append( "tmi_boss_type=T19M" )
 
   if settings.simc_settings["ptr"]:
     argument.append( "ptr=1" )
@@ -45,7 +48,10 @@ def get_dps(trinket_id, item_level, fight_style, enchantment="", use_trinket_id=
   if settings.simc_settings["c_profile"]:
     argument.append( settings.simc_settings["c_profile_path"] + settings.simc_settings["c_profile_name"] )
   else:
-    argument.append( settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + "_" + settings.simc_settings["tier"] + ".simc" )
+    if settings.simc_settings["tier"][0] == "T":
+      argument.append( "Tier" + settings.simc_settings["tier"][1:] + "/" + settings.simc_settings["tier"] + "_" + settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + ".simc" )
+    else:
+      argument.append( "PreRaid/" + settings.simc_settings["tier"] + "_" + settings.simc_settings["class"] + "_" + settings.simc_settings["spec"] + ".simc" )
 
   if settings.simc_settings["use_second_trinket"]:
     second_trinket_string = "trinket1=,id=" + settings.simc_settings["second_trinket"][0] + ",ilevel=" + settings.simc_settings["second_trinket"][1]
@@ -70,35 +76,35 @@ def get_dps(trinket_id, item_level, fight_style, enchantment="", use_trinket_id=
     startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
     simulation_output = subprocess.run(
-      argument, 
-      stdout=subprocess.PIPE, 
-      stderr=subprocess.STDOUT, 
-      universal_newlines=True, 
+      argument,
+      stdout=subprocess.PIPE,
+      stderr=subprocess.STDOUT,
+      universal_newlines=True,
       startupinfo=startupinfo
     )
 
     while simulation_output.returncode != 0:
       simulation_output = subprocess.run(
-        argument, 
-        stdout=subprocess.PIPE, 
-        stderr=subprocess.STDOUT, 
+        argument,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
         universal_newlines=True,
         startupinfo=startupinfo
       )
-      
+
   else:
     simulation_output = subprocess.run(
-      argument, 
-      stdout=subprocess.PIPE, 
-      stderr=subprocess.STDOUT, 
+      argument,
+      stdout=subprocess.PIPE,
+      stderr=subprocess.STDOUT,
       universal_newlines=True
     )
 
     while simulation_output.returncode != 0:
       simulation_output = subprocess.run(
-        argument, 
-        stdout=subprocess.PIPE, 
-        stderr=subprocess.STDOUT, 
+        argument,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
         universal_newlines=True
       )
 
@@ -160,11 +166,11 @@ def sim_all( trinkets, ilevels, fight_style ):
       if source == "legendary" and not settings.legendary:
         sim_counter += 1
         continue
-      
+
       ## add a trinket to all simmed and make it a dictionary as well
       all_simmed[trinket[0]] = {}
 
-      # special handling of the baseline profile to simulate a socket too
+      # special handling of the baseline profile to simulate data for sockets too
       if trinket[1] == "":
         all_simmed[trinket[0]][ilevels[0]] = get_dps( trinket[1], ilevels[0], fight_style )
         #print("Base: " + all_simmed[trinket[0]][ilevels[0]])
@@ -182,7 +188,7 @@ def sim_all( trinkets, ilevels, fight_style ):
         all_simmed[trinket[0]][settings.legendary_ilevel] = get_dps( trinket[1], settings.legendary_ilevel, fight_style )
         sim_counter += 1
       elif source == "none" and trinket[0] == "baseline" and trinket[1] == "":
-        # don't add a 0 dps value to the baseline for legendary itemlevel 
+        # don't add a 0 dps value to the baseline for legendary itemlevel
         pass
       else:
         all_simmed[trinket[0]][settings.legendary_ilevel] = "0"
@@ -191,7 +197,7 @@ def sim_all( trinkets, ilevels, fight_style ):
       for ilevel in ilevels:
         dps = "0"
 
-        ## if the trinkets minimum itemlevel <= current itemlevel AND 
+        ## if the trinkets minimum itemlevel <= current itemlevel AND
         ## trinket maximum itemlevel >= current itemlevel
         if trinket[2] <= int( ilevel ) and trinket[3] >= int( ilevel ):
           dps = get_dps( trinket[1], ilevel, fight_style )
@@ -204,7 +210,7 @@ def sim_all( trinkets, ilevels, fight_style ):
         progress = "["
         ## progress is split in 10% steps
         for i in range(1,26):
-          ## if sim_counter is less than a 10% step add a dot to the progress 
+          ## if sim_counter is less than a 10% step add a dot to the progress
           ## bar
           if sim_ceiling * 4 * i / 100 > sim_counter:
             progress += "."
@@ -213,7 +219,7 @@ def sim_all( trinkets, ilevels, fight_style ):
         ## end of the progress bar
         progress += "]"
 
-        ## print user feedback       
+        ## print user feedback
         sys.stdout.write( "Already simed: %s %d of %d\r" % ( progress, sim_counter, sim_ceiling ))
         sys.stdout.flush()
   return all_simmed

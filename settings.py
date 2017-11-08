@@ -1,34 +1,34 @@
-## File contains all settings for 
+## File contains all settings for
 ## Bloodytrinkets
-## 
+##
 
 import datetime
 
 # graph_colours needs colours for all ilevels!
-graph_colours = { 
-  "880": "#4572a7", 
-  "890": "#aa4643", 
-  "900": "#89a54e", 
-  "910": "#71588f", 
-  "920": "#4198af", 
-  "930": "#db843d", 
-  "940": "#00E676" 
+graph_colours = {
+  "910": "#4572a7",
+  "920": "#aa4643",
+  "930": "#89a54e",
+  "940": "#71588f",
+  "950": "#4198af",
+  "960": "#db843d",
+  "970": "#00e676"
 }
 # Defines itemlevels that shall be simed, ordered from highest to lowest (graph
 # output will have this order reversed)
-ilevels = [ 
-  "940", 
-  "930", 
-  "920", 
-  "910", 
-  "900", 
-  "890", 
-  "880"
+ilevels = [
+  "970",
+  "960",
+  "950",
+  "940",
+  "930",
+  "920",
+  "910"
 ]
 
 legendary = True
 legendary_colour = "#ffeb3b"
-legendary_ilevel = "970"
+legendary_ilevel = "1000"
 
 output_screen = False
 # "json", "highchart"
@@ -39,8 +39,8 @@ simc_settings["simc"]         = "../simc.exe"
 simc_settings["fight_styles"] = ["patchwerk", "helterskelter"]
 simc_settings["iterations"]   = "250000"
 simc_settings["target_error"] = "0.1"
-simc_settings["threads"]      = ""
-simc_settings["tier"]         = "T20M"
+simc_settings["threads"]      = "8"
+simc_settings["tier"]         = "T21"
 
 graph_title = "Shaman - Elemental - Patchwerk"
 graph_subtitle = "UTC " + datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M") + " SimC build: 43201b2"
@@ -55,7 +55,7 @@ simc_settings["second_trinket"] = ( "141482", "880" )     # ( id s, ilevel s),
 simc_settings["allow_double_trinkets"] = True             # True, allows two identical trinkets to be simmed
                                                           # False, prevents identical trinkets to be simmed
 
-# You want to use a custom profile? Set c_profile to True and add a relative 
+# You want to use a custom profile? Set c_profile to True and add a relative
 # path and name
 simc_settings["c_profile"]      = False
 simc_settings["c_profile_path"] = "example_dir/"
