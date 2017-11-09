@@ -1,5 +1,5 @@
 ## File to manage outputs
- 
+
 
 ## Library needed to get date and calculationtime for program
 import lib.output.highcharts as highcharts
@@ -34,13 +34,17 @@ def __create_filename(fight_style):
 ##
 ## @return     The highest trinket dps.
 ##
-def __get_highest_trinket_dps(sim_results, trinket):
-  if not sim_results[trinket][settings.ilevels[0]] == "0":
-    return sim_results[trinket][settings.ilevels[0]]
+def __get_highest_trinket_dps( sim_results, trinket ):
+  if settings.legendary and sim_results[ trinket ][ settings.legendary_ilevel ] != "0":
+    return sim_results[ trinket ][ settings.legendary_ilevel ]
+
+  if sim_results[ trinket ][ settings.ilevels[ 0 ] ] != "0":
+    return sim_results[ trinket ][ settings.ilevels[ 0 ] ]
+
   dps = "0"
-  for ilevel in sim_results[trinket]:
-    if int( sim_results[trinket][ilevel] ) > int( dps ):
-      dps = sim_results[trinket][ilevel]
+  for ilevel in sim_results[ trinket ]:
+    if int( sim_results[ trinket ][ ilevel ] ) > int( dps ):
+      dps = sim_results[ trinket ][ ilevel ]
   return dps
 
 
@@ -54,17 +58,17 @@ def __get_highest_trinket_dps(sim_results, trinket):
 ## @param      base_dps     Dictionary of the base-profile without trinkets
 ##                          values as strings {trinket_name s:{ilevel s:{dps
 ##                          s}}}.
-## @param      base_ilevel  The base ilevel
+## @param      base_ilevel  The lowest base ilevel
 ##
 ## @return     Dictionary of all simmed trinkets with all their normalised dps
 ##             values as strings {trinket_name s:{ilevel s:{dps s}}}. dps is "0"
 ##             if the simmed itemlevel doesn't match available trinket itemlevel
 ##
-def __normalise_trinkets(base_dps, sim_results, base_ilevel):
+def __normalise_trinkets( base_dps, sim_results, base_ilevel ):
   for trinket in sim_results:
-    for ilevel in sim_results[trinket]:
-      if not sim_results[trinket][ilevel] == "0":
-        sim_results[trinket][ilevel] = str(int(sim_results[trinket][ilevel]) - int(base_dps["baseline"][base_ilevel]))
+    for ilevel in sim_results[ trinket ]:
+      if not sim_results[ trinket ][ ilevel ] == "0":
+        sim_results[ trinket ][ ilevel ] = str( int( sim_results[ trinket ][ ilevel ] ) - int( base_dps[ "baseline" ][ base_ilevel ] ) )
   return sim_results
 
 
@@ -81,7 +85,7 @@ def __normalise_trinkets(base_dps, sim_results, base_ilevel):
 ##             highest available itemlevel
 ##
 def __order_results(sim_results):
-  highest_ilevel = settings.ilevels[0]
+
   current_best_dps = "-1"
   last_best_dps = "-1"
   name = ""
@@ -102,39 +106,44 @@ def __order_results(sim_results):
       if int( current_best_dps ) < int( trinket_dps ) and int( last_best_dps ) > int( trinket_dps ):
         current_best_dps = trinket_dps
         name = trinket
-    if not name == "error": 
+    if not name == "error":
       trinket_list.append( name )
       last_best_dps = current_best_dps
 
   return trinket_list
 
 
-def print_manager(base_dps_dic, sim_results, fight_style):
-  filename = __create_filename(fight_style)
+def print_manager( base_dps_dic, sim_results, fight_style ):
+  filename = __create_filename( fight_style )
+
   for print_type in settings.output_types:
-    print("")
+    print( "" )
 
     if print_type is "json":
-      print("Initiating json output.")
-      all_simulations = dict(sim_results)
-      all_simulations["baseline"] = dict(base_dps_dic["baseline"])
-      if json.print_json(all_simulations, filename):
-        print("Generating json file: Done")
+      print( "Initiating json output." )
+      all_simulations = dict( sim_results )
+      all_simulations[ "baseline" ] = dict( base_dps_dic[ "baseline" ] )
+
+      if json.print_json( all_simulations, filename ):
+        print( "  Generating json file: Done" )
       else:
-        print("Generating json file: Failed")
+        print( "  Generating json file: Failed" )
 
     elif print_type is "highchart":
-      print("Initiating highchart output")
-      print("Ordering trinkets by dps.")
-      ordered_trinket_names = __order_results(sim_results)
+      print( "Initiating highchart output" )
+      print( "  Ordering trinkets by dps." )
+      ordered_trinket_names = __order_results( sim_results )
+
       if settings.output_screen:
-        print(ordered_trinket_names)
-      print("Normalising dps values.")
-      sim_results = __normalise_trinkets(base_dps_dic, sim_results, settings.ilevels[-1])
+        print( ordered_trinket_names )
+
+      print( "  Normalising dps values." )
+      sim_results = __normalise_trinkets( base_dps_dic, sim_results, settings.ilevels[ -1 ] )
       if settings.output_screen:
-        print(sim_results)
-      if highcharts.print_highchart(sim_results, ordered_trinket_names, filename):
-        print("Generating highchart file: Done")
+        print( sim_results )
+
+      if highcharts.print_highchart( sim_results, ordered_trinket_names, filename ):
+        print( "  Generating highchart file: Done" )
       else:
-        print("Generating highchart file: Failed")
+        print( "  Generating highchart file: Failed" )
   return True

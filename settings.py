@@ -50,7 +50,7 @@ simc_settings["spec"]  = "elemental"
 # Be aware that this feature basically makes the trinket disappear in the graph
 # but has the benefit of showing a bit more realistic trinket values
 simc_settings["use_second_trinket"] = True
-simc_settings["second_trinket"] = ( "141482", "880" )     # ( id s, ilevel s),
+simc_settings["second_trinket"] = ( "141482", "910" )     # ( id s, ilevel s),
                                                           # this is a int-vers stat stick
 simc_settings["allow_double_trinkets"] = True             # True, allows two identical trinkets to be simmed
                                                           # False, prevents identical trinkets to be simmed

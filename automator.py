@@ -4,9 +4,9 @@ import sys
 
 simc_build = "<a href=\\\"https://github.com/simulationcraft/simc/commit/c56773bf9e4845bb68b68dccb8ce6015ee67375a\\\" target=\\\"blank\\\">c56773b</a>"
 
-fight_styles = [ 
-  ( "patchwerk", "0.1" ), 
-  ( "beastlord", "0.25" ) 
+fight_styles = [
+  ( "patchwerk", "0.1" ),
+  ( "beastlord", "0.25" )
 ]
 
 use_second_trinket = "True"
@@ -46,11 +46,11 @@ profiles = [
 
 second_trinket = {
   # agi
-  "agi": "( \"142506,bonus_id=607\", \"880\" )",
+  "agi": "( \"142506,bonus_id=607\", \"910\" )",
   # int
-  "int": "( \"142507,bonus_id=607\", \"880\" )",
+  "int": "( \"142507,bonus_id=607\", \"910\" )",
   # str
-  "str": "( \"142508,bonus_id=607\", \"880\" )"  
+  "str": "( \"142508,bonus_id=607\", \"910\" )"
 }
 
 
@@ -78,35 +78,35 @@ for fight_style in fight_styles:
       startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
       result = subprocess.run(
-        command, 
-        stdout=None, 
-        stderr=subprocess.STDOUT, 
-        universal_newlines=True, 
+        command,
+        stdout=None,
+        stderr=subprocess.STDOUT,
+        universal_newlines=True,
         startupinfo=startupinfo
       )
       while result.returncode != 0:
         print(result)
         print("I keep trying")
         result = subprocess.run(
-          command, 
-          stdout=None, 
-          stderr=subprocess.STDOUT, 
+          command,
+          stdout=None,
+          stderr=subprocess.STDOUT,
           universal_newlines=True,
           startupinfo=startupinfo
         )
 
     else:
       result = subprocess.run(
-        command, 
-        stdout=None, 
-        stderr=subprocess.STDOUT, 
+        command,
+        stdout=None,
+        stderr=subprocess.STDOUT,
         universal_newlines=True
       )
       while result.returncode != 0:
         result = subprocess.run(
-          command, 
-          stdout=None, 
-          stderr=subprocess.STDOUT, 
+          command,
+          stdout=None,
+          stderr=subprocess.STDOUT,
           universal_newlines=True
         )
 end = datetime.datetime.utcnow()
