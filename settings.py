@@ -34,7 +34,7 @@ simulate_gems = False
 
 output_screen = False
 # "json", "highchart"
-output_types = ["json", "highchart"]
+output_types = ["highchart"]
 
 simc_settings = {}
 simc_settings["simc"]         = "../simc.exe"

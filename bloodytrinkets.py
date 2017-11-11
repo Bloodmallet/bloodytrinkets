@@ -137,6 +137,10 @@ def get_dps( trinket_id, item_level, fight_style, enchantment="", use_trinket_id
       owndps = False
   return dps.split()[1].split(".")[0]
 
+#import random
+#def get_dps( trinket_id, item_level, fight_style, enchantment="", use_trinket_id=True ):
+#  string = item_level[:-1] + "5"
+#  return string
 
 ##
 ## @brief      Sim all trinkets at all itemlevels when available.
@@ -388,7 +392,7 @@ if __name__ == '__main__':
       logging.critical("No chart type detected.")
       sys.exit( "No chart type detected." )
 
-    # output pruned results
+    # generate pruned charts
     if settings.pruned_chart and settings.full_chart:
 
       pruned_results = []
@@ -421,6 +425,45 @@ if __name__ == '__main__':
             pruned_results[ trinket[ 0 ] ][ ilevel ] = "0"
 
       if lib.output.output.print_manager( base_dps, pruned_results, fight_style, prefix="pruned" ):
+        print("Pruned output successful.")
+
+    # generate softly pruned charts (titanforged max ilevel drops)
+    if settings.pruned_chart and settings.full_chart:
+
+      pruned_results = []
+      for source in trinkets:
+        for trinket in trinkets[ source ]:
+          # {source s:[[trinket_name s, id s, base_ilevel i, max_itemlevel i, max_itemlevel_drop i],]}
+
+          try:
+            if str( trinket[ 4 ] ) in sim_results[ trinket[ 0 ] ]:
+              pruned_results.append( ( trinket[ 0 ], str( trinket[ 4 ] ), sim_results[ trinket[ 0 ] ][ str( trinket[ 4 ] ) ] ) )
+            elif str( trinket[ 4 ] - 5 ) in sim_results[ trinket[ 0 ] ]:
+              # tricky...simming with original itemlevel but printing the reduced one
+              pruned_results.append( ( trinket[ 0 ], str( trinket[ 4 ] - 5 ), sim_results[ trinket[ 0 ] ][ str( trinket[ 4 ] - 5 ) ]  ) )
+            else:
+              pass
+          except Exception as e:
+            logging.warning("The following trinket won't have a chance to be in the charts: %s", e)
+
+      sorted_full_list = sorted( pruned_results, key=lambda trinket: int( trinket[ 2 ] ), reverse=True )
+      del sorted_full_list[ settings.prune_count: ]
+
+      pruned_results = {}
+
+      for trinket in sorted_full_list:
+        pruned_results[ trinket[ 0 ] ] = {}
+
+        for i in range( len( ilevels ) ):
+          try:
+            if ilevels[ i ] == trinket[ 1 ] or ilevels[ i + 1 ] == trinket[ 1 ] or ilevels[ i + 2 ] == trinket[ 1 ]:
+              pruned_results[ trinket[ 0 ] ][ ilevels[ i ] ] = sim_results[ trinket[ 0 ] ][ ilevels[ i ] ]
+            else:
+              pruned_results[ trinket[ 0 ] ][ ilevels[ i ] ] = "0"
+          except Exception as e:
+            pruned_results[ trinket[ 0 ] ][ ilevels[ i ] ] = "0"
+
+      if lib.output.output.print_manager( base_dps, pruned_results, fight_style, prefix="pruned_titanforged" ):
         print("Pruned output successful.")
 
   print("Program exits flawless.")

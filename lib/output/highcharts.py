@@ -18,7 +18,7 @@ import settings
 def __get_dps_ilevel_borders(trinket):
   # this value should be greater than any possible ilevel value
   lowest_ilevel = "1200"
-  highest_ilevel = "0"
+  highest_ilevel = settings.ilevels[ -1 ]
 
   for ilevel in trinket:
     if int(ilevel) < int(lowest_ilevel) and trinket[ilevel] != "0":
