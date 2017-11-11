@@ -2,10 +2,12 @@
 # Project to automate trinket sims for dps specs
 
 # params
-#import argparse
-# Library to use command line
-import subprocess
+
+# data
 import settings
+
+import logging
+import subprocess
 # Library to print fancy one line output
 import sys
 # Bloodytrinkets lib imports
@@ -123,7 +125,8 @@ def get_dps( trinket_id, item_level, fight_style, enchantment="", use_trinket_id
       fail_counter += 1
 
   if fail_counter >= 5:
-    raise SystemExit(0)
+    logging.critical( "Simulation failed 5 times.\nstdout: %s\nargs: %s", simulation_output.stdout, simulation_output.args )
+    raise SystemExit( 0 )
 
   owndps = True
   dps = "DPS: 0.0"
@@ -139,7 +142,7 @@ def get_dps( trinket_id, item_level, fight_style, enchantment="", use_trinket_id
 ## @brief      Sim all trinkets at all itemlevels when available.
 ##
 ## @param      trinkets     The trinkets dictionary {source s:[[trinket_name s,
-##                          id s, base_ilevel i, max_itemlevel i],]}
+##                          id s, base_ilevel i, max_itemlevel i, max_itemlevel_drop i],]}
 ## @param      ilevels      The ilevels list
 ## @param      fight_style  The fight style
 ##
@@ -195,15 +198,12 @@ def sim_all( trinkets, ilevels, fight_style ):
       # special handling of the baseline profile to simulate data for sockets too
       if trinket[ 1 ] == "":
         all_simmed[ trinket[ 0 ] ][ ilevels[ 0 ] ] = get_dps( trinket[ 1 ], ilevels[ 0 ], fight_style )
-        #print("Base: " + all_simmed[trinket[0]][ilevels[0]])
-        all_simmed[ trinket[ 0 ] ][ "10_crit_gems" ] = get_dps( "", ilevels[ 0 ], fight_style, enchantment="2000crit", use_trinket_id=False )
-        #print("Crit: " + all_simmed[trinket[0]][ "10_crit_gems" ])
-        all_simmed[ trinket[ 0 ] ][ "10_haste_gems" ] = get_dps( "", ilevels[ 0 ], fight_style, enchantment="2000haste", use_trinket_id=False )
-        #print("Haste: " + all_simmed[trinket[0]][ "10_haste_gems" ])
-        all_simmed[ trinket[ 0 ] ][ "10_mastery_gems" ] = get_dps( "", ilevels[ 0 ], fight_style, enchantment="2000mastery", use_trinket_id=False )
-        #print("Mastery: " + all_simmed[trinket[0]][ "10_mastery_gems" ])
-        all_simmed[ trinket[ 0 ] ][ "10_versatility_gems" ] = get_dps( "", ilevels[ 0 ], fight_style, enchantment="2000vers", use_trinket_id=False )
-        #print("Vers: " + all_simmed[trinket[0]][ "10_versatility_gems" ])
+
+        if settings.simulate_gems:
+          all_simmed[ trinket[ 0 ] ][ "10_crit_gems" ] = get_dps( "", ilevels[ 0 ], fight_style, enchantment="2000crit", use_trinket_id=False )
+          all_simmed[ trinket[ 0 ] ][ "10_haste_gems" ] = get_dps( "", ilevels[ 0 ], fight_style, enchantment="2000haste", use_trinket_id=False )
+          all_simmed[ trinket[ 0 ] ][ "10_mastery_gems" ] = get_dps( "", ilevels[ 0 ], fight_style, enchantment="2000mastery", use_trinket_id=False )
+          all_simmed[ trinket[ 0 ] ][ "10_versatility_gems" ] = get_dps( "", ilevels[ 0 ], fight_style, enchantment="2000vers", use_trinket_id=False )
         continue
 
       ## get dps values from all trinkets for all necessary itemlevels
@@ -221,7 +221,7 @@ def sim_all( trinkets, ilevels, fight_style ):
         all_simmed[ trinket[ 0 ] ][ ilevel ] = dps
 
         ## create fancy progress bar:
-        progress = "[ "
+        progress = "["
         ## progress is split in 10% steps
         for i in range( 1, 26 ):
           ## if sim_counter is less than a 10% step add a dot to the progress
@@ -231,7 +231,7 @@ def sim_all( trinkets, ilevels, fight_style ):
           else:
             progress += "="
         ## end of the progress bar
-        progress += " ]"
+        progress += "]"
 
         ## print user feedback
         sys.stdout.write( "Already simed: %s %d of %d\r" % ( progress, sim_counter, sim_ceiling ) )
@@ -241,67 +241,186 @@ def sim_all( trinkets, ilevels, fight_style ):
 
 
 ##
+## @brief      Generates dps values for the max_itemlevel_drop itemlevel of all
+##             trinkets. Prunes after the top 20 results.
+##
+## @param      trinkets     The trinkets dictionary {source s:[[trinket_name s,
+##                          id s, base_ilevel i, max_itemlevel i, max_itemlevel_drop i],]}
+## @param      ilevels      The ilevels list
+## @param      fight_style  The fight style
+##
+## @return     Dictionary of all remaining trinkets after pruning.
+##             {trinket_name s:{ilevel s:{dps s}}}
+##
+def prune_trinkets( trinkets, ilevels, fight_style ):
+
+  # [ ( name, ilevel, dps ), ]
+  full_list = []
+
+  counter = 0
+  ceiling = 0
+
+  for source in trinkets:
+    ceiling += len( trinkets[ source ] )
+
+  for source in trinkets:
+    for trinket in trinkets[ source ]:
+      dps = "0"
+      # look for the drop itemlevel in ilevels list
+      if str( trinket[ 4 ] ) in ilevels:
+        dps = get_dps( trinket[ 1 ], str( trinket[ 4 ] ), fight_style)
+        full_list.append( ( trinket[ 0 ], str( trinket[ 4 ] ), dps ) )
+      elif str( trinket[ 4 ] - 5 ) in ilevels:
+        # tricky...simming with original itemlevel but printing the reduced one
+        dps = get_dps( trinket[ 1 ], str( trinket[ 4 ] ), fight_style)
+        full_list.append( ( trinket[ 0 ], str( trinket[ 4 ] - 5 ), dps ) )
+      # if max_itemlevel_drop is smaller than the lowest to be simmed itemlevel
+      elif trinket[ 4 ] < int( ilevels[ -1 ] ):
+        # ignore trinket
+        pass
+      # if highest drop itemlevel is higher than all to be simmed itemlevels
+      elif trinket[ 4 ] > int( ilevels[ 0 ] ):
+        # magic: select a lower itemlevel in range of ilevels. if not possible, ignore trinket
+        pass
+      else:
+        pass
+      counter += 1
+      sys.stdout.write( "Already simed: %d of %d\r" % ( counter, ceiling ) )
+      sys.stdout.flush()
+
+  sorted_full_list = sorted( full_list, key=lambda trinket: int( trinket[ 2 ] ), reverse=True )
+
+  # prune
+  logging.info( "Trinket list length before pruning: %d", len( sorted_full_list ) )
+  del sorted_full_list[ settings.prune_count: ]
+  logging.info( "Trinket list length after pruning: %d", len( sorted_full_list ) )
+
+  results = {}
+
+  for trinket in sorted_full_list:
+    results[ trinket[ 0 ] ] = {}
+    for ilevel in ilevels:
+      if ilevel == trinket[ 1 ]:
+        results[ trinket[ 0 ] ][ trinket[ 1 ] ] = trinket[ 2 ]
+      else:
+        results[ trinket[ 0 ] ][ ilevel ] = "0"
+
+  return results
+
+
+##
 #-------------------------------------------------------------------------------------
 # Program start
 #-------------------------------------------------------------------------------------
 ##
 
+if __name__ == '__main__':
 
-## Check for errors in the data
-error_collector = []
-if not Simc_checks.is_iteration( settings.simc_settings[ "iterations" ] ):
-  error_collector.append( "simc_settings[iterations] not strong or out of bounds" )
-if not Simc_checks.is_target_error( settings.simc_settings[ "target_error" ] ):
-  error_collector.append( "simc_settings[target_error] not string or out of bounds" )
-if not Simc_checks.is_fight_style( settings.simc_settings[ "fight_styles" ] ):
-  error_collector.append( "simc_settings[fight_styles] not a recognised fight style" )
-if not Wow_lib.is_class( settings.simc_settings[ "class" ] ):
-  error_collector.append( "simc_settings[class] wrong name" )
-if not Wow_lib.is_spec( settings.simc_settings[ "spec" ] ):
-  error_collector.append( "simc_settings[spec] not appropriate spec name" )
-## get all necessary trinkets for this class/spec at the same time
-if Wow_lib.is_class_spec( settings.simc_settings[ "class" ], settings.simc_settings[ "spec" ] ):
-  trinkets = Wow_lib.get_trinkets_for_spec( settings.simc_settings[ "class" ], settings.simc_settings[ "spec" ] )
-else:
-  error_collector.append( "simc_settings[class] and simc_settings[spec] don't fit each other" )
+  logging.getLogger(__name__)
+  logging.basicConfig( filename='log.log', filemode='w', level=logging.DEBUG )
 
-## Print errors and terminate
-if error_collector:
-  print( "Some data got corrupted. The following errors were cought:" )
-  for error in error_collector:
-    print(error)
-  sys.exit( "Program terminates due to errors in data." )
-
-## Remind the user of his graph name input
-print( "Name of the graph: '" + settings.graph_title + "'" )
-
-## Print information about multiple fight styles, if that was choosen
-if len( settings.simc_settings[ "fight_styles" ] ) > 1:
-  print( "Calculating multiple fight styles." )
-
-## Generating baseline damage of a profile (no trinkets)
-baseline = { "none": [ [ "baseline", "", 840, 1200], ] }
-for fight_style in settings.simc_settings[ "fight_styles" ]:
-
-  print( "Loading base dps value." )
-  ## simulate baseline dps value from the empty trinket, minimum itemlevel and the current fight style
-  base_dps = sim_all( baseline, [ settings.ilevels[ -1 ] ], fight_style )
-  if settings.output_screen:
-    print( base_dps )
-
-  #print("")
-  ## simulate all trinkets for this fight style
-  print("Loading dps-values for all trinkets.")
-
-  if settings.legendary:
-    ilevels = [ settings.legendary_ilevel ] + settings.ilevels
+  ## Check for errors in the data
+  error_collector = []
+  if not Simc_checks.is_iteration( settings.simc_settings[ "iterations" ] ):
+    error_collector.append( "simc_settings[iterations] not strong or out of bounds" )
+  if not Simc_checks.is_target_error( settings.simc_settings[ "target_error" ] ):
+    error_collector.append( "simc_settings[target_error] not string or out of bounds" )
+  if not Simc_checks.is_fight_style( settings.simc_settings[ "fight_styles" ] ):
+    error_collector.append( "simc_settings[fight_styles] not a recognised fight style" )
+  if not Wow_lib.is_class( settings.simc_settings[ "class" ] ):
+    error_collector.append( "simc_settings[class] wrong name" )
+  if not Wow_lib.is_spec( settings.simc_settings[ "spec" ] ):
+    error_collector.append( "simc_settings[spec] not appropriate spec name" )
+  ## get all necessary trinkets for this class/spec at the same time
+  if Wow_lib.is_class_spec( settings.simc_settings[ "class" ], settings.simc_settings[ "spec" ] ):
+    trinkets = Wow_lib.get_trinkets_for_spec( settings.simc_settings[ "class" ], settings.simc_settings[ "spec" ] )
   else:
-    ilevels = settings.ilevels
+    error_collector.append( "simc_settings[class] and simc_settings[spec] don't fit each other" )
 
-  sim_results = sim_all( trinkets, ilevels, fight_style )
+  ## Print errors and terminate
+  if error_collector:
+    logging.error( "Data corruption. The following errors were cought: %s", str(error_collector) )
+    sys.exit( "Program terminates due to errors in data." )
 
-  ## output results
-  if lib.output.output.print_manager( base_dps, sim_results, fight_style ):
-    print("Output successful.")
+  ## Remind the user of his graph name input
+  print( "Name of the graph: '" + settings.graph_title + "'" )
 
-print("Program exits flawless.")
+  ## Print information about multiple fight styles, if that was choosen
+  if len( settings.simc_settings[ "fight_styles" ] ) > 1:
+    print( "Calculating multiple fight styles." )
+
+  ## Generating baseline damage of a profile (no trinkets)
+  baseline = { "none": [ [ "baseline", "", 840, 1200], ] }
+  for fight_style in settings.simc_settings[ "fight_styles" ]:
+
+    print( "Loading base dps value." )
+    ## simulate baseline dps value from the empty trinket, minimum itemlevel and the current fight style
+    base_dps = sim_all( baseline, [ settings.ilevels[ -1 ] ], fight_style )
+    if settings.output_screen:
+      print( base_dps )
+
+    # add legendary itemlevel to the itemlevel list if necessary
+    if settings.legendary:
+      ilevels = [ settings.legendary_ilevel ] + settings.ilevels
+    else:
+      ilevels = settings.ilevels
+
+    if settings.full_chart:
+      ## simulate all trinkets for this fight style
+      print("Loading dps-values for all trinkets.")
+      sim_results = sim_all( trinkets, ilevels, fight_style )
+
+      ## output results
+      if lib.output.output.print_manager( base_dps, sim_results, fight_style ):
+        print("  Full output successful.")
+
+    # sim fewer if charts shall be pruned
+    elif settings.pruned_chart:
+      print("Loading trinkets to prune.")
+      sim_results = prune_trinkets( trinkets, ilevels, fight_style )
+
+      ## output results
+      if lib.output.output.print_manager( base_dps, sim_results, fight_style, prefix="pruned" ):
+        print("  Pruned output successful.")
+
+    else:
+      print("At least one of full_chart or pruned_chart needs to be set to true.")
+      logging.critical("No chart type detected.")
+      sys.exit( "No chart type detected." )
+
+    # output pruned results
+    if settings.pruned_chart and settings.full_chart:
+
+      pruned_results = []
+      for source in trinkets:
+        for trinket in trinkets[ source ]:
+          # {source s:[[trinket_name s, id s, base_ilevel i, max_itemlevel i, max_itemlevel_drop i],]}
+
+          try:
+            if str( trinket[ 4 ] ) in sim_results[ trinket[ 0 ] ]:
+              pruned_results.append( ( trinket[ 0 ], str( trinket[ 4 ] ), sim_results[ trinket[ 0 ] ][ str( trinket[ 4 ] ) ] ) )
+            elif str( trinket[ 4 ] - 5 ) in sim_results[ trinket[ 0 ] ]:
+              # tricky...simming with original itemlevel but printing the reduced one
+              pruned_results.append( ( trinket[ 0 ], str( trinket[ 4 ] - 5 ), sim_results[ trinket[ 0 ] ][ str( trinket[ 4 ] - 5 ) ]  ) )
+            else:
+              pass
+          except Exception as e:
+            logging.warning("The following trinket won't have a chance to be in the charts: %s", e)
+
+      sorted_full_list = sorted( pruned_results, key=lambda trinket: int( trinket[ 2 ] ), reverse=True )
+      del sorted_full_list[ settings.prune_count: ]
+
+      pruned_results = {}
+
+      for trinket in sorted_full_list:
+        pruned_results[ trinket[ 0 ] ] = {}
+        for ilevel in ilevels:
+          if ilevel == trinket[ 1 ]:
+            pruned_results[ trinket[ 0 ] ][ trinket[ 1 ] ] = trinket[ 2 ]
+          else:
+            pruned_results[ trinket[ 0 ] ][ ilevel ] = "0"
+
+      if lib.output.output.print_manager( base_dps, pruned_results, fight_style, prefix="pruned" ):
+        print("Pruned output successful.")
+
+  print("Program exits flawless.")

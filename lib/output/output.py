@@ -16,8 +16,10 @@ import settings
 ##
 ## @return     Returns a filename which contains the current date
 ##
-def __create_filename(fight_style):
+def __create_filename( fight_style, prefix="" ):
   filename = "./results/"
+  if prefix:
+    filename += prefix + "_"
   filename += settings.simc_settings["class"] + "_"
   filename += settings.simc_settings["spec"] + "_"
   filename += fight_style
@@ -113,14 +115,14 @@ def __order_results(sim_results):
   return trinket_list
 
 
-def print_manager( base_dps_dic, sim_results, fight_style ):
-  filename = __create_filename( fight_style )
+def print_manager( base_dps_dic, sim_results, fight_style, prefix="" ):
+  filename = __create_filename( fight_style, prefix )
 
   for print_type in settings.output_types:
     print( "" )
 
     if print_type is "json":
-      print( "Initiating json output." )
+      print( "JSON output " + prefix )
       all_simulations = dict( sim_results )
       all_simulations[ "baseline" ] = dict( base_dps_dic[ "baseline" ] )
 
@@ -130,7 +132,7 @@ def print_manager( base_dps_dic, sim_results, fight_style ):
         print( "  Generating json file: Failed" )
 
     elif print_type is "highchart":
-      print( "Initiating highchart output" )
+      print( "HIGHCHARTS output " + prefix )
       print( "  Ordering trinkets by dps." )
       ordered_trinket_names = __order_results( sim_results )
 

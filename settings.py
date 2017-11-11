@@ -30,6 +30,8 @@ legendary = True
 legendary_colour = "#ffeb3b"
 legendary_ilevel = "1000"
 
+simulate_gems = False
+
 output_screen = False
 # "json", "highchart"
 output_types = ["json", "highchart"]
@@ -62,3 +64,7 @@ simc_settings["c_profile_path"] = "example_dir/"
 simc_settings["c_profile_name"] = "example_name.simc"
 
 simc_settings["ptr"] = False
+
+pruned_chart = True
+prune_count = 20
+full_chart = True
