@@ -16,13 +16,15 @@ import settings
 ##
 ## @return     Returns a filename which contains the current date
 ##
-def __create_filename( fight_style, prefix ):
+def __create_filename( fight_style, prefix="", suffix="" ):
   filename = "./results/"
   if prefix:
     filename += prefix + "_"
   filename += settings.simc_settings["class"] + "_"
   filename += settings.simc_settings["spec"] + "_"
   filename += fight_style
+  if suffix:
+    filename += "_" + suffix
   if settings.simc_settings["ptr"]:
     filename += "_ptr"
   return filename

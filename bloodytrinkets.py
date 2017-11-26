@@ -199,7 +199,7 @@ def sim_all( trinkets, ilevels, fight_style ):
       ## add a trinket to all simmed and make it a dictionary as well
       all_simmed[ trinket[ 0 ] ] = {}
 
-      # special handling of the baseline profile to simulate data for sockets too
+      ## special handling of the baseline profile to simulate data for sockets too
       if trinket[ 1 ] == "":
         all_simmed[ trinket[ 0 ] ][ ilevels[ 0 ] ] = get_dps( trinket[ 1 ], ilevels[ 0 ], fight_style )
 
@@ -209,6 +209,10 @@ def sim_all( trinkets, ilevels, fight_style ):
           all_simmed[ trinket[ 0 ] ][ "10_mastery_gems" ] = get_dps( "", ilevels[ 0 ], fight_style, enchantment="2000mastery", use_trinket_id=False )
           all_simmed[ trinket[ 0 ] ][ "10_versatility_gems" ] = get_dps( "", ilevels[ 0 ], fight_style, enchantment="2000vers", use_trinket_id=False )
         continue
+
+
+        # legion.pantheon_trinket_users=am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am
+
 
       ## get dps values from all trinkets for all necessary itemlevels
       for ilevel in ilevels:
@@ -384,7 +388,7 @@ if __name__ == '__main__':
       sim_results = prune_trinkets( trinkets, ilevels, fight_style )
 
       ## output results
-      if lib.output.output.print_manager( base_dps, sim_results, fight_style, prefix="pruned" ):
+      if lib.output.output.print_manager( base_dps, sim_results, fight_style, suffix="pruned" ):
         print("  Pruned output successful.")
 
     else:
@@ -424,7 +428,7 @@ if __name__ == '__main__':
           else:
             pruned_results[ trinket[ 0 ] ][ ilevel ] = "0"
 
-      if lib.output.output.print_manager( base_dps, pruned_results, fight_style, prefix="pruned" ):
+      if lib.output.output.print_manager( base_dps, pruned_results, fight_style, suffix="pruned" ):
         print("Pruned output successful.")
 
     # generate softly pruned charts (titanforged max ilevel drops)
@@ -463,7 +467,7 @@ if __name__ == '__main__':
           except Exception as e:
             pruned_results[ trinket[ 0 ] ][ ilevels[ i ] ] = "0"
 
-      if lib.output.output.print_manager( base_dps, pruned_results, fight_style, prefix="pruned_titanforged" ):
+      if lib.output.output.print_manager( base_dps, pruned_results, fight_style, suffix="pruned_titanforged" ):
         print("Pruned output successful.")
 
   print("Program exits flawless.")
