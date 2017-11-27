@@ -29,7 +29,7 @@ import lib.simc_support.wow_lib     as Wow_lib
 ##
 ## @return     The dps s.
 ##
-def get_dps( trinket_id, item_level, fight_style, enchantment="", use_trinket_id=True ):
+def get_dps( trinket_id, item_level, fight_style, enchantment="", use_trinket_id=True, arguments=[] ):
   argument = [ settings.simc_settings[ "simc" ] ]
   argument.append( "iterations="   + settings.simc_settings[ "iterations" ] )
   argument.append( "target_error=" + settings.simc_settings[ "target_error" ] )
@@ -66,6 +66,9 @@ def get_dps( trinket_id, item_level, fight_style, enchantment="", use_trinket_id
   else:
     argument.append( "trinket2=" )
   argument.append( "ready_trigger=1" )
+
+  for parameter in arguments:
+    argument.append( parameter )
 
   #print(argument)
 
@@ -211,9 +214,6 @@ def sim_all( trinkets, ilevels, fight_style ):
         continue
 
 
-        # legion.pantheon_trinket_users=am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am
-
-
       ## get dps values from all trinkets for all necessary itemlevels
       for ilevel in ilevels:
         dps = "0"
@@ -227,6 +227,16 @@ def sim_all( trinkets, ilevels, fight_style ):
 
         ## add data
         all_simmed[ trinket[ 0 ] ][ ilevel ] = dps
+
+        # if pantheon trinket: add +10 +15 +20 versions
+        if trinket[ 1 ] in ( "154172", "154174", "154177", "154176" ):
+          dps = get_dps( trinket[ 1 ], ilevel, fight_style, arguments=["legion.pantheon_trinket_users=am/am/am/am/am/am/am/am/am/am"] )
+          all_simmed[ trinket[ 0 ] + " +10" ][ ilevel ] = dps
+          dps = get_dps( trinket[ 1 ], ilevel, fight_style, arguments=["legion.pantheon_trinket_users=am/am/am/am/am/am/am/am/am/am/am/am/am/am/am"] )
+          all_simmed[ trinket[ 0 ] + " +15" ][ ilevel ] = dps
+          dps = get_dps( trinket[ 1 ], ilevel, fight_style, arguments=["legion.pantheon_trinket_users=am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am/am"] )
+          all_simmed[ trinket[ 0 ] + " +20" ][ ilevel ] = dps
+
 
         ## create fancy progress bar:
         progress = "["
