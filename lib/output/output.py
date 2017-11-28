@@ -121,14 +121,14 @@ def __order_results(sim_results):
   return trinket_list
 
 
-def print_manager( base_dps_dic, sim_results, fight_style, prefix="" ):
-  filename = __create_filename( fight_style, prefix )
+def print_manager( base_dps_dic, sim_results, fight_style, prefix="", suffix="" ):
+  filename = __create_filename( fight_style, prefix, suffix )
 
   for print_type in settings.output_types:
     print( "" )
 
     if print_type is "json":
-      print( "JSON output " + prefix )
+      print( "JSON output " + prefix + " " + suffix )
       all_simulations = dict( sim_results )
       all_simulations[ "baseline" ] = dict( base_dps_dic[ "baseline" ] )
 
@@ -138,7 +138,7 @@ def print_manager( base_dps_dic, sim_results, fight_style, prefix="" ):
         print( "  Generating json file: Failed" )
 
     elif print_type is "highchart":
-      print( "HIGHCHART output " + prefix )
+      print( "HIGHCHART output " + prefix + " " + suffix )
       print( "  Ordering trinkets by dps." )
 
       ordered_trinket_names = __order_results( sim_results )
