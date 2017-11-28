@@ -152,6 +152,9 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
       },
       "stackLabels": {
         "enabled": True,
+        "style": {
+          "textOutline": False,
+        }
       },
       "plotLines": [{
         "color": "#0973DA",
