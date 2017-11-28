@@ -6,17 +6,19 @@ import datetime
 
 # graph_colours needs colours for all ilevels!
 graph_colours = {
-  "910": "#4572a7",
-  "920": "#aa4643",
-  "930": "#89a54e",
-  "940": "#71588f",
-  "950": "#4198af",
-  "960": "#db843d",
-  "970": "#00e676"
+  "910": "#a6cee3",
+  "920": "#1f78b4",
+  "930": "#b2df8a",
+  "940": "#33a02c",
+  "950": "#fb9a99",
+  "960": "#e31a1c",
+  "970": "#fdbf6f",
+  "980": "#ff7f00",
 }
 # Defines itemlevels that shall be simed, ordered from highest to lowest (graph
 # output will have this order reversed)
 ilevels = [
+  "980",
   "970",
   "960",
   "950",
@@ -27,7 +29,7 @@ ilevels = [
 ]
 
 legendary = True
-legendary_colour = "#ffeb3b"
+legendary_colour = "#cab2d6"
 legendary_ilevel = "1000"
 
 simulate_gems = False
