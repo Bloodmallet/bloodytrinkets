@@ -70,3 +70,4 @@ simc_settings["ptr"] = False
 pruned_chart = True
 prune_count = 20
 full_chart = True
+add_tooltips = True

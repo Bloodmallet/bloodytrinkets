@@ -7,6 +7,7 @@ import os
 import settings
 
 
+
 ##
 ## @brief      Gets the dps ilevel borders which helds dps values of a trinket.
 ##
@@ -34,7 +35,7 @@ def __get_dps_ilevel_borders(trinket):
 ##             https://www.stormearthandlava.com/ele/trinkets/
 ##
 ## @param      trinket_list           The normalised trinkets dictionary
-##                                    {trinket_name s:{ilevel s:{dps s}}}
+##                                    {trinket_name s:{ilevel s: dps s,}}
 ## @param      ordered_trinket_names  The ordered trinket names
 ## @param      filename               The filename
 ## TODO        Rewrite                Rewrite this whole function to use actual data types and
@@ -42,11 +43,26 @@ def __get_dps_ilevel_borders(trinket):
 ##
 ## @return     True if writing to file was successfull
 ##
-def print_highchart(trinket_list, ordered_trinket_names, filename):
+def print_highchart( trinket_list, ordered_trinket_names, filename ):
   # let's create a real structure...
   categories = []
   for name in ordered_trinket_names:
-    categories.append(name)
+    categories.append( name )
+
+  # massage category names into wowhead links
+  if settings.add_tooltips:
+    import lib.simc_support.wow_lib as Wow_lib
+    for i in range( len( categories ) ):
+      # get full trinket list, to compare to categories
+      # {source s:[[trinket_name s, id s, base_ilevel i, max_itemlevel i, max_itemlevel_drop i],]}
+      full_trinket_list = Wow_lib.get_trinkets_for_spec( settings.simc_settings[ "class" ], settings.simc_settings[ "spec" ] )
+
+      for source in full_trinket_list:
+        for trinket in full_trinket_list[ source ]:
+          # if the original trinket name is in the category name like "Amanthuls +15"
+          if trinket[ 0 ] in categories[ i ]:
+            categories[ i ] = "<a href=\"http://www.wowhead.com/item={item_id}\">{item_name}</a>".format( trinket[ 1 ], categories[ i ] )
+
 
   # MEAN CALCULATION
   dps_sum = 0
