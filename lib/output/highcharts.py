@@ -134,13 +134,18 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
       "type": "bar"
     },
     "title": {
-      "text": settings.graph_title
+      "text": settings.graph_title,
+      "useHTML": True
     },
     "subtitle": {
-      "text": settings.graph_subtitle
+      "text": settings.graph_subtitle,
+      "useHTML": True
     },
     "xAxis": {
-      "categories": categories
+      "categories": categories,
+      "labels": {
+        "useHTML": True,
+      },
     },
     "yAxis": {
       "min": 0,
@@ -189,7 +194,7 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
     "tooltip": {
       "headerFormat": "<b>{point.x}</b>",
       "formatter": """'''function() {
-        var s = '<b>'+ this.x +'</b>';
+        var s = '<div style="background-color:#eee; padding:12px;"><b>'+ this.x +'</b>';
         var cumulative_amount = 0;
         for (var i = this.points.length - 1 ; i >= 0 ; i--) {
             cumulative_amount += this.points[i].y;
@@ -197,6 +202,7 @@ def print_highchart(trinket_list, ordered_trinket_names, filename):
                 s += '<br/><span style=\"color: ' + this.points[i].series.color + '; font-weight: bold;\">' + this.points[i].series.name +'</span>: ' + cumulative_amount;
             }
         }
+        s += '</div>';
         return s;
       }'''""",
       "shared": True,
