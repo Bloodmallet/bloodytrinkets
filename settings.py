@@ -6,14 +6,14 @@ import datetime
 
 # graph_colours needs colours for all ilevels!
 graph_colours = {
-  "910": "#a6cee3",
-  "920": "#1f78b4",
-  "930": "#b2df8a",
-  "940": "#33a02c",
-  "950": "#fb9a99",
-  "960": "#e31a1c",
-  "970": "#fdbf6f",
-  "980": "#ff7f00",
+  "910": "#1f78b4",
+  "920": "#a6cee3",
+  "930": "#33a02c",
+  "940": "#b2df8a",
+  "950": "#e31a1c",
+  "960": "#fb9a99",
+  "970": "#ff7f00",
+  "980": "#cab2d6",
 }
 # Defines itemlevels that shall be simed, ordered from highest to lowest (graph
 # output will have this order reversed)
@@ -29,18 +29,18 @@ ilevels = [
 ]
 
 legendary = True
-legendary_colour = "#cab2d6"
+legendary_colour = "#fdbf6f"
 legendary_ilevel = "1000"
 
 simulate_gems = False
 
 output_screen = False
 # "json", "highchart"
-output_types = ["highchart"]
+output_types = ["highchart", "json"]
 
 simc_settings = {}
 simc_settings["simc"]         = "../simc.exe"
-simc_settings["fight_styles"] = ["patchwerk", "helterskelter"]
+simc_settings["fight_styles"] = ["patchwerk"]
 simc_settings["iterations"]   = "250000"
 simc_settings["target_error"] = "0.1"
 simc_settings["threads"]      = "8"
@@ -67,7 +67,8 @@ simc_settings["c_profile_name"] = "example_name.simc"
 
 simc_settings["ptr"] = False
 
+full_chart = True
 pruned_chart = True
 prune_count = 20
-full_chart = True
+pruned_titanforged_chart = False
 add_tooltips = True

@@ -12,11 +12,11 @@ fight_styles = [
 use_second_trinket = "True"
 
 profiles = [
-  #( "death_knight", "blood",          "str" ),
+  ( "death_knight", "blood",          "str" ),
   ( "death_knight", "frost",          "str" ),
   ( "death_knight", "unholy",         "str" ),
   ( "demon_hunter", "havoc",          "agi" ),
-  #( "demon_hunter", "vengance",       "agi" ),
+  #( "demon_hunter", "vengeance",      "agi" ),
   ( "druid",        "balance",        "int" ),
   ( "druid",        "feral",          "agi" ),
   #( "druid",        "guardian",       "agi" ),
@@ -26,9 +26,9 @@ profiles = [
   ( "mage",         "arcane",         "int" ),
   ( "mage",         "fire",           "int" ),
   ( "mage",         "frost",          "int" ),
-  #( "monk",         "brewmaster",     "agi" ),
+  ( "monk",         "brewmaster",     "agi" ),
   ( "monk",         "windwalker",     "agi" ),
-  #( "paladin",      "protection",     "str" ),
+  ( "paladin",      "protection",     "str" ),
   ( "paladin",      "retribution",    "str" ),
   ( "priest",       "shadow",         "int" ),
   ( "rogue",        "assassination",  "agi" ),
@@ -70,6 +70,7 @@ for fight_style in fight_styles:
       ofile.write("simc_settings[\"second_trinket\"] = " + second_trinket[profile[2]] + "\n")
 
     print("")
+    print(datetime.datetime.utcnow())
 
     command = "python bloodytrinkets.py"
     if sys.platform == 'win32':

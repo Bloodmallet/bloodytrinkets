@@ -349,7 +349,7 @@ def prune_trinkets( trinkets, ilevels, fight_style ):
 if __name__ == '__main__':
 
   logging.getLogger(__name__)
-  logging.basicConfig( filename='log.log', filemode='w', level=logging.DEBUG )
+  logging.basicConfig( filename='log.log', filemode='a', level=logging.DEBUG )
 
   ## Check for errors in the data
   error_collector = []
@@ -409,9 +409,10 @@ if __name__ == '__main__':
     # sim fewer if charts shall be pruned
     elif settings.pruned_chart:
       print("Loading trinkets to prune.")
+      # prunes and simualtes trinkets
       sim_results = prune_trinkets( trinkets, ilevels, fight_style )
 
-      ## output results
+      # output results
       if lib.output.output.print_manager( base_dps, sim_results, fight_style, suffix="pruned" ):
         print("  Pruned output successful.")
 
@@ -456,7 +457,7 @@ if __name__ == '__main__':
         print("Pruned output successful.")
 
     # generate softly pruned charts (titanforged max ilevel drops)
-    if settings.pruned_chart and settings.full_chart:
+    if settings.pruned_titanforged_chart and settings.full_chart:
 
       pruned_results = []
       for source in trinkets:
@@ -492,6 +493,8 @@ if __name__ == '__main__':
             pruned_results[ trinket[ 0 ] ][ ilevels[ i ] ] = "0"
 
       if lib.output.output.print_manager( base_dps, pruned_results, fight_style, suffix="pruned_titanforged" ):
-        print("Pruned output successful.")
+        print("Pruned titanforged output successful.")
+    elif settings.pruned_titanforged_chart:
+      logging.error("Pruned titfanforged output can not be generated without full chart data. (Enable full_chart)")
 
   print("Program exits flawless.")
