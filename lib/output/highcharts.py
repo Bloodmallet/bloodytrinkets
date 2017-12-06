@@ -75,6 +75,7 @@ def print_highchart( trinket_list, ordered_trinket_names, filename ):
     dps_counter += 1
 
   mean = dps_sum / dps_counter
+  mean_text = "'mean: ' + Intl.NumberFormat().format(" + str( int( mean ) ) + ")"
   # MEAN CALCULATION END
 
   # data handle for all series
@@ -175,7 +176,10 @@ def print_highchart( trinket_list, ordered_trinket_names, filename ):
         "enabled": True,
         "style": {
           "textOutline": False,
-        }
+        },
+        "formatter": """'''function() {
+          return Intl.NumberFormat().format(this.total);
+        }'''""",
       },
       "plotLines": [{
         "color": "#0973DA",
@@ -183,7 +187,7 @@ def print_highchart( trinket_list, ordered_trinket_names, filename ):
         "width": 2,
         "zIndex": 2,
         "label": {
-          "text": 'mean: ' + str( int( mean ) ),
+          "text": """'''{0}'''""".format(mean_text),
           "align": 'left',
           "verticalAlign": 'bottom',
           "rotation": 0,
@@ -215,7 +219,7 @@ def print_highchart( trinket_list, ordered_trinket_names, filename ):
         for (var i = this.points.length - 1 ; i >= 0 ; i--) {
             cumulative_amount += this.points[i].y;
             if (this.points[i].y !== 0){
-                s += '<br/><span style=\"color: ' + this.points[i].series.color + '; font-weight: bold;\">' + this.points[i].series.name +'</span>: ' + cumulative_amount;
+                s += '<br/><span style=\"color: ' + this.points[i].series.color + '; font-weight: bold;\">' + this.points[i].series.name +'</span>: ' + Intl.NumberFormat().format(cumulative_amount);
             }
         }
         s += '</div>';
@@ -253,7 +257,7 @@ def print_highchart( trinket_list, ordered_trinket_names, filename ):
                     id: 'helperLine',
                     zIndex: 5,
                     label: {
-                      text: this.series.name + ' ' + this.category + ': ' + this.stackY,
+                      text: this.series.name + ' ' + this.category + ': ' + Intl.NumberFormat().format(this.stackY),
                       align: 'left',
                       verticalAlign: 'bottom',
                       rotation: 0,
