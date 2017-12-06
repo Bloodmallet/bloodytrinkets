@@ -51,18 +51,24 @@ def print_highchart( trinket_list, ordered_trinket_names, filename ):
 
   # massage category names into wowhead links
   if settings.add_tooltips:
-    import lib.simc_support.wow_lib as Wow_lib
-    for i in range( len( categories ) ):
-      # get full trinket list, to compare to categories
-      # {source s:[[trinket_name s, id s, base_ilevel i, max_itemlevel i, max_itemlevel_drop i],]}
-      full_trinket_list = Wow_lib.get_trinkets_for_spec( settings.simc_settings[ "class" ], settings.simc_settings[ "spec" ] )
+    new_categories_list = []
 
+    import lib.simc_support.wow_lib as Wow_lib
+    # get full trinket list, to compare to categories
+    # {source s:[[trinket_name s, id s, base_ilevel i, max_itemlevel i, max_itemlevel_drop i],]}
+    full_trinket_list = Wow_lib.get_trinkets_for_spec( settings.simc_settings[ "class" ], settings.simc_settings[ "spec" ] )
+
+    for i in range( len( categories ) ):
+      found = False
       for source in full_trinket_list:
         for trinket in full_trinket_list[ source ]:
           # if the original trinket name is in the category name like "Amanthuls +15"
           if trinket[ 0 ] in categories[ i ]:
+            found = True
             categories[ i ] = "<a href=\"http://www.wowhead.com/item={item_id}\">{item_name}</a>".format( item_id=trinket[ 1 ], item_name=categories[ i ] )
-
+            break
+        if found:
+          break
 
   # MEAN CALCULATION
   dps_sum = 0
