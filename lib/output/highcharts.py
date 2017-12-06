@@ -61,7 +61,7 @@ def print_highchart( trinket_list, ordered_trinket_names, filename ):
         for trinket in full_trinket_list[ source ]:
           # if the original trinket name is in the category name like "Amanthuls +15"
           if trinket[ 0 ] in categories[ i ]:
-            categories[ i ] = "<a href=\"http://www.wowhead.com/item={item_id}\">{item_name}</a>".format( trinket[ 1 ], categories[ i ] )
+            categories[ i ] = "<a href=\"http://www.wowhead.com/item={item_id}\">{item_name}</a>".format( item_id=trinket[ 1 ], item_name=categories[ i ] )
 
 
   # MEAN CALCULATION
