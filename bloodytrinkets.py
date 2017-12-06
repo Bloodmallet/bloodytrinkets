@@ -203,7 +203,7 @@ def sim_all( trinkets, ilevels, fight_style ):
       all_simmed[ trinket[ 0 ] ] = {}
 
       ## special handling for pantheon trinkets
-      if trinket[ 1 ] in ( "154172", "154174", "154177", "154176" ):
+      if trinket[ 1 ] in ( "154172", "154174", "154177", "154176", "154173" ):
         all_simmed[ trinket[ 0 ] + " +10" ] = {}
         all_simmed[ trinket[ 0 ] + " +15" ] = {}
         all_simmed[ trinket[ 0 ] + " +20" ] = {}
@@ -235,7 +235,7 @@ def sim_all( trinkets, ilevels, fight_style ):
         all_simmed[ trinket[ 0 ] ][ ilevel ] = dps
 
         # if pantheon trinket: add +10 +15 +20 versions
-        if trinket[ 1 ] in ( "154172", "154174", "154177", "154176" ):
+        if trinket[ 1 ] in ( "154172", "154174", "154177", "154176", "154173" ):
           dps = "0"
           if trinket[ 2 ] <= int( ilevel ) and int( ilevel ) <= trinket[ 3 ]:
             dps = get_dps( trinket[ 1 ], ilevel, fight_style, arguments=["legion.pantheon_trinket_users=am/am/am/am/am/am/am/am/am/am"] )
