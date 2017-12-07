@@ -71,6 +71,7 @@ def get_dps( trinket_id, item_level, fight_style, enchantment="", use_trinket_id
     argument.append( parameter )
 
   #print(argument)
+  #print("\nSim it! ({} + {} + {})".format(trinket_id, item_level, arguments))
 
   # should prevent additional empty windows popping up...on win32 systems without breaking different OS
   if sys.platform == 'win32':
