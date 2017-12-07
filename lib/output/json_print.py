@@ -22,11 +22,19 @@ import settings
 ##
 def print_json(trinket_list, filename):
   sim_data = {}
-  sim_data["Name"] = settings.graph_title
-  sim_data["Simulated itemlevels"] = settings.ilevels
+  sim_data["title"] = settings.graph_title
+  sim_data["subtitle"] = settings.graph_subtitle
+  if settings.legendary:
+    sim_data["Simulated itemlevels"] = [ settings.legendary_ilevel ] + settings.ilevels
+  else:
+    sim_data["Simulated itemlevels"] = settings.ilevels
   sim_data["Simc setting"] = settings.simc_settings
-  sim_data["Date"] = "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.now())
+  sim_data["Date"] = "{:%Y_%m_%d__%H_%M}".format(datetime.datetime.utcnow())
   sim_data["trinkets"] = trinket_list
+  sim_data["legendary_activated"] = settings.legendary
+  sim_data["legendary_ilevel_colour"] = settings.legendary_colour
+  sim_data["legendary_ilevel"] = settings.legendary_ilevel
+  sim_data["simulate_gems"] = settings.simulate_gems
   with open(filename + ".json", "w") as ofile:
     ofile.write(json.dumps(sim_data, sort_keys=True, indent=4))
     return True
