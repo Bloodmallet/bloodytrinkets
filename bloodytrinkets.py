@@ -204,7 +204,7 @@ def sim_all( trinkets, ilevels, fight_style ):
       all_simmed[ trinket[ 0 ] ] = {}
 
       ## special handling for pantheon trinkets
-      if trinket[ 1 ] in ( "154172", "154174", "154177", "154176", "154173" ):
+      if trinket[ 1 ] in ( "154172", "154174", "154177", "154176" ):
         all_simmed[ trinket[ 0 ] + " +10" ] = {}
         all_simmed[ trinket[ 0 ] + " +15" ] = {}
         all_simmed[ trinket[ 0 ] + " +20" ] = {}
