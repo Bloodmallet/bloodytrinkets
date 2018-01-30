@@ -12,8 +12,11 @@ import subprocess
 import sys
 # Bloodytrinkets lib imports
 import lib.output.output
-import lib.simc_support.simc_checks as Simc_checks
-import lib.simc_support.wow_lib     as Wow_lib
+
+# basic input checks for SimulationCraft input
+from simc_support import simc_checks as Simc_checks
+# world of warcraft game data about trinkets, talents, crucible...
+from simc_support import wow_lib     as Wow_lib
 
 ##
 ## @brief      Gets the dps for one trinket.
