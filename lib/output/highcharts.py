@@ -236,7 +236,8 @@ def print_highchart( trinket_list, ordered_trinket_names, filename ):
       "borderColor": "#bbb",
       "style": {
         "color": "black"
-      }
+      },
+      "useHTML": True
     },
     "plotOptions": {
       "series": {
