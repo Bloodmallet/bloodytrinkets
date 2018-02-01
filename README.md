@@ -7,7 +7,7 @@ Bloodytrinkets
 You need a working SimulationCraft version, Python 3.5 or newer and the module [simc_support](https://github.com/Bloodmallet/simc_support) which is handled in the requirements.txt.
 
 ## Download
-Download or clone this repository into your SimulationCraft directory. `simulationcraft/bloodytrinkets`
+Download or clone this repository into your SimulationCraft directory. `simulationcraft\bloodytrinkets`
 
 ## Setup
 Start your python environement. Install dependencies.
@@ -19,10 +19,10 @@ $ <env_name>\Scripts\active
 `pip freeze` should return something like this: "-e git+https://github.com/Bloodmallet/simc_support.git@e806d5ca289072684c6aca5fb03ce2b44e88cc4e#egg=simc_support"
 
 ## Getting started
-Edit settings.py to your liking using any text editor. Start your python environement. Start bloodytrinket.
+Edit settings.py to your liking using any text editor. Start your python environement. Start bloodytrinkets.
 ```sh
 $ <env_name>\Scripts\active
-(<env_name>)$ python .\bloodyrelics.py
+(<env_name>)$ python .\bloodytrinkets.py
 ```
 
 ## Development
