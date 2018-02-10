@@ -53,7 +53,7 @@ def print_highchart( trinket_list, ordered_trinket_names, filename ):
   if settings.add_tooltips:
     new_categories_list = []
 
-    import lib.simc_support.wow_lib as Wow_lib
+    from simc_support import wow_lib as Wow_lib
     # get full trinket list, to compare to categories
     # {source s:[[trinket_name s, id s, base_ilevel i, max_itemlevel i, max_itemlevel_drop i],]}
     full_trinket_list = Wow_lib.get_trinkets_for_spec( settings.simc_settings[ "class" ], settings.simc_settings[ "spec" ] )
