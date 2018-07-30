@@ -1,6 +1,8 @@
 Bloodytrinkets
 ===========
 
+# This tool is deprecated with the launch of the Battle for Azeroth Prepatch. See [bloodytools](https://github.com/Bloodmallet/bloodytools) for an improved and continued tool.
+
 > Automatation tool to calculate the worth of all dps trinkets of all classes in World of Warcraft using SimulationCraft.
 
 ## Requirements
